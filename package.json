@@ -31,6 +31,9 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@tiptap/core": "^2.8.0",
+		"@tiptap/pm": "^2.8.0",
+		"@tiptap/starter-kit": "^2.8.0",
 		"axios": "^1.7.7"
 	}
 }
