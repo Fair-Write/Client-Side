@@ -1,4 +1,5 @@
 function getSuffix(fileName: string) {
+  //  continue where you left off
   fileName.at(fileName.length - 4);
 }
 
