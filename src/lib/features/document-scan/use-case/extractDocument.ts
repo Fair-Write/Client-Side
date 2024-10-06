@@ -18,6 +18,10 @@ export function dropHandler(e: DragEvent) {
     });
   } else {
     // Use DataTransfer interface to access the file(s)
+    if (e.dataTransfer!.files.length != 1) {
+      throw new Error("BRO NO");
+    }
+
     [...e.dataTransfer!.files].forEach((file, i) => {
       console.log(`… file[${i}].name = ${file.name}`);
     });
