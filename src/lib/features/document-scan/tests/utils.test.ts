@@ -18,7 +18,10 @@ describe("getSuffix", () => {
     expect(getSuffix("joebiden.html")).toBe("html");
   });
 
-  test("to throw error on invalid file type like joebiden.js", () => {
-    expect(() => getSuffix("joebiden.js")).toThrowError();
+  test("get the word html from joebiden.doc", () => {
+    expect(getSuffix("joebiden.doc")).toBe("doc");
+  });
+  test("to throw an error on invalid file type in joebiden.js", () => {
+    expect(() => getSuffix("joebiden.js")).toThrowError("Invalid File Type");
   });
 });
