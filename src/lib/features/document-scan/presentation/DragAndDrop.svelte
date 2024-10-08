@@ -17,7 +17,7 @@
   let fileDocument: null | File = null;
 
   onMount(() => {
-    console.log(getTextFromPdf());
+    console.log(getTextFromPdf("/LoremText.pdf"));
   });
 </script>
 

@@ -1,38 +1,26 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf.mjs";
 import * as pdfWorker from "pdfjs-dist/legacy/build/pdf.worker.mjs";
+import type { TextItem } from "pdfjs-dist/types/src/display/api";
 pdfjs.GlobalWorkerOptions.workerSrc =
   import.meta.url + "pdfjs-dist/legacy/build/pdf.worker.mjs";
 
-export function getTextFromPdf() {
-  let pdf = pdfjs.getDocument("/LoremText.pdf");
+export async function getTextFromPdf(pdfPath: string): Promise<string> {
+  const loadingTask = pdfjs.getDocument(pdfPath);
+  const pdf = await loadingTask.promise;
 
-  return pdf.promise.then(function (pdf) {
-    // get all pages text
-    const maxPages = pdf._pdfInfo.numPages;
-    let countPromises = []; // collecting all page promises
-    for (let j = 1; j <= maxPages; j++) {
-      let page = pdf.getPage(j);
+  const maxPages = pdf.numPages;
+  const textPromises: Promise<string>[] = [];
 
-      let txt = "";
-      countPromises.push(
-        page.then(function (page) {
-          // add page promise
-          let textContent = page.getTextContent();
+  for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
+    const page = await pdf.getPage(pageNum);
+    const textContent = await page.getTextContent();
+    const pageText = textContent.items
+      .map((item: TextItem) => item.str)
+      .join("");
+    textPromises.push(Promise.resolve(pageText));
+  }
 
-          return textContent.then(function (text) {
-            // return content promise
-            return text.items
-              .map(function (s) {
-                return s.str;
-              })
-              .join(""); // value page text
-          });
-        }),
-      );
-    }
-    // Wait for all pages and join text
-    return Promise.all(countPromises).then(function (texts) {
-      return texts.join("");
-    });
-  });
+  const texts = await Promise.all(textPromises);
+  return texts.join("");
 }
