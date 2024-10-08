@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   // flow
   // drag file to zone *
   // on drag check if file is a valid type
@@ -11,8 +12,13 @@
     convertDragToFile,
     convertInputToFile,
   } from "../use-case/extractDocument";
+  import { getTextFromPdf } from "../use-case/pdfToText";
 
   let fileDocument: null | File = null;
+
+  onMount(() => {
+    console.log(getTextFromPdf());
+  });
 </script>
 
 <div>
@@ -27,14 +33,15 @@
       }}
       on:dragover={(e) => dragOverHandler(e)}
     ></div>
-
-    <label for="File_Drop">Drag your File Here</label>
-    <input
-      on:change={(e) => dropHandler(convertInputToFile(e))}
-      id="File_Drop"
-      accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-      type="file"
-    />
+    <div>
+      <label for="File_Drop">Drag your File Here</label>
+      <input
+        on:change={(e) => dropHandler(convertInputToFile(e))}
+        id="File_Drop"
+        accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        type="file"
+      />
+    </div>
 
     <button type="submit">Analyze</button>
   </form>
@@ -43,7 +50,7 @@
 <style>
   .drop-container {
     border: solid 5px blue;
-    width: 100px;
-    height: 100px;
+    width: 500px;
+    height: 500px;
   }
 </style>
