@@ -1,18 +1,18 @@
 <script lang="ts">
   // flow
-  // drag file to zone
+  // drag file to zone *
   // on drag check if file is a valid type
   // txt/pdf/document
   // if valid
   // return output string i guess
-  import { dropHandler, dragOverHandler } from "../use-case/extractDocument";
-  let fileDocument: null | File = null;
+  import {
+    dropHandler,
+    dragOverHandler,
+    convertDragToFile,
+    convertInputToFile,
+  } from "../use-case/extractDocument";
 
-  function handleFileChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    fileDocument = input.files ? input.files[0] : null;
-    console.log(fileDocument?.type);
-  }
+  let fileDocument: null | File = null;
 </script>
 
 <div>
@@ -22,13 +22,15 @@
       aria-label="Upload files"
       aria-describedby="upload-instructions"
       tabindex="0"
-      on:drop={(e) => dropHandler(e)}
+      on:drop={(e) => {
+        dropHandler(convertDragToFile(e));
+      }}
       on:dragover={(e) => dragOverHandler(e)}
     ></div>
 
     <label for="File_Drop">Drag your File Here</label>
     <input
-      on:change={(e) => handleFileChange(e)}
+      on:change={(e) => dropHandler(convertInputToFile(e))}
       id="File_Drop"
       accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
       type="file"

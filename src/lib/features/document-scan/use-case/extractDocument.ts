@@ -1,36 +1,34 @@
-function getSuffix(fileName: string) {
-  //  continue where you left off
-  fileName.at(fileName.length - 4);
-}
+import { getSuffix } from "./utilts";
 
-export function dropHandler(e: DragEvent) {
-  console.log("File has been dropped");
-  e.preventDefault();
-
-  if (e.dataTransfer!.items) {
-    // Use DataTransferItemList interface to access the file(s)
-    [...e.dataTransfer!.items].forEach((item, i) => {
-      // If dropped items aren't files, reject them
-      if (item.kind === "file") {
-        const file = item.getAsFile();
-        console.log(`… file[${i}].name = ${file!.name}`);
-      }
-    });
+// turn drag event into file attribute
+export function convertDragToFile(e: DragEvent): File {
+  // checks if the drag event contains files
+  if (e.dataTransfer?.items != null) {
+    return e.dataTransfer.items[0].getAsFile() as File;
   } else {
-    // Use DataTransfer interface to access the file(s)
-    if (e.dataTransfer!.files.length != 1) {
-      throw new Error("BRO NO");
-    }
-
-    [...e.dataTransfer!.files].forEach((file, i) => {
-      console.log(`… file[${i}].name = ${file.name}`);
-    });
+    throw new Error("NOT A FILE");
   }
 }
 
-export function dragOverHandler(ev: Event) {
-  console.log("File(s) in drop zone");
+// turn input event to file
+export function convertInputToFile(e: Event): File {
+  const input = e.target as HTMLInputElement;
 
+  if (input.files) {
+    return input.files[0];
+  } else {
+    throw new Error("NOT A FILE");
+  }
+}
+
+export function dragOverHandler(ev: Event): void {
+  console.log("File(s) in drop zone");
   // Prevent default behavior (Prevent file from being opened)
   ev.preventDefault();
+}
+
+export function dropHandler(file: File) {
+  // do something with the file here
+  let fileSuffix = getSuffix(file.name);
+  console.log(fileSuffix);
 }
