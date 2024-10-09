@@ -1,3 +1,4 @@
+import { getTextFromHtml } from "./docxToText";
 import { getTextFromPdf } from "./pdfToText";
 import { getSuffix } from "./utilts";
 
@@ -28,6 +29,8 @@ export async function fileHandler(file: File): Promise<string> {
 
   if (fileSuffix == "pdf") {
     return await getTextFromPdf(file);
+  } else if (fileSuffix == "docx" || fileSuffix == "doc") {
+    return await getTextFromHtml(file);
   } else {
     throw new Error("Error has occured");
   }
