@@ -23,6 +23,7 @@
     "eslint": "^9.0.0",
     "eslint-plugin-svelte": "^2.36.0",
     "globals": "^15.0.0",
+    "pdfjs-dist": "^4.7.76",
     "prettier": "^3.3.3",
     "prettier-plugin-svelte": "^3.2.7",
     "svelte": "^4.2.7",
@@ -30,8 +31,7 @@
     "typescript": "^5.0.0",
     "typescript-eslint": "^8.0.0",
     "vite": "^5.0.3",
-    "vitest": "^2.0.0",
-    "pdfjs-dist": "^4.7.76"
+    "vitest": "^2.0.0"
   },
   "type": "module",
   "dependencies": {
@@ -39,6 +39,7 @@
     "@tiptap/pm": "^2.8.0",
     "@tiptap/starter-kit": "^2.8.0",
     "axios": "^1.7.7",
+    "mammoth": "^1.8.0",
     "pdfjs-dist": "^4.7.76"
   }
 }
