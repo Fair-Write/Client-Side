@@ -1,17 +1,9 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  // flow
-  // drag file to zone *
-  // on drag check if file is a valid type
-  // txt/pdf/document
-  // if valid
-  // return output string i guess
   import {
-    dropHandler,
     dragOverHandler,
-    convertDragToFile,
-    convertInputToFile,
-  } from "../use-case/extractDocument";
+    dropHandler,
+    inputHandler,
+  } from "../use-case/dragAndDropEvents";
 
   let fileDocument: null | File = null;
 </script>
@@ -21,16 +13,13 @@
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       class="drop-wrapper"
-      on:drop={(e) => {
-        e.preventDefault();
-        dropHandler(convertDragToFile(e));
-      }}
-      on:dragover={(e) => dragOverHandler(e)}
+      on:drop={async (e) => await dropHandler(e)}
+      on:dragover={async (e) => await dragOverHandler(e)}
     >
       <div>
         <label for="File_Drop">Drag your File Here</label>
         <input
-          on:change={(e) => dropHandler(convertInputToFile(e))}
+          on:change={async (e) => await inputHandler(e)}
           id="File_Drop"
           accept=".pdf,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           type="file"
