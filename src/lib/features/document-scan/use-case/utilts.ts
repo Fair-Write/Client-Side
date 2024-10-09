@@ -16,3 +16,19 @@ export function getSuffix(fileName: string): string {
 
   return suffix;
 }
+
+// Helper function to read the file as an ArrayBuffer
+export function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    // Resolve the promise once the file is read
+    reader.onload = () => resolve(reader.result as ArrayBuffer);
+
+    // Reject the promise if there's an error
+    reader.onerror = () => reject(reader.error);
+
+    // Read the file as ArrayBuffer
+    reader.readAsArrayBuffer(file);
+  });
+}
