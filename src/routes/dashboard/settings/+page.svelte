@@ -1,1 +1,1 @@
-<p> This is the settings page</p>
+<p>This is the settings page</p>
