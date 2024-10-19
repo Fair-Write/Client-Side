@@ -6,7 +6,7 @@ import StarterKit from "@tiptap/starter-kit";
 export default function formatDocument(
   editor: Editor,
   content: TDocument,
-  element: TElementTarget
+  element: TElementTarget,
 ): Editor {
   return new Editor({
     element: element,
