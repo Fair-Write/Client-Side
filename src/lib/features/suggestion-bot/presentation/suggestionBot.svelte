@@ -1,1 +1,8 @@
-<p>this is the suggestion bot module</p>
+<section class=" w-80 border-l border-stone-300 bg-stone-100">
+  <div
+    class="flex h-14 w-full items-center justify-between border-b border-solid border-stone-300 bg-stone-50 p-5"
+  >
+    <h2 class="text-xl font-semibold">AI Companion</h2>
+    <p>Settings</p>
+  </div>
+</section>
