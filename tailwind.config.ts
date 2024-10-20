@@ -1,5 +1,6 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
 import type { Config } from "tailwindcss";
+
 import typography from "@tailwindcss/typography";
 const config: Config = {
   darkMode: ["class"],
@@ -16,7 +17,7 @@ const config: Config = {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border) / <alpha-value>)",
+        border: "red-500",
         input: "hsl(var(--input) / <alpha-value>)",
         ring: "hsl(var(--ring) / <alpha-value>)",
         background: "hsl(var(--background) / <alpha-value>)",

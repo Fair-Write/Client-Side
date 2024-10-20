@@ -3,6 +3,10 @@
   import { Editor } from "@tiptap/core";
   import StarterKit from "@tiptap/starter-kit";
   import Placeholder from "@tiptap/extension-placeholder";
+  import * as ToggleGroup from "$lib/components/ui/toggle-group/index.js";
+  import Bold from "lucide-svelte/icons/bold";
+  import Italic from "lucide-svelte/icons/italic";
+  import Underline from "lucide-svelte/icons/underline";
   let editor: Editor;
   let element: HTMLDivElement;
 
@@ -73,13 +77,25 @@
           P
         </button>
       </span>
+<!-- toggle group fo buttons -->
+      <ToggleGroup.Root variant="outline" size="sm" type="single">
+        <ToggleGroup.Item value="bold" aria-label="Toggle bold">
+          <Bold class="h-4 w-4" />
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="italic" aria-label="Toggle italic">
+          <Italic class="h-4 w-4" />
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="strikethrough" aria-label="Toggle strikethrough">
+          <Underline class="h-4 w-4" />
+        </ToggleGroup.Item>
+      </ToggleGroup.Root>
 
       <button>Export As</button>
     </div>
   {/if}
 
   <div
-    class="prose prose-lg w-[700px] flex-1 bg-stone-50"
+    class="prose prose-lg w-[700px] flex-1 bg-stone-50 bg-border"
     bind:this={element}
   />
 </section>

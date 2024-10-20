@@ -21,6 +21,7 @@
     "@tailwindcss/typography": "^0.5.14",
     "@types/eslint": "^9.6.0",
     "autoprefixer": "^10.4.20",
+    "bits-ui": "^0.21.16",
     "clsx": "^2.1.1",
     "eslint": "^9.0.0",
     "eslint-plugin-svelte": "^2.36.0",
@@ -46,6 +47,7 @@
     "@tiptap/pm": "^2.8.0",
     "@tiptap/starter-kit": "^2.8.0",
     "axios": "^1.7.7",
+    "lucide-svelte": "^0.453.0",
     "mammoth": "^1.8.0",
     "pdfjs-dist": "^4.7.76"
   }
