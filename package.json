@@ -43,6 +43,7 @@
   "type": "module",
   "dependencies": {
     "@tiptap/core": "^2.8.0",
+    "@tiptap/extension-highlight": "^2.8.0",
     "@tiptap/extension-placeholder": "^2.8.0",
     "@tiptap/extension-text-align": "^2.8.0",
     "@tiptap/extension-underline": "^2.8.0",

@@ -15,6 +15,17 @@ const config: Config = {
         "2xl": "1400px",
       },
     },
+    // // typography:
+    // typography: (theme) => ({
+    //   DEFAULT: {
+    //     css: {
+    //       p: {
+    //         lineHeight: theme("lineHeight.relaxed"),
+    //       },
+    //     },
+    //   },
+    // }),
+    // extentions
     extend: {
       colors: {
         border: "red-500",

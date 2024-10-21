@@ -7,6 +7,7 @@
   import Placeholder from "@tiptap/extension-placeholder";
   import Underline from "@tiptap/extension-underline";
   import TextAlign from "@tiptap/extension-text-align";
+  import Highlight from "@tiptap/extension-highlight";
   // shadcn
   import * as ToggleGroup from "$lib/components/ui/toggle-group/index.js";
   import { Button } from "$lib/components/ui/button/index.js";
@@ -97,6 +98,7 @@
         TextAlign.configure({
           types: ["heading", "paragraph"],
         }),
+        Highlight.configure({ multicolor: true }),
       ],
       onUpdate: ({ editor }) => {
         htmlContent = editor.getHTML();
