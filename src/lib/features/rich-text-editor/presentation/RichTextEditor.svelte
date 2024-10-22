@@ -51,7 +51,7 @@
         editor.chain().focus().toggleHeading({ level: 3 }).run();
         break;
       case "p":
-        editor.chain().focus().toggleParagraph().run();
+        editor.chain().focus().setParagraph().run();
         break;
       case "bold":
         editor.chain().focus().toggleBold().run();
