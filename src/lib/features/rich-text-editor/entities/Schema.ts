@@ -1,53 +1,107 @@
-import { type NodeSpec, type MarkSpec, Schema } from "prosemirror-model";
+import { Schema } from "prosemirror-model";
 
-// Define node types
-const nodes: { [key: string]: NodeSpec } = {
-  doc: {
-    content: "block+",
-  },
-  paragraph: {
-    group: "block",
-    content: "inline*",
-    toDOM() {
-      return ["p", 0];
+const mySchema = new Schema({
+  nodes: {
+    doc: {
+      content: "block+",
     },
-    parseDOM: [{ tag: "p" }],
-  },
-  text: {
-    group: "inline",
-  },
-  heading: {
-    attrs: { level: { default: 1 } },
-    content: "inline*",
-    group: "block",
-    defining: true,
-    toDOM(node) {
-      return ["h" + node.attrs.level, 0];
+    text: {
+      group: "inline",
     },
-    parseDOM: [
-      { tag: "h1", attrs: { level: 1 } },
-      { tag: "h2", attrs: { level: 2 } },
-      { tag: "h3", attrs: { level: 3 } },
-    ],
+    paragraph: {
+      attrs: { align: { default: "left" } },
+      content: "inline*",
+      group: "block",
+      parseDOM: [
+        {
+          tag: "p",
+          getAttrs(dom) {
+            return { align: dom.style.textAlign || "left" };
+          },
+        },
+      ],
+      toDOM(node) {
+        return ["p", { style: `text-align: ${node.attrs.align}` }, 0];
+      },
+    },
+    heading: {
+      attrs: { level: { default: 1 }, align: { default: "left" } },
+      content: "inline*",
+      group: "block",
+      defining: true,
+      parseDOM: [
+        {
+          tag: "h1",
+          getAttrs(dom) {
+            return { level: 1, align: dom.style.textAlign || "left" };
+          },
+        },
+        {
+          tag: "h2",
+          getAttrs(dom) {
+            return { level: 2, align: dom.style.textAlign || "left" };
+          },
+        },
+        {
+          tag: "h3",
+          getAttrs(dom) {
+            return { level: 3, align: dom.style.textAlign || "left" };
+          },
+        },
+      ],
+      toDOM(node) {
+        return [
+          "h" + node.attrs.level,
+          { style: `text-align: ${node.attrs.align}` },
+          0,
+        ];
+      },
+    },
   },
-  // Add more custom nodes as needed
-};
+  marks: {
+    bold: {
+      parseDOM: [{ tag: "strong" }, { style: "font-weight=bold" }],
+      toDOM() {
+        return ["strong", 0];
+      },
+    },
+    italic: {
+      parseDOM: [{ tag: "i" }, { style: "font-style=italic" }],
+      toDOM() {
+        return ["i", 0];
+      },
+    },
+    underline: {
+      parseDOM: [{ tag: "u" }, { style: "text-decoration=underline" }],
+      toDOM() {
+        return ["u", 0];
+      },
+    },
+    strikethrough: {
+      parseDOM: [{ tag: "s" }, { style: "text-decoration=line-through" }],
+      toDOM() {
+        return ["s", 0];
+      },
+    },
+    blue: {
+      parseDOM: [{ style: "color=blue" }],
+      toDOM() {
+        return ["span", { style: "color: blue" }, 0];
+      },
+    },
+    red: {
+      parseDOM: [{ style: "color=red" }],
+      toDOM() {
+        return ["span", { style: "color: red" }, 0];
+      },
+    },
+    yellow: {
+      parseDOM: [{ style: "color=yellow" }],
+      toDOM() {
+        return ["span", { style: "color: yellow" }, 0];
+      },
+    },
+  },
+});
 
-// Define mark types
-const marks: { [key: string]: MarkSpec } = {
-  bold: {
-    toDOM() {
-      return ["strong"];
-    },
-    parseDOM: [{ tag: "strong" }],
-  },
-  italic: {
-    toDOM() {
-      return ["em"];
-    },
-    parseDOM: [{ tag: "em" }],
-  },
-};
-
-// Define the schema with node and mark types
-export const mySchema: Schema = new Schema({ nodes, marks });
+export default mySchema;

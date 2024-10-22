@@ -9,41 +9,89 @@
   import { keymap } from "prosemirror-keymap";
   import { baseKeymap } from "prosemirror-commands";
   import { writable } from "svelte/store";
+  import mySchema from "$lib/features/rich-text-editor/entities/Schema";
+  import { setBlockType } from "prosemirror-commands";
+  import { history, undo, redo } from "prosemirror-history"; // Import history plugin and commands
 
   let editorContainer: HTMLDivElement | null = null;
   let view: EditorView | undefined;
 
+  function toggleHeading(level: number) {
+    if (!view) return;
+    const { state, dispatch } = view;
+    setBlockType(mySchema.nodes.heading, { level })(state, dispatch);
+  }
+
+  function toggleParagraph() {
+    if (!view) return;
+    const { state, dispatch } = view;
+    setBlockType(mySchema.nodes.paragraph)(state, dispatch);
+  }
+
   // Toggle bold formatting
-  const toggleBold = () => {
-    const { state, dispatch } = view!;
-    const markType = state.schema.marks.strong;
-    if (markType) {
-      toggleMark(markType)(state, dispatch);
-    } else {
-      console.error("Bold (strong) mark is undefined");
-    }
-  };
+  function toggleBold() {
+    if (!view) return;
+    const { state, dispatch } = view;
+    const { schema } = state;
+    toggleMark(schema.marks.bold)(state, dispatch);
+  }
 
   // Toggle italic formatting
-  const toggleItalic = () => {
-    const { state, dispatch } = view!;
-    const markType = state.schema.marks.em;
-    if (markType) {
-      toggleMark(markType)(state, dispatch);
-    } else {
-      console.error("Italic (em) mark is undefined");
+  function toggleItalic() {
+    if (!view) return;
+    const { state, dispatch } = view;
+    const { schema } = state;
+    toggleMark(schema.marks.italic)(state, dispatch);
+  }
+
+  function setTextAlign(align: string) {
+    if (!view) return;
+    const { state, dispatch } = view;
+    const { $from } = state.selection;
+    const node = $from.node($from.depth);
+
+    if (
+      node.type === mySchema.nodes.paragraph ||
+      node.type === mySchema.nodes.heading
+    ) {
+      const attrs = { ...node.attrs, align };
+      setBlockType(node.type, attrs)(state, dispatch);
     }
-  };
+  }
+
+  function highlightWords(words: string[]) {
+    if (!view) return;
+    const { state, dispatch } = view;
+    const { tr } = state;
+    const regex = new RegExp(words.join("|"), "gi");
+
+    tr.doc.descendants((node, pos) => {
+      if (node.isText) {
+        let match;
+        while ((match = regex.exec(node.text!)) !== null) {
+          tr.addMark(
+            pos + match.index,
+            pos + match.index + match[0].length,
+            state.schema.marks.red.create(),
+          );
+        }
+      }
+    });
+
+    if (tr.docChanged) {
+      dispatch(tr);
+    }
+  }
 
   const content = writable("<p>Hello ProseMirror in Svelte!</p>");
 
   onMount(() => {
     const state = EditorState.create({
-      schema,
-      doc: DOMParser.fromSchema(schema).parse(
+      schema: mySchema,
+      doc: DOMParser.fromSchema(mySchema).parse(
         document.createRange().createContextualFragment($content),
-      ), // Empty document to start
-      plugins: [keymap(baseKeymap)],
+      ),
+      plugins: [history(), keymap(baseKeymap)],
     });
 
     view = new EditorView(editorContainer, {
@@ -51,6 +99,7 @@
       dispatchTransaction(transaction) {
         const newState = view!.state.apply(transaction);
         view!.updateState(newState);
+        content.set(newState.doc.content.toString());
       },
     });
 
@@ -68,6 +117,18 @@
     <h2 class="text-xl font-semibold">Write</h2>
     <Button on:click={toggleBold}>Bold</Button>
     <Button on:click={toggleItalic}>Italic</Button>
+    <Button on:click={toggleParagraph}>P</Button>
+    <Button on:click={() => toggleHeading(1)}>H1</Button>
+    <Button on:click={() => toggleHeading(2)}>H2</Button>
+    <Button on:click={() => toggleHeading(3)}>H3</Button>
+    <Button on:click={() => setTextAlign("left")}>Align Left</Button>
+    <Button on:click={() => setTextAlign("center")}>Align Center</Button>
+    <Button on:click={() => setTextAlign("right")}>Align Right</Button>
+    <Button on:click={() => highlightWords(["Hello", "Svelte"])}
+      >Highlight Words</Button
+    >
+    <Button on:click={() => undo(view.state, view.dispatch)}>Undo</Button>
+    <Button on:click={() => redo(view.state, view.dispatch)}>Redo</Button>
   </div>
 
   <!-- ProseMirror editor container -->
