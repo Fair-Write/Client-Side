@@ -3,16 +3,14 @@
 	import { EditorState } from 'prosemirror-state';
 	import { EditorView } from 'prosemirror-view';
 	import { DOMParser } from 'prosemirror-model';
-	import { toggleMark } from 'prosemirror-commands';
-	import { Button } from '$lib/components/ui/button'; // Chadcn Svelte button
-	import { schema } from 'prosemirror-schema-basic'; // Import basic schema
 	import { keymap } from 'prosemirror-keymap';
 	import { baseKeymap } from 'prosemirror-commands';
 	import { writable } from 'svelte/store';
 	import mySchema from '$lib/features/rich-text-editor/entities/Schema';
-	import { setBlockType } from 'prosemirror-commands';
-	import { history, undo, redo } from 'prosemirror-history'; // Import history plugin and commands
+
+	import { history } from 'prosemirror-history'; // Import history plugin and commands
 	import ToolBar from './ToolBar.svelte';
+	import ExportButton from './ExportButton.svelte';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -50,6 +48,7 @@
 	>
 		<h2 class="text-xl font-semibold">Write</h2>
 		<ToolBar view={view!} {mySchema}></ToolBar>
+		<ExportButton></ExportButton>
 	</div>
 
 	<!-- ProseMirror editor container -->
