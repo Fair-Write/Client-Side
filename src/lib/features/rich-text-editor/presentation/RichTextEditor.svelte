@@ -129,7 +129,7 @@
 	<!-- ProseMirror editor container -->
 	<div
 		bind:this={editorContainer}
-		class="prose prose-lg w-[700px] flex-1 bg-border"
+		class="prose prose-lg w-[700px] flex-1 bg-stone-50"
 		id="editor"
 	></div>
 </section>
