@@ -84,3 +84,7 @@ body {
 	display: flex;
 	flex-direction: column;
 }
+
+.ProseMirror:focus {
+	outline: none;
+}
