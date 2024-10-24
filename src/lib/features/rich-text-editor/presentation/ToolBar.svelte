@@ -64,8 +64,8 @@
 <div class="flex items-center justify-center gap-3">
 	<!-- Heading -->
 	<DropdownMenu.Root>
-		<DropdownMenu.Trigger>
-			<Button variant="outline">Heading</Button>
+		<DropdownMenu.Trigger asChild let:builder>
+			<Button builders={[builder]} variant="outline">Heading</Button>
 		</DropdownMenu.Trigger>
 		<DropdownMenu.Content>
 			<DropdownMenu.Group>

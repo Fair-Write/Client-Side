@@ -11,6 +11,7 @@
 	import { history } from 'prosemirror-history'; // Import history plugin and commands
 	import ToolBar from './ToolBar.svelte';
 	import ExportButton from './ExportButton.svelte';
+	import linterPlugin from '../use-case/LinterPlugin';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -23,7 +24,7 @@
 			doc: DOMParser.fromSchema(mySchema).parse(
 				document.createRange().createContextualFragment($content)
 			),
-			plugins: [history(), keymap(baseKeymap)]
+			plugins: [history(), keymap(baseKeymap), linterPlugin]
 		});
 
 		view = new EditorView(editorContainer, {
@@ -54,14 +55,13 @@
 	<!-- ProseMirror editor container -->
 	<div
 		bind:this={editorContainer}
-		class="prose prose-base w-[700px] flex-1 bg-stone-50 focus:outline-none"
+		class="prose overflow-y-scroll w-[700px] prose-base flex-1 bg-stone-50 focus:outline-none"
 		id="editor"
 	></div>
 </section>
 
 <style>
 	#editor {
-		padding: 30px;
-		min-height: 200px;
+		padding: 10px 20px;
 	}
 </style>

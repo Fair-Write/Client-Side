@@ -4,14 +4,9 @@
 </script>
 
 <DropdownMenu.Root>
-	<DropdownMenu.Trigger>
-		<Button
-			variant="outline"
-			class=" rounded-full"
-			color="primary"
-			on:click={() => {
-				console.log('Exporting content');
-			}}>Export As</Button
+	<DropdownMenu.Trigger asChild let:builder>
+		<Button builders={[builder]} variant="outline" class=" rounded-full" color="primary"
+			>Export As</Button
 		>
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content>

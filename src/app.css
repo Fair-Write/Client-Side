@@ -88,3 +88,8 @@ body {
 .ProseMirror:focus {
 	outline: none;
 }
+
+.linter-error {
+	background-color: yellow;
+	text-decoration: underline;
+}
