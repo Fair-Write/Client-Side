@@ -32,7 +32,7 @@
         class={cn(
           "rounded-lg border border-transparent p-2 text-xl ",
           " hover:bg-stone-200 ",
-          $page.url.pathname == "/dashboard/write" &&
+          $page.url.pathname === "/dashboard/write" &&
             "border-solid border-stone-300 bg-stone-50 shadow-md hover:bg-stone-50",
         )}
       >

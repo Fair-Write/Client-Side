@@ -1,15 +1,15 @@
 import { Plugin } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
+import { Node as ProseMirrorNode } from 'prosemirror-model';
 
-// Example linter function that checks for sentences starting with "And"
-const linter = (doc: any) => {
+const linter = (doc: ProseMirrorNode): DecorationSet => {
 	const decorations: Decoration[] = [];
 	const regex = /burger/g; // 'g' flag for global matching
 
-	doc.descendants((node, pos) => {
+	doc.descendants((node: ProseMirrorNode, pos: number) => {
 		if (node.isText) {
 			let match;
-			while ((match = regex.exec(node.text)) !== null) {
+			while ((match = regex.exec(node.text!)) !== null) {
 				const start = pos + match.index;
 				const end = start + match[0].length;
 				decorations.push(Decoration.inline(start, end, { class: 'linter-error' }));
