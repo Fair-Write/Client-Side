@@ -8,6 +8,6 @@
 >
 	<h2 class="text-center line text-xl font-semibold">Write</h2>
 </div>
-
+foo
 	<DragAndDrop></DragAndDrop>
 </div>
