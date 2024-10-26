@@ -14,7 +14,7 @@
 	import linterPlugin from '../use-case/LinterPlugin';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
-	let view: EditorView | null = $state(null);
+	let view: EditorView | undefined = $state(undefined);
 
 	const content = writable('<p>Hello ProseMirror in Svelte!</p>');
 
@@ -48,7 +48,7 @@
 		class=" flex h-14 w-full items-center justify-between border-b border-stone-300 bg-stone-50 p-2"
 	>
 		<h2 class="text-xl font-semibold">Write</h2>
-		<ToolBar view={view} {mySchema}></ToolBar>
+		<ToolBar view={view as EditorView} {mySchema}></ToolBar>
 		<ExportButton></ExportButton>
 	</div>
 
