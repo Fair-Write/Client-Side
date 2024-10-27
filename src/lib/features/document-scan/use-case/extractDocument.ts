@@ -29,7 +29,7 @@ export async function fileHandler(file: File): Promise<string> {
 
   if (fileSuffix == "pdf") {
     return await getTextFromPdf(file);
-  } else if (fileSuffix == "docx" || fileSuffix == "doc") {
+  } else if (fileSuffix == "docx" ) {
     return await getTextFromHtml(file);
   } else {
     throw new Error("Error has occured");
