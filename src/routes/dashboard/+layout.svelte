@@ -3,9 +3,7 @@
   import { page } from "$app/stores";
   import SuggestionBot from "$lib/features/suggestion-bot/presentation/suggestionBot.svelte";
 
-  function isActive(url: string) {
-    return $page.url.pathname == url;
-  }
+
 </script>
 
 <header
@@ -16,7 +14,7 @@
 </header>
 <div class="flex flex-1 bg-stone-100">
   <nav
-    class="bordre-r flex w-64 flex-col justify-between gap-2 border-r border-solid border-stone-300"
+    class="flex w-64 flex-col justify-between gap-2 border-r border-solid border-stone-300"
   >
     <!-- wrapper -->
     <div class="flex flex-col gap-2 px-3">
@@ -32,7 +30,7 @@
         class={cn(
           "rounded-lg border border-transparent p-2 text-xl ",
           " hover:bg-stone-200 ",
-          $page.url.pathname == "/dashboard/write" &&
+          $page.url.pathname === "/dashboard/write" &&
             "border-solid border-stone-300 bg-stone-50 shadow-md hover:bg-stone-50",
         )}
       >
@@ -43,7 +41,7 @@
         class={cn(
           "rounded-lg border border-transparent  p-2 text-xl",
           " hover:bg-stone-200 ",
-          $page.url.pathname == "/dashboard/scan" &&
+          $page.url.pathname === "/dashboard/scan" &&
             "border-solid border-stone-300 bg-stone-50 shadow-md hover:bg-stone-50 ",
         )}>Scan</a
       >

@@ -1,46 +1,35 @@
 <script lang="ts">
-  import {
-    dragOverHandler,
-    dropHandler,
-    inputHandler,
-  } from "../use-case/dragAndDropEvents";
-
-  let fileDocument: null | File = null;
+	import { FolderOpen } from 'lucide-svelte';
+	import { dragOverHandler, dropHandler, inputHandler } from '../use-case/dragAndDropEvents';
+	import { Input } from '$lib/components/ui/input';
+	let fileDocument: null | File = $state(null);
 </script>
 
-<div>
-  <form class="scan-container">
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div
-      class="drop-wrapper"
-      on:drop={async (e) => await dropHandler(e)}
-      on:dragover={async (e) => await dragOverHandler(e)}
-    >
-      <div>
-        <label for="File_Drop">Drag your File Here</label>
-        <input
-          on:change={async (e) => await inputHandler(e)}
-          id="File_Drop"
-          accept=".pdf,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-          type="file"
-        />
-      </div>
-    </div>
+<div class=" w-[600px] flex-1 flex items-center justify-center p-10">
+	<form
+		class="w-[350px] h-[350px] border-dashed bg-stone-50 border-stone-300 rounded-sm border-2 flex items-center justify-center gap-5 p-5 flex-col"
+		ondrop={async (e) => await dropHandler(e)}
+		ondragover={async (e) => await dragOverHandler(e)}
+	>
+		<FolderOpen class="w-[150px] h-[150px] text-stone-500"></FolderOpen>
+		<h3 class="text-lg text-stone-500 text-center">Drag your PDF/DOCX/JPG File Here <br /> OR</h3>
 
-    <button type="submit">Analyze</button>
-  </form>
+		<label
+			class="text-blue-50 px-5 py-3 text-center bg-blue-500 hover:cursor-pointer rounded-full"
+			for="File_Drop"
+		>
+			Choose File
+		</label>
+		<input
+			bind:value={fileDocument}
+			onchange={async (e) => await inputHandler(e)}
+			id="File_Drop"
+			accept=".pdf,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+			type="file"
+			class=" hidden"
+		/>
+	</form>
 </div>
 
 <style>
-  .scan-container {
-    border: solid 5px blue;
-    width: 500px;
-    height: 500px;
-  }
-
-  .drop-wrapper {
-    width: 200px;
-    height: 200px;
-    background-color: rgb(184, 167, 167);
-  }
 </style>

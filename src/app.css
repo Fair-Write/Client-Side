@@ -84,3 +84,12 @@ body {
 	display: flex;
 	flex-direction: column;
 }
+
+.ProseMirror:focus {
+	outline: none;
+}
+
+.linter-error {
+	background-color: yellow;
+	text-decoration: underline;
+}
