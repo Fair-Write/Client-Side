@@ -61,7 +61,7 @@
 				await inputHandler(e);
 			}}
 			id="File_Drop"
-			accept=".pdf,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+			accept=".pdf,.docx,.png,.jpeg"
 			type="file"
 			class=" hidden"
 		/>
