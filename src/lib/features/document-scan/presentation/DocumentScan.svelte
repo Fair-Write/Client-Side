@@ -1,6 +1,8 @@
 <script>
 	import DragAndDrop from './DragAndDrop.svelte';
 </script>
+<!--TODO FIX UI -->
+<!-- TODO Integrate the JPG TO Text Feature-->
 
 <div class="flex flex-1 w-full flex-col items-center bg-stone-200">
 	<div

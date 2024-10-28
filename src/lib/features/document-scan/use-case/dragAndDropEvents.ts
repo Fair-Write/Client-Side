@@ -15,7 +15,7 @@ export function dragOverHandler(e: Event): void {
 
 export async function dropHandler(e: DragEvent) {
   e.preventDefault();
-  const file = convertDragToFile(e);
+  const file = convertDragToFile(e );
  console.log(fileHandler(file));
   return await fileHandler(file);
 }
@@ -23,6 +23,6 @@ export async function dropHandler(e: DragEvent) {
 export async function inputHandler(e: Event) {
   e.preventDefault();
   const inputFile: File = convertInputToFile(e);
- console.log(fileHandler(inputFile));
+  console.log(fileHandler(inputFile));
   return await fileHandler(inputFile);
 }
