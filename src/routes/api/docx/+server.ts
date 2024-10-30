@@ -6,7 +6,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	const { htmlContent } = await request.json();
 
 	try {
-		// 2. Convert HTML to DOCX
+		// 2. Convert HTML to docx
 		const docxBuffer = await htmlToDocx(htmlContent,"",  {
 			table: { row: { cantSplit: true } },
 			footer: true,
@@ -21,7 +21,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			}
 		});
 	} catch (error) {
-		console.error("Error generating DOCX:", error);
-		return new Response("Failed to generate DOCX", { status: 500 });
+		console.error("Error generating docx:", error);
+		return new Response("Failed to generate docx", { status: 500 });
 	}
 };

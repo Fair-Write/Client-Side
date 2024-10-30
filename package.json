@@ -46,6 +46,7 @@
 		"jspdf": "^2.5.2",
 		"lucide-svelte": "^0.453.0",
 		"mammoth": "^1.8.0",
+		"pdf.js-extract": "^0.2.1",
 		"pdfjs-dist": "^4.7.76",
 		"prosemirror-commands": "^1.6.1",
 		"prosemirror-history": "^1.4.1",

@@ -8,7 +8,7 @@
 	let { state }: { state: EditorState } = $props();
 
 	async function downloadDocx() {
-		const response = await fetch('/api/DOCX', {
+		const response = await fetch('/api/docx', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ htmlContent: state.doc.textContent })
@@ -23,7 +23,7 @@
 			link.click();
 			URL.revokeObjectURL(url);
 		} else {
-			console.error('Failed to generate DOCX');
+			console.error('Failed to generate docx');
 		}
 	}
 
