@@ -1,7 +1,3 @@
-import { getTextFromHtml } from './docxToText';
-import { getTextFromImage } from './imageToText';
-import { getTextFromPdf } from './pdfToText';
-import { getSuffix } from './utilts';
 
 // turn drag event into file attribute
 export function convertDragToFile(e: DragEvent): File {
@@ -23,18 +19,4 @@ export function convertInputToFile(e: Event): File {
 	}
 }
 
-export async function fileHandler(file: File): Promise<string> {
-	// do something with the file here
-	const fileSuffix = getSuffix(file.name);
-	// extract file to text
 
-	if (fileSuffix == 'pdf') {
-		return await getTextFromPdf(file);
-	} else if (fileSuffix == 'docx') {
-		return await getTextFromHtml(file);
-	} else if (fileSuffix == 'png' || fileSuffix == 'jpeg') {
-		return await getTextFromImage(file);
-	} else {
-		throw new Error('Error has occured');
-	}
-}

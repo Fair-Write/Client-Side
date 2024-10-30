@@ -1,5 +1,5 @@
 import { readFileAsArrayBuffer } from "./utilts";
-import * as mammoth from "mammoth";
+import mammoth from "mammoth";
 
 export async function getTextFromHtml(file: File): Promise<string> {
   try {

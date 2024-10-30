@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { CloudUpload, FolderOpen } from 'lucide-svelte';
-	import { dragOverHandler, dropHandler, inputHandler } from '../use-case/dragAndDropEvents';
+	import { dragOverHandler } from '../use-case/dragAndDropEvents';
 	import { getSuffix } from '$lib/features/document-scan/use-case/utilts';
 	import {
 		convertDragToFile,
 		convertInputToFile
 	} from '$lib/features/document-scan/use-case/extractDocument';
 	import FileNameDisplay from '$lib/features/document-scan/presentation/FileNameDisplay.svelte';
+
 	let fileDocument: unknown | File = $state(null);
 
 	let fileSuffix = $derived.by(() => {
@@ -24,6 +25,35 @@
 			return '';
 		}
 	});
+
+	let extractedText = $state('');
+
+	async function convertToText(file: File | unknown, type: string) {
+		console.log('HELLO?');
+		if (!file) {
+			throw new Error('EHRM WTF');
+		}
+		const formData = new FormData();
+		formData.append('file', file as File);
+
+		switch (type) {
+			case 'docx': {
+				const response = await fetch('/api/extract/docx', { method: 'POST', body: formData });
+				const result = await response.json();
+				console.log(result);
+				extractedText = result.data;
+				break;
+			}
+
+			case 'pdf': {
+				const response = await fetch('/api/extract/pdf', { method: 'POST', body: formData });
+				const result = await response.json();
+				console.log(result);
+				extractedText = result.data;
+				break;
+			}
+		}
+	}
 </script>
 
 <div class=" w-[600px] flex-1 flex items-center justify-center">
@@ -33,7 +63,7 @@
 		justify-center gap-5 p-5 flex-col"
 		ondrop={async (e) => {
 			fileDocument = convertDragToFile(e);
-			await dropHandler(e);
+			await convertToText(fileDocument, fileSuffix || 'pdf');
 		}}
 		ondragover={(e) => dragOverHandler(e)}
 	>
@@ -58,7 +88,7 @@
 		<input
 			onchange={async (e) => {
 				fileDocument = convertInputToFile(e);
-				await inputHandler(e);
+				await convertToText(fileDocument, fileSuffix || 'pdf');
 			}}
 			id="File_Drop"
 			accept=".pdf,.docx,.png,.jpeg"
