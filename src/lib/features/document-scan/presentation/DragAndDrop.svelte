@@ -38,7 +38,7 @@
 
 		switch (type) {
 			case 'docx': {
-				const response = await fetch('/api/extract/docx', { method: 'POST', body: formData });
+				const response = await fetch('/api/extract/image', { method: 'POST', body: formData });
 				const result = await response.json();
 				console.log(result);
 				extractedText = result.data;
@@ -47,6 +47,14 @@
 
 			case 'pdf': {
 				const response = await fetch('/api/extract/pdf', { method: 'POST', body: formData });
+				const result = await response.json();
+				console.log(result);
+				extractedText = result.data;
+				break;
+			}
+			case 'png':
+			case 'jpeg': {
+				const response = await fetch('/api/extract/image', { method: 'POST', body: formData });
 				const result = await response.json();
 				console.log(result);
 				extractedText = result.data;
