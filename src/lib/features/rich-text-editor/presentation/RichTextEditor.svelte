@@ -6,27 +6,25 @@
 	import { DOMParser } from 'prosemirror-model';
 	import { history } from 'prosemirror-history';
 
-	import { writable } from 'svelte/store';
+	import { textContent } from '$lib/stores/textFromEditorStore';
 	import mySchema from '$lib/features/rich-text-editor/entities/Schema';
-
 
 	import ToolBar from './ToolBar.svelte';
 	import ExportButton from './ExportButton.svelte';
 	import linterPlugin from '../use-case/LinterPlugin';
 	import { myKeymap } from '$lib/features/rich-text-editor/entities/keymaps';
+	import { placeholder } from '$lib/features/rich-text-editor/use-case/PlaceHolderPlugin';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
-	let view: EditorView|null  = $state(null);
-
-	const content = writable('<p>Hello ProseMirror in Svelte!</p>');
+	let view: EditorView | null = $state(null);
 
 	onMount(() => {
 		const state = EditorState.create({
 			schema: mySchema,
 			doc: DOMParser.fromSchema(mySchema).parse(
-				document.createRange().createContextualFragment($content)
+				document.createRange().createContextualFragment($textContent)
 			),
-			plugins: [history(), linterPlugin, myKeymap]
+			plugins: [history(), linterPlugin, myKeymap, placeholder("Type your text here")]
 		});
 
 		view = new EditorView(editorContainer, {
@@ -34,7 +32,7 @@
 			dispatchTransaction(transaction) {
 				const newState = view!.state.apply(transaction);
 				view!.updateState(newState);
-				content.set(newState.doc.content.toString());
+				$textContent = newState.doc.textContent.toString();
 			}
 		});
 
@@ -51,17 +49,16 @@
 	>
 		<h2 class="text-xl font-semibold">Write</h2>
 
-		{#if view!==null}
-			<ToolBar view={view} {mySchema}></ToolBar>
-			<ExportButton state = {view.state}></ExportButton>
-
+		{#if view !== null}
+			<ToolBar {view} {mySchema}></ToolBar>
+			<ExportButton state={view.state}></ExportButton>
 		{/if}
 	</div>
 
 	<!-- ProseMirror editor container -->
 	<div
 		bind:this={editorContainer}
-		class="prose overflow-y-scroll w-[700px] prose-base flex-1 bg-stone-50 focus:outline-none"
+		class="prose overflow-y-scroll w-[700px] prose-base flex-1 bg-stone-50 focus:outline-none editor__paragraph"
 		id="editor"
 	></div>
 </section>
