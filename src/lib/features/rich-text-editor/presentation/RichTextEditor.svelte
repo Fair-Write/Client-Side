@@ -1,17 +1,19 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+
 	import { EditorState } from 'prosemirror-state';
 	import { EditorView } from 'prosemirror-view';
 	import { DOMParser } from 'prosemirror-model';
-	import { keymap } from 'prosemirror-keymap';
-	import { baseKeymap } from 'prosemirror-commands';
+	import { history } from 'prosemirror-history';
+
 	import { writable } from 'svelte/store';
 	import mySchema from '$lib/features/rich-text-editor/entities/Schema';
 
-	import { history } from 'prosemirror-history'; // Import history plugin and commands
+
 	import ToolBar from './ToolBar.svelte';
 	import ExportButton from './ExportButton.svelte';
 	import linterPlugin from '../use-case/LinterPlugin';
+	import { myKeymap } from '$lib/features/rich-text-editor/entities/keymaps';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView|null  = $state(null);
@@ -24,7 +26,7 @@
 			doc: DOMParser.fromSchema(mySchema).parse(
 				document.createRange().createContextualFragment($content)
 			),
-			plugins: [history(), keymap(baseKeymap), linterPlugin]
+			plugins: [history(), linterPlugin, myKeymap]
 		});
 
 		view = new EditorView(editorContainer, {
