@@ -93,3 +93,11 @@ body {
 	background-color: yellow;
 	text-decoration: underline;
 }
+.editor__paragraph .placeholder::before {
+	pointer-events: none;
+	position: absolute;
+	color: #717171; /* Set a light color for placeholder */
+	content: attr(data-placeholder);
+	font-family: inherit;
+	font-size: inherit;
+}
