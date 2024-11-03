@@ -23,11 +23,28 @@
 	let view: EditorView | null = $state(null);
 
 	const words = { wrongWord: 'svelte', rightWord: 'vue' };
-	const linterPlugin = createLinterPlugin([/burger/g, /pizza/g, /fries/g]);
-
+	let linterPluginSpelling = createLinterPlugin([], 'linter-error ');
+	let linterPluginGrammar = createLinterPlugin([], 'linter-grammar');
+	let linterPluginGFL = createLinterPlugin([], 'linter-gfl');
 
 	// todo:LINTER - add a store for this array of regexes i also have to have a regex factory
+	// todo:LINTER - create a linter will be instanciated easily DONE
 	// todo:REPLACE TEXT - add a store as well for the word to replace it with
+
+	// Plan: bali when changing these arrays i must instantiate the plugin again sadly
+
+	function reconfigAllPlugins(): void {
+		if (!view) throw new Error('Editorview not defined');
+
+		linterPluginSpelling = createLinterPlugin([/dog/g], 'linter-error ');
+		linterPluginGrammar = createLinterPlugin([/cat/g], 'linter-grammar');
+		linterPluginGFL = createLinterPlugin([/bird/g], 'linter-gfl');
+
+		const state = view.state.reconfigure({
+			plugins: [linterPluginGrammar, linterPluginGFL, linterPluginSpelling]
+		});
+		view.updateState(state);
+	}
 
 	function replaceWordCommand(words: { wrongWord: string; rightWord: string }) {
 		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
@@ -45,9 +62,12 @@
 			),
 			plugins: [
 				history(),
-				linterPlugin,
+				linterPluginSpelling,
+				linterPluginGrammar,
+				linterPluginGFL,
 				keymap(baseKeymap),
 				myKeymap,
+
 				placeholder('Type your text here')
 			]
 		});
@@ -60,6 +80,7 @@
 				$textContent = newState.doc.textContent.toString();
 			}
 		});
+		reconfigAllPlugins();
 
 		return () => {
 			view?.destroy();

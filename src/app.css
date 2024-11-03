@@ -93,6 +93,14 @@ body {
 	background-color: yellow;
 	text-decoration: underline;
 }
+.linter-grammar{
+	background-color: #6e6eda;
+	text-decoration: underline;
+}
+.linter-gfl{
+	background-color: #f6dade;
+	text-decoration: underline;
+}
 .editor__paragraph .placeholder::before {
 	pointer-events: none;
 	position: absolute;
