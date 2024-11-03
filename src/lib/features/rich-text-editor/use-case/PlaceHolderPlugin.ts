@@ -5,7 +5,7 @@ function placeholder(placeholder:string) {
 	return new Plugin({
 		props: {
 			decorations(state) {
-				const textContent = state.tr.selection.$from.parent.textContent;
+				const textContent = state.doc.textContent;
 
 				if (!textContent) {
 					// Decoration.widget adds the placeholder decoration

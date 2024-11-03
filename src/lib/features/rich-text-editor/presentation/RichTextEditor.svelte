@@ -16,10 +16,23 @@
 	import { placeholder } from '$lib/features/rich-text-editor/use-case/PlaceHolderPlugin';
 	import { keymap } from 'prosemirror-keymap';
 	import { baseKeymap } from 'prosemirror-commands';
+	import {  Transaction } from 'prosemirror-state';
+	import {replaceWordInDocument} from '$lib/features/rich-text-editor/use-case/replaceText';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
 
+	const words = { wrongWord: "svelte", rightWord: "vue" };
+
+
+	function replaceWordCommand(words: { wrongWord: string; rightWord: string }) {
+		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
+			if (!dispatch) return false; // No dispatch means no transaction to apply
+
+			replaceWordInDocument(state, dispatch, words);
+			return true; // Return true to indicate that the command executed
+		};
+	}
 	onMount(() => {
 		const state = EditorState.create({
 			schema: mySchema,
@@ -60,6 +73,11 @@
 		{#if view !== null}
 			<ToolBar {view} {mySchema}></ToolBar>
 			<ExportButton state={view.state}></ExportButton>
+			<button onclick={()=>{
+				if(!view){throw new Error("view is null")}
+				replaceWordCommand(words)(view.state, view.dispatch)
+
+			} }> Click </button>
 		{/if}
 	</div>
 
