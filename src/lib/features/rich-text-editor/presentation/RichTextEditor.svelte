@@ -11,19 +11,19 @@
 
 	import ToolBar from './ToolBar.svelte';
 	import ExportButton from './ExportButton.svelte';
-	import linterPlugin from '../use-case/LinterPlugin';
+	import createLinterPlugin from '../use-case/LinterPlugin';
 	import { myKeymap } from '$lib/features/rich-text-editor/entities/keymaps';
 	import { placeholder } from '$lib/features/rich-text-editor/use-case/PlaceHolderPlugin';
 	import { keymap } from 'prosemirror-keymap';
 	import { baseKeymap } from 'prosemirror-commands';
-	import {  Transaction } from 'prosemirror-state';
-	import {replaceWordInDocument} from '$lib/features/rich-text-editor/use-case/replaceText';
+	import { Transaction } from 'prosemirror-state';
+	import { replaceWordInDocument } from '$lib/features/rich-text-editor/use-case/replaceText';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
 
-	const words = { wrongWord: "svelte", rightWord: "vue" };
-
+	const words = { wrongWord: 'svelte', rightWord: 'vue' };
+	const linterPlugin = createLinterPlugin([/burger/g, /pizza/g, /fries/g]);
 
 	function replaceWordCommand(words: { wrongWord: string; rightWord: string }) {
 		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
@@ -73,11 +73,16 @@
 		{#if view !== null}
 			<ToolBar {view} {mySchema}></ToolBar>
 			<ExportButton state={view.state}></ExportButton>
-			<button onclick={()=>{
-				if(!view){throw new Error("view is null")}
-				replaceWordCommand(words)(view.state, view.dispatch)
-
-			} }> Click </button>
+			<button
+				onclick={() => {
+					if (!view) {
+						throw new Error('view is null');
+					}
+					replaceWordCommand(words)(view.state, view.dispatch);
+				}}
+			>
+				Click
+			</button>
 		{/if}
 	</div>
 
