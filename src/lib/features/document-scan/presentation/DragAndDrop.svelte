@@ -25,7 +25,7 @@
 			return '';
 		}
 	});
-
+	// todo: add store to this stupid shit v
 	let extractedText = $state('');
 
 	async function convertToText(file: File | unknown, type: string) {

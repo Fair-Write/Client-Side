@@ -25,6 +25,10 @@
 	const words = { wrongWord: 'svelte', rightWord: 'vue' };
 	const linterPlugin = createLinterPlugin([/burger/g, /pizza/g, /fries/g]);
 
+
+	// todo:LINTER - add a store for this array of regexes i also have to have a regex factory
+	// todo:REPLACE TEXT - add a store as well for the word to replace it with
+
 	function replaceWordCommand(words: { wrongWord: string; rightWord: string }) {
 		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
 			if (!dispatch) return false; // No dispatch means no transaction to apply
