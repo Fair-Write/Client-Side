@@ -28,7 +28,7 @@
 	let linterPluginGFL = createLinterPlugin([], 'linter-gfl');
 
 	// todo:LINTER - add a store for this array of regexes i also have to have a regex factory
-	// todo:LINTER - create a linter will be instanciated easily DONE
+	// todo:LINTER - create a linter will be instantiated easily DONE
 	// todo:REPLACE TEXT - add a store as well for the word to replace it with
 
 	// Plan: bali when changing these arrays i must instantiate the plugin again sadly
