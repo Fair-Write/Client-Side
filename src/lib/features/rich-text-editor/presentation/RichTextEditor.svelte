@@ -14,6 +14,8 @@
 	import linterPlugin from '../use-case/LinterPlugin';
 	import { myKeymap } from '$lib/features/rich-text-editor/entities/keymaps';
 	import { placeholder } from '$lib/features/rich-text-editor/use-case/PlaceHolderPlugin';
+	import { keymap } from 'prosemirror-keymap';
+	import { baseKeymap } from 'prosemirror-commands';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -24,7 +26,13 @@
 			doc: DOMParser.fromSchema(mySchema).parse(
 				document.createRange().createContextualFragment($textContent)
 			),
-			plugins: [history(), linterPlugin, myKeymap, placeholder("Type your text here")]
+			plugins: [
+				history(),
+				linterPlugin,
+				keymap(baseKeymap),
+				myKeymap,
+				placeholder('Type your text here')
+			]
 		});
 
 		view = new EditorView(editorContainer, {
