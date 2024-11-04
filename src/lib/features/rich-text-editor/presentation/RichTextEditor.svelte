@@ -39,9 +39,14 @@
 		linterPlugin= createLinterPlugin($linterStore);
 
 		const state = view.state.reconfigure({
-			plugins: [linterPlugin]
+			plugins: [linterPlugin,history(),
+				keymap(baseKeymap),
+				myKeymap,
+				placeholder('Type your text here'),]
 		});
+
 		view.updateState(state);
+
 	}
 
 	function replaceWordCommand(words: { wrongWord: string; rightWord: string }) {
@@ -60,10 +65,10 @@
 			),
 			plugins: [
 				history(),
-				linterPlugin,
 				keymap(baseKeymap),
 				myKeymap,
-				placeholder('Type your text here')
+				placeholder('Type your text here'),
+				linterPlugin,
 			]
 		});
 
