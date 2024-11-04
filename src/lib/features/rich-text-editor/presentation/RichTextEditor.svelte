@@ -18,14 +18,14 @@
 	import { baseKeymap } from 'prosemirror-commands';
 	import { Transaction } from 'prosemirror-state';
 	import { replaceWordInDocument } from '$lib/features/rich-text-editor/use-case/replaceText';
+	import {linterStore} from '$lib/stores/lintingStore';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
 
 	const words = { wrongWord: 'svelte', rightWord: 'vue' };
-	let linterPluginSpelling = createLinterPlugin([], 'linter-error ');
-	let linterPluginGrammar = createLinterPlugin([], 'linter-grammar');
-	let linterPluginGFL = createLinterPlugin([], 'linter-gfl');
+	let linterPlugin= createLinterPlugin([] );
+
 
 	// todo:LINTER - add a store for this array of regexes i also have to have a regex factory
 	// todo:LINTER - create a linter will be instantiated easily DONE
@@ -36,12 +36,10 @@
 	function reconfigAllPlugins(): void {
 		if (!view) throw new Error('Editorview not defined');
 
-		linterPluginSpelling = createLinterPlugin([/dog/g], 'linter-error ');
-		linterPluginGrammar = createLinterPlugin([/cat/g], 'linter-grammar');
-		linterPluginGFL = createLinterPlugin([/bird/g], 'linter-gfl');
+		linterPlugin= createLinterPlugin($linterStore);
 
 		const state = view.state.reconfigure({
-			plugins: [linterPluginGrammar, linterPluginGFL, linterPluginSpelling]
+			plugins: [linterPlugin]
 		});
 		view.updateState(state);
 	}
@@ -62,12 +60,9 @@
 			),
 			plugins: [
 				history(),
-				linterPluginSpelling,
-				linterPluginGrammar,
-				linterPluginGFL,
+				linterPlugin,
 				keymap(baseKeymap),
 				myKeymap,
-
 				placeholder('Type your text here')
 			]
 		});

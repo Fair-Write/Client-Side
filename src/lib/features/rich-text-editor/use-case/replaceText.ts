@@ -5,6 +5,7 @@ interface ReplaceWordParams {
 	wrongWord: string;
 	rightWord: string;
 }
+// todo: rework this what you have to do is find the node that contains the exact word
 
 export function replaceWordInDocument(
 	editorState: EditorState,
