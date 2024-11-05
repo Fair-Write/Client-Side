@@ -18,14 +18,14 @@
 	import { baseKeymap } from 'prosemirror-commands';
 	import { Transaction } from 'prosemirror-state';
 	import { replaceWordInDocument } from '$lib/features/rich-text-editor/use-case/replaceText';
-	import {linterStore} from '$lib/stores/lintingStore';
+	import { linterStore } from '$lib/stores/lintingStore';
+	import { replaceStore } from '$lib/stores/lintingStore';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
 
 	const words = { wrongWord: 'svelte', rightWord: 'vue' };
-	let linterPlugin= createLinterPlugin([] );
-
+	let linterPlugin = createLinterPlugin([]);
 
 	// todo:LINTER - add a store for this array of regexes i also have to have a regex factory
 	// todo:LINTER - create a linter will be instantiated easily DONE
@@ -36,20 +36,22 @@
 	function reconfigAllPlugins(): void {
 		if (!view) throw new Error('Editorview not defined');
 
-		linterPlugin= createLinterPlugin($linterStore);
+		linterPlugin = createLinterPlugin($linterStore);
 
 		const state = view.state.reconfigure({
-			plugins: [linterPlugin,history(),
+			plugins: [
+				linterPlugin,
+				history(),
 				keymap(baseKeymap),
 				myKeymap,
-				placeholder('Type your text here'),]
+				placeholder('Type your text here')
+			]
 		});
 
 		view.updateState(state);
-
 	}
 
-	function replaceWordCommand(words: { wrongWord: string; rightWord: string }) {
+	function replaceWordCommand(words: { correctPhrase: string; wrongPhrase: string }) {
 		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
 			if (!dispatch) return false; // No dispatch means no transaction to apply
 
@@ -57,6 +59,17 @@
 			return true; // Return true to indicate that the command executed
 		};
 	}
+
+	$effect(() => {
+		if ($replaceStore.length != 0) {
+			$replaceStore.forEach((store) => {
+				replaceWordCommand(store)(view!.state, view!.dispatch);
+			});
+
+			$replaceStore = [];
+		}
+	});
+
 	onMount(() => {
 		const state = EditorState.create({
 			schema: mySchema,
@@ -68,7 +81,7 @@
 				keymap(baseKeymap),
 				myKeymap,
 				placeholder('Type your text here'),
-				linterPlugin,
+				linterPlugin
 			]
 		});
 
