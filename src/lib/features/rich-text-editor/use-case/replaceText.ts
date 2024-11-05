@@ -1,18 +1,16 @@
 import { EditorState, Transaction } from 'prosemirror-state';
 import { Node } from 'prosemirror-model';
+import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 
-interface ReplaceWordParams {
-	wrongWord: string;
-	rightWord: string;
-}
+
 // todo: rework this what you have to do is find the node that contains the exact word
 
 export function replaceWordInDocument(
 	editorState: EditorState,
 	dispatch: (tr: Transaction) => void,
-	words: ReplaceWordParams
+	words:Omit<TSuggestion, 'analysis'|'correctionType'>
 ): void {
-	const { wrongWord, rightWord } = words;
+	const { wrongPhrase, correctPhrase } = words;
 	const { doc } = editorState;
 	const transaction = editorState.tr;
 
@@ -22,11 +20,11 @@ export function replaceWordInDocument(
 	// Traverse each text node in the document
 	doc.descendants((node: Node, pos: number) => {
 		if (node.isText && node.textContent) {
-			const regex = new RegExp(`\\b${wrongWord}\\b`, 'g');
+			const regex = new RegExp(`\\b${wrongPhrase}\\b`, 'g');
 			const matches = [...node.textContent.matchAll(regex)];
 
 			if (matches.length > 0) {
-				const newText = node.textContent.replace(regex, rightWord);
+				const newText = node.textContent.replace(regex, correctPhrase);
 
 				// Store the replacement range and text
 				replacements.push({ from: pos, to: pos + node.nodeSize, text: newText });

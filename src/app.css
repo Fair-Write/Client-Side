@@ -90,15 +90,15 @@ body {
 }
 
 .linter-error {
-	background-color: yellow;
+	background-color: #ffff2c;
 	text-decoration: underline;
 }
 .linter-grammar{
-	background-color: #6e6eda;
+	background-color: #6fa1ff;
 	text-decoration: underline;
 }
 .linter-gfl{
-	background-color: #f6dade;
+	background-color: #ffa746;
 	text-decoration: underline;
 }
 .editor__paragraph .placeholder::before {
