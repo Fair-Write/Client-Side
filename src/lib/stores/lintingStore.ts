@@ -17,7 +17,7 @@ export const aiSuggestions = writable<TSuggestion[]>([
 	{ wrongPhrase: 'collegues', correctPhrase: 'colleagues', correctionType: 'spelling', analysis: 5 },
 	{ wrongPhrase: 'his', correctPhrase: 'their', correctionType: 'gfl', analysis: 5 },
 	{ wrongPhrase: 'he', correctPhrase: 'they', correctionType: 'gfl', analysis: 5 },
-	{ wrongPhrase: 'responsabilities ', correctPhrase: 'responsibilities', correctionType: 'spelling', analysis: 5 }
+	{ wrongPhrase: 'responsabilities', correctPhrase: 'responsibilities', correctionType: 'spelling', analysis: 5 }
 ]);
 
 export const linterStore = derived(aiSuggestions, ($aiSuggestions) => {
