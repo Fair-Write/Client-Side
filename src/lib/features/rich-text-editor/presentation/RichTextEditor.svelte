@@ -11,15 +11,52 @@
 
 	import ToolBar from './ToolBar.svelte';
 	import ExportButton from './ExportButton.svelte';
-	import linterPlugin from '../use-case/LinterPlugin';
+	import createLinterPlugin from '../use-case/LinterPlugin';
 	import { myKeymap } from '$lib/features/rich-text-editor/entities/keymaps';
 	import { placeholder } from '$lib/features/rich-text-editor/use-case/PlaceHolderPlugin';
 	import { keymap } from 'prosemirror-keymap';
 	import { baseKeymap } from 'prosemirror-commands';
+	import { Transaction } from 'prosemirror-state';
+	import { replaceWordInDocument } from '$lib/features/rich-text-editor/use-case/replaceText';
+	import {linterStore} from '$lib/stores/lintingStore';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
 
+	const words = { wrongWord: 'svelte', rightWord: 'vue' };
+	let linterPlugin= createLinterPlugin([] );
+
+
+	// todo:LINTER - add a store for this array of regexes i also have to have a regex factory
+	// todo:LINTER - create a linter will be instantiated easily DONE
+	// todo:REPLACE TEXT - add a store as well for the word to replace it with
+
+	// Plan: bali when changing these arrays i must instantiate the plugin again sadly
+
+	function reconfigAllPlugins(): void {
+		if (!view) throw new Error('Editorview not defined');
+
+		linterPlugin= createLinterPlugin($linterStore);
+
+		const state = view.state.reconfigure({
+			plugins: [linterPlugin,history(),
+				keymap(baseKeymap),
+				myKeymap,
+				placeholder('Type your text here'),]
+		});
+
+		view.updateState(state);
+
+	}
+
+	function replaceWordCommand(words: { wrongWord: string; rightWord: string }) {
+		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
+			if (!dispatch) return false; // No dispatch means no transaction to apply
+
+			replaceWordInDocument(state, dispatch, words);
+			return true; // Return true to indicate that the command executed
+		};
+	}
 	onMount(() => {
 		const state = EditorState.create({
 			schema: mySchema,
@@ -28,10 +65,10 @@
 			),
 			plugins: [
 				history(),
-				linterPlugin,
 				keymap(baseKeymap),
 				myKeymap,
-				placeholder('Type your text here')
+				placeholder('Type your text here'),
+				linterPlugin,
 			]
 		});
 
@@ -43,6 +80,7 @@
 				$textContent = newState.doc.textContent.toString();
 			}
 		});
+		reconfigAllPlugins();
 
 		return () => {
 			view?.destroy();
@@ -60,6 +98,16 @@
 		{#if view !== null}
 			<ToolBar {view} {mySchema}></ToolBar>
 			<ExportButton state={view.state}></ExportButton>
+			<button
+				onclick={() => {
+					if (!view) {
+						throw new Error('view is null');
+					}
+					replaceWordCommand(words)(view.state, view.dispatch);
+				}}
+			>
+				Click
+			</button>
 		{/if}
 	</div>
 
