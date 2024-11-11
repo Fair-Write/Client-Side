@@ -33,7 +33,7 @@
 				<a
 					href="/dashboard/editor"
 					class={cn(
-						'rounded-lg border border-transparent p-2 text-xl ',
+						'rounded-lg border border-transparent p-2  text-xl transition-all ease-in-out',
 						' hover:bg-stone-200 ',
 						$page.url.pathname === '/dashboard/editor' &&
 							'border-solid border-stone-300 bg-stone-50 shadow-md hover:bg-stone-50'
@@ -44,7 +44,7 @@
 				<a
 					href="/dashboard/scan"
 					class={cn(
-						'rounded-lg border border-transparent  p-2 text-xl',
+						'rounded-lg border border-transparent  p-2 text-xl    transition-all ease-in-out',
 						' hover:bg-stone-200 ',
 						$page.url.pathname === '/dashboard/scan' &&
 							'border-solid border-stone-300 bg-stone-50 shadow-md hover:bg-stone-50 '

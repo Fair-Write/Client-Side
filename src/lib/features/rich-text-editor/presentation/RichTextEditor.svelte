@@ -6,7 +6,7 @@
 	import { DOMParser } from 'prosemirror-model';
 	import { history } from 'prosemirror-history';
 
-	import { textContent } from '$lib/stores/textFromEditorStore';
+	import { textContent, textTitle } from '$lib/stores/textFromEditorStore';
 	import mySchema from '$lib/features/rich-text-editor/entities/Schema';
 
 	import ToolBar from './ToolBar.svelte';
@@ -30,6 +30,10 @@
 	// todo:REPLACE TEXT - add a store as well for the word to replace it with
 
 	// Plan: bali when changing these arrays i must instantiate the plugin again sadly
+	function resetScroll(event: Event) {
+		if (event == null) throw new Error('NULL BOSS');
+		event.target.scrollLeft = 0;
+	}
 
 	function reconfigAllPlugins(): void {
 		if (!view) throw new Error('Editorview not defined');
@@ -104,14 +108,20 @@
 	<div
 		class=" flex h-14 w-full items-center justify-between border-b border-stone-300 bg-stone-50 p-2"
 	>
-		<h2 class="text-xl font-semibold">Untitled_1</h2>
-
+		<input
+			type="text"
+			class="w-24 text-ellipsis whitespace-nowrap text-xl font-semibold focus:outline-none"
+			bind:value={$textTitle}
+			onblur={resetScroll}
+		/>
 		{#if view !== null}
 			<ToolBar {view} {mySchema}></ToolBar>
 		{/if}
 
 		<div>
-			Word Count: {$textContent.trim().split(/\s+/).length}
+			<p class="text-sm text-muted-foreground">
+				Word Count: {$textContent.trim().split(/\s+/).length}
+			</p>
 		</div>
 	</div>
 
