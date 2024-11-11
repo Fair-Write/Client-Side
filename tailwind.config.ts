@@ -1,7 +1,7 @@
 import { fontFamily } from 'tailwindcss/defaultTheme';
-import typography from '@tailwindcss/typography';
+import * as typography  from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss';
-import tailwindcssAnimate from 'tailwindcss-animate';
+import * as  tailwindcssAnimate from 'tailwindcss-animate';
 const config: Config = {
 	darkMode: ['class'],
 	content: ['./src/**/*.{html,js,svelte,ts}'],
