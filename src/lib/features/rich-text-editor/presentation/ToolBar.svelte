@@ -12,6 +12,7 @@
 		AlignLeft,
 		AlignRight,
 		Bold,
+		ChevronDown,
 		Italic,
 		Pilcrow,
 		Redo2,
@@ -64,7 +65,12 @@
 <div class="flex items-center justify-center gap-3">
 	<!-- Heading -->
 	<DropdownMenu.Root>
-		<DropdownMenu.Trigger>Heading</DropdownMenu.Trigger>
+		<DropdownMenu.Trigger>
+			<Button variant="secondary" class=" rounded-md"
+				>Heading
+				<ChevronDown />
+			</Button>
+		</DropdownMenu.Trigger>
 		<DropdownMenu.Content>
 			<DropdownMenu.Group>
 				<DropdownMenu.Label>All Headings</DropdownMenu.Label>
@@ -76,11 +82,11 @@
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>
 	<!-- Styles -->
-	<div>
+	<div class="border-x border-solid border-stone-300 px-2">
 		<Tooltip.Provider>
 			<Tooltip.Root>
 				<Tooltip.Trigger>
-					<Button size="icon" class="h-10 w-10 " variant="outline" onclick={toggleBold}
+					<Button size="icon" class="h-10 w-10 " variant="ghost" onclick={toggleBold}
 						><Bold /></Button
 					>
 				</Tooltip.Trigger>
@@ -93,7 +99,7 @@
 		<Tooltip.Provider>
 			<Tooltip.Root>
 				<Tooltip.Trigger>
-					<Button size="icon" class="h-10 w-10" variant="outline" onclick={toggleItalic}
+					<Button size="icon" class="h-10 w-10" variant="ghost" onclick={toggleItalic}
 						><Italic /></Button
 					>
 				</Tooltip.Trigger>
@@ -106,7 +112,7 @@
 		<Tooltip.Provider>
 			<Tooltip.Root>
 				<Tooltip.Trigger>
-					<Button size="icon" class="h-10 w-10" variant="outline" onclick={toggleParagraph}
+					<Button size="icon" class="h-10 w-10" variant="ghost" onclick={toggleParagraph}
 						><Pilcrow /></Button
 					>
 				</Tooltip.Trigger>
@@ -117,16 +123,13 @@
 		</Tooltip.Provider>
 	</div>
 	<!-- alignment -->
-	<div>
+	<div class="border-r border-solid border-stone-300 px-2">
 		<!-- Justify -->
 		<Tooltip.Provider>
 			<Tooltip.Root>
 				<Tooltip.Trigger>
-					<Button
-						size="icon"
-						class="h-10 w-10"
-						variant="outline"
-						onclick={() => setTextAlign('left')}><AlignLeft /></Button
+					<Button size="icon" class="h-10 w-10" variant="ghost" onclick={() => setTextAlign('left')}
+						><AlignLeft /></Button
 					>
 				</Tooltip.Trigger>
 				<Tooltip.Content>
@@ -142,7 +145,7 @@
 					<Button
 						size="icon"
 						class="h-10 w-10"
-						variant="outline"
+						variant="ghost"
 						onclick={() => setTextAlign('center')}><AlignCenter /></Button
 					>
 				</Tooltip.Trigger>
@@ -160,7 +163,7 @@
 					<Button
 						size="icon"
 						class="h-10 w-10"
-						variant="outline"
+						variant="ghost"
 						onclick={() => setTextAlign('right')}><AlignRight /></Button
 					>
 				</Tooltip.Trigger>
@@ -176,7 +179,7 @@
 		<Tooltip.Provider>
 			<Tooltip.Root>
 				<Tooltip.Trigger>
-					<Button size="icon" variant="outline" onclick={() => undo(view.state, view.dispatch)}
+					<Button size="icon" variant="ghost" onclick={() => undo(view.state, view.dispatch)}
 						><Undo2 /></Button
 					>
 				</Tooltip.Trigger>
@@ -193,7 +196,7 @@
 					<Button
 						size="icon"
 						class="h-10 w-10"
-						variant="outline"
+						variant="ghost"
 						onclick={() => redo(view.state, view.dispatch)}><Redo2 /></Button
 					>
 				</Tooltip.Trigger>
