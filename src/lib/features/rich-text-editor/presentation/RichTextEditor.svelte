@@ -10,7 +10,7 @@
 	import mySchema from '$lib/features/rich-text-editor/entities/Schema';
 
 	import ToolBar from './ToolBar.svelte';
-	import ExportButton from './ExportButton.svelte';
+	// import ExportButton from './ExportButton.svelte';
 	import createLinterPlugin from '../use-case/LinterPlugin';
 	import { myKeymap } from '$lib/features/rich-text-editor/entities/keymaps';
 	import { placeholder } from '$lib/features/rich-text-editor/use-case/PlaceHolderPlugin';
@@ -23,8 +23,6 @@
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
-
-	const words = { wrongWord: 'svelte', rightWord: 'vue' };
 	let linterPlugin = createLinterPlugin([]);
 
 	// todo:LINTER - add a store for this array of regexes i also have to have a regex factory
@@ -106,22 +104,16 @@
 	<div
 		class=" flex h-14 w-full items-center justify-between border-b border-stone-300 bg-stone-50 p-2"
 	>
-		<h2 class="text-xl font-semibold">Write</h2>
+		<h2 class="text-xl font-semibold">Editor</h2>
 
-		{#if view !== null}
-			<ToolBar {view} {mySchema}></ToolBar>
-			<ExportButton state={view.state}></ExportButton>
-			<button
-				onclick={() => {
-					if (!view) {
-						throw new Error('view is null');
-					}
-					replaceWordCommand(words)(view.state, view.dispatch);
-				}}
-			>
-				Click
-			</button>
-		{/if}
+		{#if view!==null}
+		<ToolBar {view} {mySchema}></ToolBar>
+			{/if}
+
+		<div>
+			Word Count: {$textContent.trim().split(/\s+/).length}
+		</div>
+
 	</div>
 
 	<!-- ProseMirror editor container -->

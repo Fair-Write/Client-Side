@@ -1,12 +1,14 @@
-import { fontFamily } from 'tailwindcss/defaultTheme';
-import * as typography  from '@tailwindcss/typography';
+import aspectRatio from '@tailwindcss/aspect-ratio';
+import containerQueries from '@tailwindcss/container-queries';
+import typography from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss';
-import * as  tailwindcssAnimate from 'tailwindcss-animate';
-const config: Config = {
-	darkMode: ['class'],
+import tailwindcssAnimate from 'tailwindcss-animate';
+import { fontFamily } from 'tailwindcss/defaultTheme';
+
+export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
+	darkMode: ['class'],
 	safelist: ['dark'],
-	plugins: [typography, tailwindcssAnimate],
 	theme: {
 		container: {
 			center: true,
@@ -81,7 +83,6 @@ const config: Config = {
 				'caret-blink': 'caret-blink 1.25s ease-out infinite'
 			}
 		}
-	}
-};
-
-export default config;
+	},
+	plugins: [typography, containerQueries, aspectRatio, tailwindcssAnimate]
+} satisfies Config;
