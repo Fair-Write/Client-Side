@@ -2,6 +2,9 @@
 	"extends": "./.svelte-kit/tsconfig.json",
 	"include": ["tailwind.config.ts"],
 	"compilerOptions": {
+		"paths": {
+			"$lib/*": ["src/lib/*"]
+		},
 		"allowJs": true,
 		"checkJs": true,
 		"esModuleInterop": true,
