@@ -29,12 +29,12 @@
 	// todo:LINTER - create a linter will be instantiated easily DONE
 	// todo:REPLACE TEXT - add a store as well for the word to replace it with
 
-	// Plan: bali when changing these arrays i must instantiate the plugin again sadly
 	function resetScroll(event: Event) {
-		if (event == null) throw new Error('NULL BOSS');
-		event.target.scrollLeft = 0;
+		const target = event.target as HTMLDivElement;
+		target.scrollLeft = 0;
 	}
 
+	// when stores has changed, the plugins must be reconfigured
 	function reconfigAllPlugins(): void {
 		if (!view) throw new Error('Editorview not defined');
 
@@ -110,7 +110,7 @@
 	>
 		<input
 			type="text"
-			class="w-24 text-ellipsis whitespace-nowrap text-xl font-semibold focus:outline-none"
+			class="w-24 bg-stone-50 text-ellipsis whitespace-nowrap text-xl font-semibold focus:outline-none"
 			bind:value={$textTitle}
 			onblur={resetScroll}
 		/>
