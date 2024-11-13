@@ -1,7 +1,6 @@
 import { derived } from 'svelte/store';
 import { writable } from 'svelte/store';
-import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
-
+import type { TSuggestion } from '../features/suggestion-bot/entities/suggestions'
 
 export function omitObject<T extends TSuggestion, K extends keyof T>(obj: T, ...props: K[]): Omit<T, K> {
 	const result = { ...obj };

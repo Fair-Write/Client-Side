@@ -5,13 +5,14 @@
 	import type { EditorView } from 'prosemirror-view';
 	import { undo, redo } from 'prosemirror-history';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-	import * as Tooltip from '$lib/components/ui/tooltip';
+	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 
 	import {
 		AlignCenter,
 		AlignLeft,
 		AlignRight,
 		Bold,
+		ChevronDown,
 		Italic,
 		Pilcrow,
 		Redo2,
@@ -61,128 +62,144 @@
 	}
 </script>
 
-<div class="flex items-center justify-center gap-3">
+<div class="lg:flex items-center justify-center gap-3 hidden">
 	<!-- Heading -->
 	<DropdownMenu.Root>
-		<DropdownMenu.Trigger asChild let:builder>
-			<Button builders={[builder]} variant="outline">Heading</Button>
+		<DropdownMenu.Trigger>
+			<Button variant="secondary" class=" rounded-md"
+				>H
+				<ChevronDown />
+			</Button>
 		</DropdownMenu.Trigger>
 		<DropdownMenu.Content>
 			<DropdownMenu.Group>
 				<DropdownMenu.Label>All Headings</DropdownMenu.Label>
 				<DropdownMenu.Separator />
-				<DropdownMenu.Item on:click={() => toggleHeading(1)}>Heading 1</DropdownMenu.Item>
-				<DropdownMenu.Item on:click={() => toggleHeading(2)}>Heading 2</DropdownMenu.Item>
-				<DropdownMenu.Item on:click={() => toggleHeading(3)}>Heading 3</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => toggleHeading(1)}>Heading 1</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => toggleHeading(2)}>Heading 2</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => toggleHeading(3)}>Heading 3</DropdownMenu.Item>
 			</DropdownMenu.Group>
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>
 	<!-- Styles -->
-	<div>
-		<Tooltip.Root>
-			<Tooltip.Trigger>
-				<Button size="icon" class="w-10 h-10 " variant="outline" on:click={toggleBold}
-					><Bold /></Button
-				>
-			</Tooltip.Trigger>
-			<Tooltip.Content>
-				<p class="text-muted-foreground text-sm">Bold</p>
-			</Tooltip.Content>
-		</Tooltip.Root>
+	<div class="border-x border-solid border-stone-300 px-1">
+		<Tooltip.Provider>
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<Button size="icon" class="h-8 w-8 " variant="ghost" onclick={toggleBold}><Bold /></Button
+					>
+				</Tooltip.Trigger>
+				<Tooltip.Content>
+					<p class="text-sm text-muted-foreground">Bold</p>
+				</Tooltip.Content>
+			</Tooltip.Root>
+		</Tooltip.Provider>
 
-		<Tooltip.Root>
-			<Tooltip.Trigger>
-				<Button size="icon" class="w-10 h-10" variant="outline" on:click={toggleItalic}
-					><Italic /></Button
-				>
-			</Tooltip.Trigger>
-			<Tooltip.Content>
-				<p>Italic</p>
-			</Tooltip.Content>
-		</Tooltip.Root>
+		<Tooltip.Provider>
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<Button size="icon" class="h-8 w-8" variant="ghost" onclick={toggleItalic}
+						><Italic /></Button
+					>
+				</Tooltip.Trigger>
+				<Tooltip.Content>
+					<p>Italic</p>
+				</Tooltip.Content>
+			</Tooltip.Root>
+		</Tooltip.Provider>
 
-		<Tooltip.Root>
-			<Tooltip.Trigger>
-				<Button size="icon" class="w-10 h-10" variant="outline" on:click={toggleParagraph}
-					><Pilcrow /></Button
-				>
-			</Tooltip.Trigger>
-			<Tooltip.Content>
-				<p>Paragraph</p>
-			</Tooltip.Content>
-		</Tooltip.Root>
+		<Tooltip.Provider>
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<Button size="icon" class="h-8 w-8" variant="ghost" onclick={toggleParagraph}
+						><Pilcrow /></Button
+					>
+				</Tooltip.Trigger>
+				<Tooltip.Content>
+					<p>Paragraph</p>
+				</Tooltip.Content>
+			</Tooltip.Root>
+		</Tooltip.Provider>
 	</div>
 	<!-- alignment -->
-	<div>
+	<div class="border-r border-solid border-stone-300 px-1">
 		<!-- Justify -->
-		<Tooltip.Root>
-			<Tooltip.Trigger>
-				<Button
-					size="icon"
-					class="w-10 h-10"
-					variant="outline"
-					on:click={() => setTextAlign('left')}><AlignLeft /></Button
-				>
-			</Tooltip.Trigger>
-			<Tooltip.Content>
-				<p>Align Left</p>
-			</Tooltip.Content>
-		</Tooltip.Root>
+		<Tooltip.Provider>
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<Button
+						size="icon"
+						class="m-0 h-8 w-8"
+						variant="ghost"
+						onclick={() => setTextAlign('left')}><AlignLeft /></Button
+					>
+				</Tooltip.Trigger>
+				<Tooltip.Content>
+					<p>Align Left</p>
+				</Tooltip.Content>
+			</Tooltip.Root>
+		</Tooltip.Provider>
+
 		<!-- Align Center -->
-		<Tooltip.Root>
-			<Tooltip.Trigger>
-				<Button
-					size="icon"
-					class="w-10 h-10"
-					variant="outline"
-					on:click={() => setTextAlign('center')}><AlignCenter /></Button
-				>
-			</Tooltip.Trigger>
-			<Tooltip.Content>
-				<p>Align Center</p>
-			</Tooltip.Content>
-		</Tooltip.Root>
+		<Tooltip.Provider>
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<Button size="icon" class="h-8 w-8" variant="ghost" onclick={() => setTextAlign('center')}
+						><AlignCenter /></Button
+					>
+				</Tooltip.Trigger>
+				<Tooltip.Content>
+					<p>Align Center</p>
+				</Tooltip.Content>
+			</Tooltip.Root>
+		</Tooltip.Provider>
+
 		<!-- Align Right -->
-		<Tooltip.Root>
-			<Tooltip.Trigger>
-				<Button
-					size="icon"
-					class="w-10 h-10"
-					variant="outline"
-					on:click={() => setTextAlign('right')}><AlignRight /></Button
-				>
-			</Tooltip.Trigger>
-			<Tooltip.Content>
-				<p>Align Right</p>
-			</Tooltip.Content>
-		</Tooltip.Root>
+
+		<Tooltip.Provider>
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<Button size="icon" class="h-8 w-8" variant="ghost" onclick={() => setTextAlign('right')}
+						><AlignRight /></Button
+					>
+				</Tooltip.Trigger>
+				<Tooltip.Content>
+					<p>Align Right</p>
+				</Tooltip.Content>
+			</Tooltip.Root>
+		</Tooltip.Provider>
 	</div>
 	<!-- history -->
 	<div class="">
 		<!-- Undo -->
-		<Tooltip.Root>
-			<Tooltip.Trigger>
-				<Button size="icon" variant="outline" on:click={() => undo(view.state, view.dispatch)}
-					><Undo2 /></Button
-				>
-			</Tooltip.Trigger>
-			<Tooltip.Content>
-				<p>Undo</p>
-			</Tooltip.Content>
-		</Tooltip.Root>
+		<Tooltip.Provider>
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<Button size="icon" variant="ghost" onclick={() => undo(view.state, view.dispatch)}
+						><Undo2 /></Button
+					>
+				</Tooltip.Trigger>
+				<Tooltip.Content>
+					<p>Undo</p>
+				</Tooltip.Content>
+			</Tooltip.Root>
+		</Tooltip.Provider>
+
 		<!-- Redo -->
-		<Tooltip.Root>
-			<Tooltip.Trigger>
-				<Button
-					size="icon"
-					class="w-10 h-10"
-					variant="outline"
-					on:click={() => redo(view.state, view.dispatch)}><Redo2 /></Button
-				>
-			</Tooltip.Trigger>
-			<Tooltip.Content>
-				<p>Redo</p>
-			</Tooltip.Content>
-		</Tooltip.Root>
+		<Tooltip.Provider>
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<Button
+						size="icon"
+						class="h-8 w-8"
+						variant="ghost"
+						onclick={() => redo(view.state, view.dispatch)}><Redo2 /></Button
+					>
+				</Tooltip.Trigger>
+				<Tooltip.Content>
+					<p>Redo</p>
+				</Tooltip.Content>
+			</Tooltip.Root>
+		</Tooltip.Provider>
 	</div>
 </div>

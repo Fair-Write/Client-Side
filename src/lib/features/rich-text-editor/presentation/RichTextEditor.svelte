@@ -6,11 +6,11 @@
 	import { DOMParser } from 'prosemirror-model';
 	import { history } from 'prosemirror-history';
 
-	import { textContent } from '$lib/stores/textFromEditorStore';
+	import { textContent, textTitle } from '$lib/stores/textFromEditorStore';
 	import mySchema from '$lib/features/rich-text-editor/entities/Schema';
 
 	import ToolBar from './ToolBar.svelte';
-	import ExportButton from './ExportButton.svelte';
+	// import ExportButton from './ExportButton.svelte';
 	import createLinterPlugin from '../use-case/LinterPlugin';
 	import { myKeymap } from '$lib/features/rich-text-editor/entities/keymaps';
 	import { placeholder } from '$lib/features/rich-text-editor/use-case/PlaceHolderPlugin';
@@ -23,16 +23,18 @@
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
-
-	const words = { wrongWord: 'svelte', rightWord: 'vue' };
 	let linterPlugin = createLinterPlugin([]);
 
 	// todo:LINTER - add a store for this array of regexes i also have to have a regex factory
 	// todo:LINTER - create a linter will be instantiated easily DONE
 	// todo:REPLACE TEXT - add a store as well for the word to replace it with
 
-	// Plan: bali when changing these arrays i must instantiate the plugin again sadly
+	function resetScroll(event: Event) {
+		const target = event.target as HTMLDivElement;
+		target.scrollLeft = 0;
+	}
 
+	// when stores has changed, the plugins must be reconfigured
 	function reconfigAllPlugins(): void {
 		if (!view) throw new Error('Editorview not defined');
 
@@ -101,39 +103,46 @@
 	});
 </script>
 
-<section class="flex flex-1 flex-col items-center bg-stone-200">
+<section class="min-h-0 h-[100svh]  flex lg:flex-1 flex-col items-center bg-stone-50">
 	<!-- Custom toolbar with Chadcn Svelte buttons -->
 	<div
 		class=" flex h-14 w-full items-center justify-between border-b border-stone-300 bg-stone-50 p-2"
 	>
-		<h2 class="text-xl font-semibold">Write</h2>
-
+		<input
+			type="text"
+			class="w-24 bg-stone-50 text-ellipsis whitespace-nowrap text-xl font-semibold focus:outline-none"
+			bind:value={$textTitle}
+			onblur={resetScroll}
+		/>
 		{#if view !== null}
 			<ToolBar {view} {mySchema}></ToolBar>
-			<ExportButton state={view.state}></ExportButton>
-			<button
-				onclick={() => {
-					if (!view) {
-						throw new Error('view is null');
-					}
-					replaceWordCommand(words)(view.state, view.dispatch);
-				}}
-			>
-				Click
-			</button>
 		{/if}
+
+		<div>
+			<p class="text-sm text-muted-foreground">
+				Word Count: {$textContent.trim().split(/\s+/).length}
+			</p>
+		</div>
 	</div>
 
 	<!-- ProseMirror editor container -->
-	<div
-		bind:this={editorContainer}
-		class="prose overflow-y-scroll w-[700px] prose-base flex-1 bg-stone-50 focus:outline-none editor__paragraph"
-		id="editor"
-	></div>
+
+	<div class="custom-shadow flex w-full flex-1 items-start justify-center bg-stone-50">
+		<div
+			bind:this={editorContainer}
+			class="editor__paragraph prose prose-sm lg:prose-base xl:prose-lg flex-1"
+			id="editor"
+		></div>
+	</div>
 </section>
 
 <style>
 	#editor {
-		padding: 10px 20px;
+		padding: 10px 10px;
+		width: 100%;
+		max-width: 900px; /* Optional: prevent overflow */
+	}
+	.custom-shadow {
+		box-shadow: inset 0 0 3px 3px rgb(0 0 0 / 0.05);
 	}
 </style>

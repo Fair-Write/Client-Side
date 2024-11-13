@@ -1,12 +1,14 @@
-import { fontFamily } from 'tailwindcss/defaultTheme';
+import aspectRatio from '@tailwindcss/aspect-ratio';
+import containerQueries from '@tailwindcss/container-queries';
 import typography from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss';
+import tailwindcssAnimate from 'tailwindcss-animate';
+import { fontFamily } from 'tailwindcss/defaultTheme';
 
-const config: Config = {
-	darkMode: ['class'],
+export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
+	darkMode: ['class'],
 	safelist: ['dark'],
-	plugins: [typography],
 	theme: {
 		container: {
 			center: true,
@@ -57,10 +59,30 @@ const config: Config = {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-				sans: [...fontFamily.sans]
+				sans: ['Open Sans', ...fontFamily.sans],
+				'Leckerli-One': 'Leckerli One '
+			},
+
+			keyframes: {
+				'accordion-down': {
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' }
+				},
+				'accordion-up': {
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' }
+				},
+				'caret-blink': {
+					'0%,70%,100%': { opacity: '1' },
+					'20%,50%': { opacity: '0' }
+				}
+			},
+			animation: {
+				'accordion-down': 'accordion-down 0.2s ease-out',
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'caret-blink': 'caret-blink 1.25s ease-out infinite'
 			}
 		}
-	}
-};
-
-export default config;
+	},
+	plugins: [typography, containerQueries, aspectRatio, tailwindcssAnimate]
+} satisfies Config;
