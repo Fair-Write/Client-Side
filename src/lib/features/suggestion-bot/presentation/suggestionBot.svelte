@@ -4,7 +4,7 @@
 	import { replaceStore } from '$lib/stores/lintingStore';
 </script>
 
-<section class=" w-80 border-l border-stone-300 bg-stone-100">
+<section class=" min-h-0 h-[100svh] lg:w-80 border-l border-stone-300 bg-stone-100">
 	<div
 		class="flex h-14 w-full items-center justify-between border-b border-solid border-stone-300 bg-stone-50 p-5"
 	>

@@ -62,7 +62,7 @@
 	}
 </script>
 
-<div class="flex items-center justify-center gap-3">
+<div class="lg:flex items-center justify-center gap-3 hidden">
 	<!-- Heading -->
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger>

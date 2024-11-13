@@ -103,7 +103,7 @@
 	});
 </script>
 
-<section class="flex flex-1 flex-col items-center bg-stone-50">
+<section class="min-h-0 h-[100svh]  flex lg:flex-1 flex-col items-center bg-stone-50">
 	<!-- Custom toolbar with Chadcn Svelte buttons -->
 	<div
 		class=" flex h-14 w-full items-center justify-between border-b border-stone-300 bg-stone-50 p-2"
@@ -130,7 +130,7 @@
 	<div class="custom-shadow flex w-full flex-1 items-start justify-center bg-stone-50">
 		<div
 			bind:this={editorContainer}
-			class="editor__paragraph prose prose-lg flex-1"
+			class="editor__paragraph prose prose-sm lg:prose-base xl:prose-lg flex-1"
 			id="editor"
 		></div>
 	</div>

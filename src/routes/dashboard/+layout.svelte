@@ -5,7 +5,7 @@
 </script>
 
 <div class="flex flex-1 bg-stone-100">
-	<div class="flex w-64 flex-col justify-between gap-2 border-r border-solid border-stone-300">
+	<div class="flex lg:w-64 flex-col justify-between gap-2 border-r border-solid border-stone-300">
 		<!-- wrapper -->
 
 		<div class="flex flex-col gap-1 *:px-2">
@@ -86,7 +86,7 @@
 			<span class="hidden lg:inline">Info</span></a
 		>
 	</div>
-	<main class="flex flex-1 bg-stone-200">
+	<main class=" flex flex-1 basis-0 shrink-0 flex-col lg:flex-row  bg-stone-200">
 		<slot></slot>
 		<SuggestionBot></SuggestionBot>
 	</main>
