@@ -64,11 +64,11 @@
 	}
 </script>
 
-<div class=" w-[600px] flex-1 flex items-center justify-center">
+<div class="flex w-full flex-1 items-start justify-center p-5 lg:items-center">
 	<form
-		class="w-[450px] h-[450px] border-dashed bg-stone-50
-		border-stone-300 rounded-sm border-2 flex items-center
-		justify-center gap-5 p-5 flex-col"
+		class=" flex h-[250px] w-[250px] flex-col items-center justify-center
+		gap-5 rounded-sm border-2 border-dashed border-stone-300
+		bg-stone-50 p-5 lg:h-[450px] lg:w-[450px]"
 		ondrop={async (e) => {
 			fileDocument = convertDragToFile(e);
 			await convertToText(fileDocument, fileSuffix || 'pdf');
@@ -78,18 +78,18 @@
 		{#if fileDocument != null}
 			<FileNameDisplay {fileName} fileType={fileSuffix}></FileNameDisplay>
 		{:else}
-			<FolderOpen class="w-[150px] h-[150px] text-stone-500"></FolderOpen>
+			<FolderOpen class="h-24 w-24 text-stone-500 lg:h-[150px] lg:w-[150px]"></FolderOpen>
 		{/if}
-		<h3 class="text-lg text-stone-500 text-center">Drag your PDF/DOCX/JPG File Here <br /> OR</h3>
+		<h3 class="text-center text-lg text-stone-500">Drag your PDF/DOCX/JPG File Here <br /> OR</h3>
 		<label
-			class="text-blue-50 px-5 py-2 bg-blue-500 hover:cursor-pointer rounded-full flex
-			items-center justify-center gap-2 border-sky-700 border-solid border shadow-lg
-			bg-gradient-to-b from-sky-300 to-sky-600"
+			class="flex items-center justify-center gap-2 rounded-full border border-solid
+			border-sky-700 bg-blue-500 bg-gradient-to-b from-sky-300 to-sky-600 px-5 py-2
+			text-blue-50 shadow-lg hover:cursor-pointer"
 			for="File_Drop"
 		>
-			<CloudUpload class="w-8 h-8"></CloudUpload>
+			<CloudUpload class="h-8 w-8"></CloudUpload>
 			<span
-				class="bg-gradient-to-b text-center from-sky-50 text-lg font-semibold to-sky-200 bg-clip-text text-transparent"
+				class="bg-gradient-to-b from-sky-50 to-sky-200 bg-clip-text text-center text-lg font-semibold text-transparent"
 				>Select File
 			</span>
 		</label>
