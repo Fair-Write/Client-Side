@@ -66,7 +66,7 @@
 
 <div class="flex w-full flex-1 items-start justify-center p-5 lg:items-center">
 	<form
-		class=" flex h-[250px] w-[250px] flex-col items-center justify-center
+		class=" flex h-[350px] w-[250px] flex-col items-center justify-center
 		gap-5 rounded-sm border-2 border-dashed border-stone-300
 		bg-stone-50 p-5 lg:h-[450px] lg:w-[450px]"
 		ondrop={async (e) => {
