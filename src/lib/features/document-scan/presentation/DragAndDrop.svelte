@@ -6,11 +6,17 @@
 		convertDragToFile,
 		convertInputToFile
 	} from '$lib/features/document-scan/use-case/extractDocument';
-	import FileNameDisplay from '$lib/features/document-scan/presentation/FileNameDisplay.svelte';
+	import ProseMirrorDocu from '$lib/features/document-scan/presentation/ProseMirrorDocu.svelte';
+
+	let {
+		setFileNameDisplay
+	}: {
+		setFileNameDisplay: (name: string, type: 'jpeg' | 'png' | 'docx' | 'pdf' | undefined) => void;
+	} = $props();
 
 	let fileDocument: File | null = $state(null);
 
-	let fileSuffix = $derived.by(() => {
+	let fileSuffix: 'jpeg' | 'png' | 'docx' | 'pdf' | undefined = $derived.by(() => {
 		if (fileDocument != null) {
 			let doc = fileDocument as File;
 			return getSuffix(doc.name);
@@ -53,7 +59,7 @@
 				const response = await fetch('/api/extract/pdf', { method: 'POST', body: formData });
 				const result = await response.json();
 				console.log(result);
-				extractedText = result.data;
+				extractedText = result.message;
 				break;
 			}
 			case 'png':
@@ -62,7 +68,7 @@
 				const response = await fetch('/api/extract/image', { method: 'POST', body: formData });
 				const result = await response.json();
 				console.log(result);
-				extractedText = result.data;
+				extractedText = result.message;
 				break;
 			}
 			case undefined: {
@@ -73,45 +79,48 @@
 </script>
 
 <div class="flex w-full flex-1 items-start justify-center p-5 lg:items-center">
-	<form
-		class=" flex h-[350px] w-[250px] flex-col items-center justify-center
+	{#if extractedText === ''}
+		<form
+			class=" flex h-[350px] w-[250px] flex-col items-center justify-center
 		gap-5 rounded-sm border-2 border-dashed border-stone-300
 		bg-stone-50 p-5 lg:h-[450px] lg:w-[450px]"
-		ondrop={async (e) => {
-			fileDocument = convertDragToFile(e);
-			await convertToText(fileDocument, fileSuffix);
-		}}
-		ondragover={(e) => dragOverHandler(e)}
-	>
-		{#if fileDocument != null}
-			<FileNameDisplay {fileName} fileType={fileSuffix}></FileNameDisplay>
-		{:else}
-			<FolderOpen class="h-24 w-24 text-stone-500 lg:h-[150px] lg:w-[150px]"></FolderOpen>
-		{/if}
-		<h3 class="text-center text-lg text-stone-500">Drag your PDF/DOCX/JPG File Here <br /> OR</h3>
-		<label
-			class="flex items-center justify-center gap-2 rounded-full border border-solid
-			border-sky-700 bg-blue-500 bg-gradient-to-b from-sky-300 to-sky-600 px-5 py-2
-			text-blue-50 shadow-lg hover:cursor-pointer"
-			for="File_Drop"
-		>
-			<CloudUpload class="h-8 w-8"></CloudUpload>
-			<span
-				class="bg-gradient-to-b from-sky-50 to-sky-200 bg-clip-text text-center text-lg font-semibold text-transparent"
-				>Select File
-			</span>
-		</label>
-		<input
-			onchange={async (e) => {
-				fileDocument = convertInputToFile(e);
+			ondrop={async (e) => {
+				fileDocument = convertDragToFile(e);
+
+				setFileNameDisplay(fileName, fileSuffix);
 				await convertToText(fileDocument, fileSuffix);
 			}}
-			id="File_Drop"
-			accept=".pdf,.docx,.png,.jpeg"
-			type="file"
-			class=" hidden"
-		/>
-	</form>
+			ondragover={(e) => dragOverHandler(e)}
+		>
+			<FolderOpen class="h-24 w-24 text-stone-500 lg:h-[150px] lg:w-[150px]"></FolderOpen>
+			<h3 class="text-center text-lg text-stone-500">Drag your PDF/DOCX/JPG File Here <br /> OR</h3>
+			<label
+				class="flex items-center justify-center gap-2 rounded-full border border-solid
+			border-sky-700 bg-blue-500 bg-gradient-to-b from-sky-300 to-sky-600 px-5 py-2
+			text-blue-50 shadow-lg hover:cursor-pointer"
+				for="File_Drop"
+			>
+				<CloudUpload class="h-8 w-8"></CloudUpload>
+				<span
+					class="bg-gradient-to-b from-sky-50 to-sky-200 bg-clip-text text-center text-lg font-semibold text-transparent"
+					>Select File
+				</span>
+			</label>
+			<input
+				onchange={async (e) => {
+					fileDocument = convertInputToFile(e);
+					setFileNameDisplay(fileName, fileSuffix);
+					await convertToText(fileDocument, fileSuffix);
+				}}
+				id="File_Drop"
+				accept=".pdf,.docx,.png,.jpeg"
+				type="file"
+				class="hidden"
+			/>
+		</form>
+	{:else}
+		<ProseMirrorDocu text={extractedText}></ProseMirrorDocu>
+	{/if}
 </div>
 
 <style>
