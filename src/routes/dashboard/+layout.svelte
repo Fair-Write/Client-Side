@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
 	import { page } from '$app/stores';
-	import SuggestionBot from '$lib/features/suggestion-bot/presentation/suggestionBot.svelte';
+	import SuggestionBot from '$lib/features/suggestion-bot/presentation/SuggestionBot.svelte';
 </script>
 
 <div class="flex flex-1 bg-stone-100">
@@ -92,14 +92,3 @@
 	</main>
 </div>
 
-<style>
-	span.s40 {
-		font-size: 40px;
-		font-variation-settings: 'OPSZ' 40;
-	}
-
-	span.s26 {
-		font-size: 26px;
-		font-variation-settings: 'OPSZ' 26;
-	}
-</style>

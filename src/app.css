@@ -86,12 +86,9 @@
 }
 
 body {
-
-
 	line-height: 1;
 	display: flex;
 	flex-direction: column;
-
 }
 
 .ProseMirror:focus {
@@ -119,10 +116,10 @@ body {
 	font-size: inherit;
 }
 .material-symbols-outlined {
-	font-family: 'Material Symbols Outlined','sans-serif';
+	font-family: 'Material Symbols Outlined', 'sans-serif';
 	font-weight: normal;
 	font-style: normal;
-	font-size: 24px;  /* Preferred icon size */
+	font-size: 24px; /* Preferred icon size */
 	display: inline-block;
 	line-height: 1;
 	text-transform: none;
@@ -130,4 +127,18 @@ body {
 	word-wrap: normal;
 	white-space: nowrap;
 	direction: ltr;
+}
+
+span.s40 {
+	font-size: 40px;
+	font-variation-settings: 'OPSZ' 40;
+}
+
+span.s26 {
+	font-size: 26px;
+	font-variation-settings: 'OPSZ' 26;
+}
+span.s36 {
+	font-size: 36px;
+	font-variation-settings: 'OPSZ' 36;
 }

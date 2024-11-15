@@ -8,12 +8,14 @@
 	} from '$lib/features/document-scan/use-case/extractDocument';
 	import FileNameDisplay from '$lib/features/document-scan/presentation/FileNameDisplay.svelte';
 
-	let fileDocument: unknown | File = $state(null);
+	let fileDocument: File | null = $state(null);
 
 	let fileSuffix = $derived.by(() => {
 		if (fileDocument != null) {
 			let doc = fileDocument as File;
 			return getSuffix(doc.name);
+		} else {
+			return undefined;
 		}
 	});
 
@@ -28,8 +30,8 @@
 	// todo: add store to this stupid shit v
 	let extractedText = $state('');
 
-	async function convertToText(file: File | unknown, type: string) {
-		console.log('HELLO?');
+	async function convertToText(file: File, type: string | undefined) {
+		console.log('Converting to file');
 		if (!file) {
 			throw new Error('EHRM WTF');
 		}
@@ -38,7 +40,8 @@
 
 		switch (type) {
 			case 'docx': {
-				const response = await fetch('/api/extract/image', { method: 'POST', body: formData });
+				console.log('THIS IS DOCX');
+				const response = await fetch('/api/extract/docx', { method: 'POST', body: formData });
 				const result = await response.json();
 				console.log(result);
 				extractedText = result.data;
@@ -46,6 +49,7 @@
 			}
 
 			case 'pdf': {
+				console.log('THIS IS PDF');
 				const response = await fetch('/api/extract/pdf', { method: 'POST', body: formData });
 				const result = await response.json();
 				console.log(result);
@@ -54,11 +58,15 @@
 			}
 			case 'png':
 			case 'jpeg': {
+				console.log('THIS IS PICTURE');
 				const response = await fetch('/api/extract/image', { method: 'POST', body: formData });
 				const result = await response.json();
 				console.log(result);
 				extractedText = result.data;
 				break;
+			}
+			case undefined: {
+				throw new Error('Affix Undefined');
 			}
 		}
 	}
@@ -71,7 +79,7 @@
 		bg-stone-50 p-5 lg:h-[450px] lg:w-[450px]"
 		ondrop={async (e) => {
 			fileDocument = convertDragToFile(e);
-			await convertToText(fileDocument, fileSuffix || 'pdf');
+			await convertToText(fileDocument, fileSuffix);
 		}}
 		ondragover={(e) => dragOverHandler(e)}
 	>
@@ -96,7 +104,7 @@
 		<input
 			onchange={async (e) => {
 				fileDocument = convertInputToFile(e);
-				await convertToText(fileDocument, fileSuffix || 'pdf');
+				await convertToText(fileDocument, fileSuffix);
 			}}
 			id="File_Drop"
 			accept=".pdf,.docx,.png,.jpeg"
