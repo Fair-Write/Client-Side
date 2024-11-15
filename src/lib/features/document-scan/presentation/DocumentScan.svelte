@@ -2,7 +2,8 @@
 	import DragAndDrop from './DragAndDrop.svelte';
 	import type { IFileNameDisplay } from '$lib/features/document-scan/entities/FileType';
 	import FileNameDisplay from '$lib/features/document-scan/presentation/FileNameDisplay.svelte';
-	import { Button } from '$lib/components/ui/button';
+	import { fileStore } from '$lib/features/document-scan/store/fileStore';
+	import { convertInputToFile } from '../use-case/extractDocument';
 
 	let fileNameDisplay: IFileNameDisplay = $state({
 		fileName: undefined,
@@ -29,7 +30,28 @@
 			<h2 class="text-xl font-semibold">Scan</h2>
 		{:else}
 			<FileNameDisplay {...fileNameDisplay} />
-			<Button variant="outline" class="rounded-full" onclick={() => {}}>Scan another file</Button>
+			<div>
+				<label
+					class="flex items-center justify-center gap-2 rounded-full border border-solid
+			border-sky-700 bg-blue-500 bg-gradient-to-b from-sky-300 to-sky-600 px-3 py-1
+			text-blue-50 shadow-lg hover:cursor-pointer"
+					for="File_Drop2"
+				>
+					<span
+						class="bg-gradient-to-b from-sky-50 to-sky-200 bg-clip-text text-center text-base font-semibold text-transparent"
+						>Select Another File
+					</span>
+				</label>
+				<input
+					onchange={(e) => {
+						$fileStore = convertInputToFile(e);
+					}}
+					id="File_Drop2"
+					accept=".pdf,.docx,.png,.jpeg"
+					type="file"
+					class="hidden"
+				/>
+			</div>
 		{/if}
 	</div>
 

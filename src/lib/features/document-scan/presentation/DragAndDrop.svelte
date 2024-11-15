@@ -7,6 +7,7 @@
 		convertInputToFile
 	} from '$lib/features/document-scan/use-case/extractDocument';
 	import ProseMirrorDocu from '$lib/features/document-scan/presentation/ProseMirrorDocu.svelte';
+	import { fileStore } from '../store/fileStore';
 
 	let {
 		setFileNameDisplay
@@ -15,6 +16,14 @@
 	} = $props();
 
 	let fileDocument: File | null = $state(null);
+
+	$effect(() => {
+		if ($fileStore != null) {
+			fileDocument = $fileStore;
+			setFileNameDisplay(fileName, fileSuffix);
+			convertToText(fileDocument, fileSuffix);
+		}
+	});
 
 	let fileSuffix: 'jpeg' | 'png' | 'docx' | 'pdf' | undefined = $derived.by(() => {
 		if (fileDocument != null) {
