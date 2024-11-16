@@ -87,7 +87,7 @@
 	}
 </script>
 
-<div class="flex w-full flex-1 items-start justify-center p-5 lg:items-center">
+<div class="flex w-full flex-1 items-start justify-center lg:items-center">
 	{#if extractedText === ''}
 		<form
 			class=" flex h-[350px] w-[250px] flex-col items-center justify-center

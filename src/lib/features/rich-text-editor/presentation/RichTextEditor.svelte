@@ -25,10 +25,6 @@
 	let view: EditorView | null = $state(null);
 	let linterPlugin = createLinterPlugin([]);
 
-	// todo:LINTER - add a store for this array of regexes i also have to have a regex factory
-	// todo:LINTER - create a linter will be instantiated easily DONE
-	// todo:REPLACE TEXT - add a store as well for the word to replace it with
-
 	function resetScroll(event: Event) {
 		const target = event.target as HTMLDivElement;
 		target.scrollLeft = 0;
