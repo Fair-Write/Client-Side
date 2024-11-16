@@ -38,7 +38,7 @@
 					for="File_Drop2"
 				>
 					<span
-						class="bg-gradient-to-b from-sky-50 to-sky-200 bg-clip-text text-center text-base font-semibold text-transparent"
+						class="bg-gradient-to-b from-sky-50 to-sky-200 bg-clip-text text-center text-sm lg:text-base font-semibold text-transparent"
 						>Select Another File
 					</span>
 				</label>

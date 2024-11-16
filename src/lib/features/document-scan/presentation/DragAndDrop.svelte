@@ -88,7 +88,7 @@
 </script>
 
 <div class="flex w-full flex-1 items-start justify-center lg:items-center">
-	{#if extractedText === ''}
+	{#if  extractedText === ''}
 		<form
 			class=" flex h-[350px] w-[250px] flex-col items-center justify-center
 		gap-5 rounded-sm border-2 border-dashed border-stone-300

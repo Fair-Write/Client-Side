@@ -14,7 +14,7 @@
 				<span
 					class="material-symbols-outlined s26 rounded-[8px] bg-gradient-to-t from-amber-700 to-yellow-500 p-1 text-yellow-50"
 				>
-					<span class="hidden lg:inline">photo_library</span>
+					photo_library
 				</span>
 			</span>
 		{:else if fileType === 'docx'}
@@ -24,7 +24,7 @@
 				<span
 					class="material-symbols-outlined s26 rounded-[8px] bg-gradient-to-t from-violet-700 to-indigo-500 p-1 text-indigo-50"
 				>
-					<span class="hidden lg:inline">description</span>
+			description
 				</span>
 			</span>
 		{:else if fileType === 'pdf'}
@@ -34,7 +34,7 @@
 				<span
 					class="material-symbols-outlined s26 rounded-[8px] bg-gradient-to-t from-rose-700 to-pink-500 p-1 text-pink-50"
 				>
-					<span class="hidden lg:inline">picture_as_pdf</span>
+					picture_as_pdf
 				</span>
 			</span>
 		{/if}
