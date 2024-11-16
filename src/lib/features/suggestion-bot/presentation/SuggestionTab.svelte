@@ -42,7 +42,10 @@
 	<div class="p-5">
 		<StepInfographic></StepInfographic>
 
-		<Carousel.Root setApi={(emblaApi) => (api = emblaApi)}>
+		<Carousel.Root
+			setApi={(emblaApi) => (api = emblaApi)}
+			opts={{ dragFree: true, watchDrag: false }}
+		>
 			<Carousel.Content>
 				<Carousel.Item><StepWrite {nextSlide}></StepWrite></Carousel.Item>
 				<Carousel.Item><StepGrammar></StepGrammar></Carousel.Item>
