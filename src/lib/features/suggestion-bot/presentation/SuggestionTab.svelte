@@ -12,8 +12,17 @@
 	import { type CarouselAPI } from '$lib/components/ui/carousel/context.js';
 	let api = $state<CarouselAPI>();
 
+	function nextSlide() {
+		if (api) {
+			api.scrollNext();
+		}
+	}
 
-
+	function goBackFromStart() {
+		if (api) {
+			api.scrollTo(1);
+		}
+	}
 </script>
 
 <!--TODO:-->
@@ -35,26 +44,32 @@
 
 		<Carousel.Root setApi={(emblaApi) => (api = emblaApi)}>
 			<Carousel.Content>
-				<Carousel.Item><StepWrite></StepWrite></Carousel.Item>
+				<Carousel.Item><StepWrite {nextSlide}></StepWrite></Carousel.Item>
 				<Carousel.Item><StepGrammar></StepGrammar></Carousel.Item>
 				<Carousel.Item><StepGLF></StepGLF></Carousel.Item>
 				<Carousel.Item><Analytics></Analytics></Carousel.Item>
 			</Carousel.Content>
-			<Carousel.Previous />
-
 			<button
 				onclick={() => {
-				if (api) {
-					api.scrollNext();
-				}
-			}}
+					if (api) {
+						api.scrollNext();
+					}
+				}}
 			>
 				NEXT</button
 			>
 
-
+			<button
+				onclick={() => {
+					if (api) {
+						api.scrollPrev();
+					}
+				}}
+			>
+				Previous</button
+			>
+			<button onclick={goBackFromStart}>From the start</button>
 		</Carousel.Root>
-
 
 		<!--		<Button-->
 		<!--			onclick={() => {-->
