@@ -3,7 +3,7 @@
 	import { progressStore } from '$lib/stores/progressStore';
 </script>
 
-<div class="mb-5 flex w-full flex-col items-center justify-start gap-2">
+<div class="p-3 flex w-full flex-col items-center justify-start gap-2 ">
 	<div class="relative flex w-full items-center justify-between">
 		<span
 			class="material-symbols-outlined s26 z-10 rounded-full border-2 border-solid border-blue-500 bg-blue-100 p-2 text-blue-500"

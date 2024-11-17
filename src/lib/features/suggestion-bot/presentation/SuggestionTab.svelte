@@ -2,14 +2,15 @@
 	// import { aiSuggestions, omitObject } from '$lib/stores/lintingStore';
 	// import { Button } from '$lib/components/ui/button';
 	// import { replaceStore } from '$lib/stores/lintingStore';
-	import StepWrite from '$lib/features/suggestion-bot/presentation/StepWrite.svelte';
-	import StepInfographic from '$lib/features/suggestion-bot/presentation/StepInfographic.svelte';
+	import StepWrite from '$lib/features/suggestion-bot/presentation/Steps/StepWrite.svelte';
+	import StepInfographic from '$lib/features/suggestion-bot/presentation/Steps/StepInfographic.svelte';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
-	import StepGrammar from '$lib/features/suggestion-bot/presentation/StepGrammar.svelte';
-	import StepGLF from '$lib/features/suggestion-bot/presentation/StepGLF.svelte';
+	import StepGrammar from '$lib/features/suggestion-bot/presentation/Steps/StepGrammar.svelte';
+	import StepGLF from '$lib/features/suggestion-bot/presentation/Steps/StepGLF.svelte';
 	import Analytics from '$lib/features/suggestion-bot/presentation/Analytics.svelte';
 
 	import { type CarouselAPI } from '$lib/components/ui/carousel/context.js';
+	import { progressStore } from '$lib/stores/progressStore';
 	let api = $state<CarouselAPI>();
 
 	function nextSlide() {
@@ -20,7 +21,8 @@
 
 	function goBackFromStart() {
 		if (api) {
-			api.scrollTo(1);
+			api.scrollTo(0);
+			$progressStore = 0;
 		}
 	}
 </script>
@@ -39,16 +41,17 @@
 		<span class="material-symbols-outlined s26 text-stone-500">settings</span>
 	</div>
 
-	<div class="p-5">
+	<div class="flex items-center justify-between flex-col">
 		<StepInfographic></StepInfographic>
 
 		<Carousel.Root
+			class="w-[280px]"
 			setApi={(emblaApi) => (api = emblaApi)}
 			opts={{ dragFree: true, watchDrag: false }}
 		>
 			<Carousel.Content>
 				<Carousel.Item><StepWrite {nextSlide}></StepWrite></Carousel.Item>
-				<Carousel.Item><StepGrammar></StepGrammar></Carousel.Item>
+				<Carousel.Item><StepGrammar {nextSlide} ></StepGrammar></Carousel.Item>
 				<Carousel.Item><StepGLF></StepGLF></Carousel.Item>
 				<Carousel.Item><Analytics></Analytics></Carousel.Item>
 			</Carousel.Content>
@@ -66,6 +69,7 @@
 				onclick={() => {
 					if (api) {
 						api.scrollPrev();
+
 					}
 				}}
 			>
