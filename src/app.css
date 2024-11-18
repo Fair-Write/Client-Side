@@ -96,16 +96,22 @@ body {
 }
 
 .linter-error {
-	background-color: #ffff2c;
-	text-decoration: underline;
+	background-color: #f87171;
+	border-bottom: solid;
+	border-bottom-width: 2px;
+	border-bottom-color: #dc2626;
 }
 .linter-grammar {
-	background-color: #6fa1ff;
-	text-decoration: underline;
+	background-color: #60a5fa;
+	border-bottom: solid;
+	border-bottom-width: 2px;
+	border-bottom-color: #1d4ed8;
 }
 .linter-gfl {
-	background-color: #ffa746;
-	text-decoration: underline;
+	background-color: #a78bfa;
+	border-bottom: solid;
+	border-bottom-width: 2px;
+	border-bottom-color:#6d28d9;
 }
 .editor__paragraph .placeholder::before {
 	pointer-events: none;
@@ -142,7 +148,7 @@ span.s36 {
 	font-size: 36px;
 	font-variation-settings: 'OPSZ' 36;
 }
-span.s16{
+span.s16 {
 	font-size: 16px;
 	font-variation-settings: 'OPSZ' 26;
 }

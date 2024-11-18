@@ -11,12 +11,55 @@
 
 	import { type CarouselAPI } from '$lib/components/ui/carousel/context.js';
 	import { progressStore } from '$lib/stores/progressStore';
+	import { aiSuggestions } from '$lib/stores/lintingStore';
 	let api = $state<CarouselAPI>();
 
 	function nextSlide() {
 		if (api) {
 			api.scrollNext();
 		}
+	}
+
+	function initPayload() {
+		$aiSuggestions = [
+			{
+				heading: 'Change to plural',
+				wrongPhrase: 'firemen is',
+				correctPhrase: 'firemen are',
+				correctionType: 'grammar',
+				analysis: 5
+			},
+			{
+				heading: 'Missing Article',
+				wrongPhrase: 'to enforce law and order',
+				correctPhrase: 'to enforce law and order;',
+				correctionType: 'grammar',
+				analysis: 5
+			},
+			{
+				heading: 'Wrong Spelling',
+				wrongPhrase: 'physical strength and cowrage',
+				correctPhrase: 'physical strength and courage',
+				correctionType: 'spelling',
+				analysis: 5
+			},
+
+			{
+				heading: 'Subject-Verb Agreement',
+				wrongPhrase: 'prepare them',
+				correctPhrase: 'prepares them',
+				correctionType: 'grammar',
+				analysis: 5
+			},
+			{
+				heading: 'Wrong Spelling',
+				wrongPhrase: 'knowed',
+				correctPhrase: 'known',
+				correctionType: 'spelling',
+				analysis: 5
+			},
+		];
+		nextSlide();
 	}
 
 	function goBackFromStart() {
@@ -33,7 +76,7 @@
 <!-- 2. grammar -->
 <!-- 3. GFL -->
 <!-- 4. analytics -->
-<section class=" h-[100svh] min-h-0 border-l border-stone-300 bg-stone-100 lg:w-80">
+<section class=" h-full min-h-0 border-l border-stone-300 bg-stone-100 lg:w-80">
 	<div
 		class="flex h-14 w-full items-center justify-between border-b border-solid border-stone-300 bg-stone-50 p-5"
 	>
@@ -41,7 +84,7 @@
 		<span class="material-symbols-outlined s26 text-stone-500">settings</span>
 	</div>
 
-	<div class="flex items-center justify-between flex-col">
+	<div class="flex flex-col items-center justify-between">
 		<StepInfographic></StepInfographic>
 
 		<Carousel.Root
@@ -50,8 +93,8 @@
 			opts={{ dragFree: true, watchDrag: false }}
 		>
 			<Carousel.Content>
-				<Carousel.Item><StepWrite {nextSlide}></StepWrite></Carousel.Item>
-				<Carousel.Item><StepGrammar {nextSlide} ></StepGrammar></Carousel.Item>
+				<Carousel.Item><StepWrite nextSlide={initPayload}></StepWrite></Carousel.Item>
+				<Carousel.Item><StepGrammar {nextSlide}></StepGrammar></Carousel.Item>
 				<Carousel.Item><StepGLF></StepGLF></Carousel.Item>
 				<Carousel.Item><Analytics></Analytics></Carousel.Item>
 			</Carousel.Content>
@@ -69,7 +112,6 @@
 				onclick={() => {
 					if (api) {
 						api.scrollPrev();
-
 					}
 				}}
 			>

@@ -49,6 +49,13 @@
 		view.updateState(state);
 	}
 
+	$effect(() => {
+		if ($linterStore) {
+			console.log($linterStore);
+			if (view != null) reconfigAllPlugins();
+		}
+	});
+
 	function replaceWordCommand(words: { correctPhrase: string; wrongPhrase: string }) {
 		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
 			if (!dispatch) return false; // No dispatch means no transaction to apply
@@ -102,7 +109,7 @@
 <section class="flex h-[100svh] min-h-0 flex-col items-center bg-stone-50 lg:flex-1">
 	<!-- Custom toolbar with Chadcn Svelte buttons -->
 	<div
-		class=" flex h-14 w-full items-center justify-between border-b border-stone-300 bg-stone-50 p-2"
+		class=" flex min-h-14 w-full items-center justify-between border-b border-stone-300 bg-stone-50 p-2"
 	>
 		<input
 			type="text"
