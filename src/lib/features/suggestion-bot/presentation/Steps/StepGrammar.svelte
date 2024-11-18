@@ -21,7 +21,7 @@
 	});
 </script>
 
-<Card.Root>
+<Card.Root class="mx-3">
 	<Card.Header>
 		<Card.Title class="border-b border-dashed border-stone-500 pb-2 font-bold"
 			>Step 2: Grammar Check</Card.Title
@@ -43,11 +43,10 @@
 	<!--compact	-->
 </Card.Root>
 
-<ScrollArea class="h-[500px]">
+<ScrollArea class="h-[500px] px-3">
 	{#key $aiSuggestions}
 		{#each suggestionsReference as payload, index}
 			<SuggestionCard suggestion={payload} {index} {removeMe} />
 		{/each}
-		{/key}
-
+	{/key}
 </ScrollArea>

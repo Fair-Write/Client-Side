@@ -109,7 +109,7 @@
 	});
 </script>
 
-<section class="flex h-[100svh] min-h-0 flex-col items-center bg-stone-50 lg:flex-1">
+<section class="flex min-h-[100svh] flex-1 flex-col items-center bg-stone-50 xl:h-full">
 	<!-- Custom toolbar with Chadcn Svelte buttons -->
 	<div
 		class=" flex min-h-14 w-full items-center justify-between border-b border-stone-300 bg-stone-50 p-2"
