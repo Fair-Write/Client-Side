@@ -18,7 +18,7 @@
 	import { baseKeymap } from 'prosemirror-commands';
 	import { Transaction } from 'prosemirror-state';
 	import { replaceWordInDocument } from '$lib/features/rich-text-editor/use-case/replaceText';
-	import { linterStore } from '$lib/stores/lintingStore';
+	import { aiSuggestions, omitObject } from '$lib/stores/lintingStore';
 	import { replaceStore } from '$lib/stores/lintingStore';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
@@ -31,10 +31,14 @@
 	}
 
 	// when stores has changed, the plugins must be reconfigured
-	function reconfigAllPlugins(): void {
+	function reconfigureAllPlugins(): void {
 		if (!view) throw new Error('Editorview not defined');
 
-		linterPlugin = createLinterPlugin($linterStore);
+		linterPlugin = createLinterPlugin(
+			$aiSuggestions.map((aiSuggestion) =>
+				omitObject(aiSuggestion, 'correctPhrase', 'analysis', 'heading')
+			)
+		);
 
 		const state = view.state.reconfigure({
 			plugins: [
@@ -50,9 +54,8 @@
 	}
 
 	$effect(() => {
-		if ($linterStore) {
-			console.log($linterStore);
-			if (view != null) reconfigAllPlugins();
+		if (aiSuggestions) {
+			if (view != null) reconfigureAllPlugins();
 		}
 	});
 
@@ -98,7 +101,7 @@
 				$textContent = newState.doc.textContent.toString();
 			}
 		});
-		reconfigAllPlugins();
+		reconfigureAllPlugins();
 
 		return () => {
 			view?.destroy();
