@@ -6,12 +6,20 @@
 	import SuggestionCard from './SuggestionCard.svelte';
 	import { aiSuggestions, omitObject, replaceStore } from '$lib/stores/lintingStore';
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
+
 	let { nextSlide }: { nextSlide: () => void } = $props();
 	let suggestionsReference = $state<TSuggestion[]>($aiSuggestions);
+	let isEmpty = $derived(suggestionsReference.length != 0);
 
 	function removeMe(index: number) {
 		$replaceStore = [omitObject($aiSuggestions[index], 'analysis', 'correctionType', 'heading')];
 		$aiSuggestions.splice(index, 1);
+	}
+	function applyAllChanges() {
+		$replaceStore = $aiSuggestions.map((suggestion) => {
+			return omitObject(suggestion, 'analysis', 'correctionType');
+		});
+		$aiSuggestions = [];
 	}
 
 	$effect(() => {
@@ -21,7 +29,7 @@
 	});
 </script>
 
-<Card.Root class="mx-3">
+<Card.Root class="mx-3 w-full">
 	<Card.Header>
 		<Card.Title class="border-b border-dashed border-stone-500 pb-2 font-bold"
 			>Step 2: Grammar Check</Card.Title
@@ -33,17 +41,26 @@
 	<Card.Content>
 		<Button
 			class="w-full"
+			disabled={isEmpty}
 			onclick={() => {
 				nextSlide();
 				$progressStore = 100;
 			}}>Proceed</Button
+		>
+		<Button
+			class="mt-2 w-full"
+			onclick={() => {
+				// nextSlide();
+				// $progressStore = 100;
+				applyAllChanges();
+			}}>Apply All Changes</Button
 		>
 	</Card.Content>
 
 	<!--compact	-->
 </Card.Root>
 
-<ScrollArea class="h-[500px] px-3">
+<ScrollArea class="h-[500px] w-full px-3">
 	{#key $aiSuggestions}
 		{#each suggestionsReference as payload, index}
 			<SuggestionCard suggestion={payload} {index} {removeMe} />
