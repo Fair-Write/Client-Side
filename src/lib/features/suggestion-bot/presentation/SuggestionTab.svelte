@@ -88,8 +88,8 @@
 				},
 				{
 					heading: 'Change to Police Officers',
-					wrongPhrase: 'policewoman',
-					correctPhrase: 'police officer',
+					wrongPhrase: 'policewomen',
+					correctPhrase: 'police officers',
 					correctionType: 'gfl',
 					analysis: 5,
 					rationale: 'lorem ipsum somethign something'

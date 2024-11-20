@@ -11,8 +11,7 @@
 	import createLinterPlugin from '$lib/features/rich-text-editor/use-case/LinterPlugin';
 	import { Transaction } from 'prosemirror-state';
 	import { replaceWordInDocument } from '$lib/features/rich-text-editor/use-case/replaceText';
-	import { linterStore } from '$lib/stores/lintingStore';
-	import { replaceStore } from '$lib/stores/lintingStore';
+	import { aiSuggestions, omitObject, replaceStore } from '$lib/stores/lintingStore';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -21,10 +20,12 @@
 	let { text }: { text: string | null } = $props();
 
 	// when stores has changed, the plugins must be reconfigured
-	function reconfigAllPlugins(): void {
+	function reconfigureAllPlugins(): void {
 		if (!view) throw new Error('Editorview not defined');
 
-		linterPlugin = createLinterPlugin($linterStore);
+		linterPlugin = createLinterPlugin(	$aiSuggestions.map((aiSuggestion) =>
+			omitObject(aiSuggestion, 'correctPhrase', 'analysis', 'heading', 'rationale')
+		));
 
 		const state = view.state.reconfigure({
 			plugins: [linterPlugin]
@@ -52,6 +53,12 @@
 		const transaction = tr.replaceWith(0, view.state.doc.content.size, newNode);
 		view.dispatch(transaction);
 	}
+	$effect(() => {
+		if (aiSuggestions) {
+			if (view != null) reconfigureAllPlugins();
+		}
+	});
+
 
 	$effect(() => {
 		if ($replaceStore.length != 0) {
@@ -87,33 +94,13 @@
 				$textContent = newState.doc.textContent.toString();
 			}
 		});
-		reconfigAllPlugins();
+		reconfigureAllPlugins();
 
 		return () => {
 			view?.destroy();
 		};
 	});
 </script>
-
-<!--<section class="flex h-[100svh] min-h-0 flex-col items-center bg-stone-50 lg:flex-1">-->
-<!-- Custom toolbar with Chadcn Svelte buttons -->
-<!--	<div-->
-<!--		class=" flex h-14 w-full items-center justify-between border-b border-stone-300 bg-stone-50 p-2"-->
-<!--	>-->
-<!--		<input-->
-<!--			type="text"-->
-<!--			class="w-24 text-ellipsis whitespace-nowrap bg-stone-50 text-xl font-semibold focus:outline-none"-->
-<!--			bind:value={$textTitle}-->
-<!--			onblur={resetScroll}-->
-<!--		/>-->
-<!--		<div>-->
-<!--			<p class="text-sm text-muted-foreground">-->
-<!--				Word Count: {$textContent.trim().split(/\s+/).length}-->
-<!--			</p>-->
-<!--		</div>-->
-<!--	</div>-->
-
-<!-- ProseMirror editor container -->
 
 <div class="custom-shadow flex w-full h-full flex-1 items-start justify-center bg-stone-50">
 	<div
