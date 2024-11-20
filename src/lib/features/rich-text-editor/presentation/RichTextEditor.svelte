@@ -36,7 +36,7 @@
 
 		linterPlugin = createLinterPlugin(
 			$aiSuggestions.map((aiSuggestion) =>
-				omitObject(aiSuggestion, 'correctPhrase', 'analysis', 'heading')
+				omitObject(aiSuggestion, 'correctPhrase', 'analysis', 'heading', 'rationale')
 			)
 		);
 

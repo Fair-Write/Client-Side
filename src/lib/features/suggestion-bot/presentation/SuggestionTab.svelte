@@ -27,21 +27,24 @@
 				wrongPhrase: 'firemen is',
 				correctPhrase: 'firemen are',
 				correctionType: 'grammar',
-				analysis: 5
+				analysis: 5,
+				rationale: 'lorem ipsum somethign something'
 			},
 			{
 				heading: 'Missing Article',
 				wrongPhrase: 'to enforce law and order',
 				correctPhrase: 'to enforce law and order;',
 				correctionType: 'grammar',
-				analysis: 5
+				analysis: 5,
+				rationale: 'lorem ipsum somethign something'
 			},
 			{
 				heading: 'Wrong Spelling',
 				wrongPhrase: 'physical strength and cowrage',
 				correctPhrase: 'physical strength and courage',
 				correctionType: 'spelling',
-				analysis: 5
+				analysis: 5,
+				rationale: 'lorem ipsum somethign something'
 			},
 
 			{
@@ -49,16 +52,91 @@
 				wrongPhrase: 'prepare them',
 				correctPhrase: 'prepares them',
 				correctionType: 'grammar',
-				analysis: 5
+				analysis: 5,
+				rationale: 'lorem ipsum somethign something'
 			},
 			{
 				heading: 'Wrong Spelling',
 				wrongPhrase: 'knowed',
 				correctPhrase: 'known',
 				correctionType: 'spelling',
-				analysis: 5
-			},
+				analysis: 5,
+				rationale: 'lorem ipsum somethign something'
+			}
 		];
+		nextSlide();
+	}
+
+	function initGLF() {
+		setTimeout(() => {
+			$aiSuggestions = [
+				{
+					heading: 'Change to firefighter',
+					wrongPhrase: 'firemen',
+					correctPhrase: 'firefighter',
+					correctionType: 'gfl',
+					analysis: 5,
+					rationale: 'lorem ipsum somethign something'
+				},
+				{
+					heading: 'Change to Police Officers',
+					wrongPhrase: 'policemen',
+					correctPhrase: 'police officer',
+					correctionType: 'gfl',
+					analysis: 5,
+					rationale: 'lorem ipsum somethign something'
+				},
+				{
+					heading: 'Change to Police Officers',
+					wrongPhrase: 'policewomen',
+					correctPhrase: 'police officers',
+					correctionType: 'gfl',
+					analysis: 5,
+					rationale: 'lorem ipsum somethign something'
+				},
+
+				{
+					heading: 'Change to firefighters',
+					wrongPhrase: 'lady firefighters',
+					correctPhrase: 'firefighters',
+					correctionType: 'gfl',
+					analysis: 5,
+					rationale: 'lorem ipsum somethign something'
+				},
+				{
+					heading: 'Change to businessperson',
+					wrongPhrase: 'businessman',
+					correctPhrase: 'businessperson',
+					correctionType: 'gfl',
+					analysis: 5,
+					rationale: 'lorem ipsum somethign something'
+				},
+				{
+					heading: 'Change to chairperson',
+					wrongPhrase: 'chairmen',
+					correctPhrase: 'chairperson',
+					correctionType: 'gfl',
+					analysis: 5,
+					rationale: 'lorem ipsum somethign something'
+				},
+				{
+					heading: 'Change to salesmen',
+					wrongPhrase: 'salesmen',
+					correctPhrase: 'salesperson',
+					correctionType: 'gfl',
+					analysis: 5,
+					rationale: 'lorem ipsum somethign something'
+				},
+				{
+					heading: 'Change to salesmen',
+					wrongPhrase: 'salesmen',
+					correctPhrase: 'salesperson',
+					correctionType: 'gfl',
+					analysis: 5,
+					rationale: 'lorem ipsum somethign something'
+				}
+			];
+		}, 500);
 		nextSlide();
 	}
 
@@ -94,8 +172,8 @@
 		>
 			<Carousel.Content>
 				<Carousel.Item><StepWrite nextSlide={initPayload}></StepWrite></Carousel.Item>
-				<Carousel.Item><StepGrammar {nextSlide}></StepGrammar></Carousel.Item>
-				<Carousel.Item><StepGLF></StepGLF></Carousel.Item>
+				<Carousel.Item><StepGrammar nextSlide={initGLF}></StepGrammar></Carousel.Item>
+				<Carousel.Item><StepGLF {nextSlide}></StepGLF></Carousel.Item>
 				<Carousel.Item><Analytics></Analytics></Carousel.Item>
 			</Carousel.Content>
 			<button
@@ -119,26 +197,5 @@
 			>
 			<button onclick={goBackFromStart}>From the start</button>
 		</Carousel.Root>
-
-		<!--		<Button-->
-		<!--			onclick={() => {-->
-		<!--				$replaceStore = $aiSuggestions.map((suggestions) =>-->
-		<!--					omitObject(suggestions, 'analysis', 'correctionType')-->
-		<!--				);-->
-		<!--			}}-->
-		<!--		>-->
-		<!--			REPLACE ALL-->
-		<!--		</Button>-->
-		<!--		{#each $aiSuggestions as suggestion}-->
-		<!--			<div class="my-5 flex flex-col gap-2">-->
-		<!--				<p>wrong phrase: {suggestion.wrongPhrase}</p>-->
-		<!--				<p>correct phrase: {suggestion.correctPhrase}</p>-->
-		<!--				<Button-->
-		<!--					onclick={() => {-->
-		<!--						$replaceStore = [omitObject(suggestion, 'analysis', 'correctionType')];-->
-		<!--					}}>replace/Button-->
-		<!--				>-->
-		<!--			</div>-->
-		<!--		{/each}-->
 	</div>
 </section>

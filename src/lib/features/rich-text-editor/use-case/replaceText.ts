@@ -8,7 +8,7 @@ import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggesti
 export function replaceWordInDocument(
 	editorState: EditorState,
 	dispatch: (tr: Transaction) => void,
-	words:Omit<TSuggestion, 'analysis'|'correctionType'|"heading">
+	words:Omit<TSuggestion, 'analysis'|'correctionType'|"heading"|"rationale">
 ): void {
 	const { wrongPhrase, correctPhrase } = words;
 	const { doc } = editorState;
