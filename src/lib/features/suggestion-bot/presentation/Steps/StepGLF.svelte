@@ -36,7 +36,7 @@
 <Card.Root class="mx-3 w-full">
 	<Card.Header>
 		<Card.Title class="border-b border-dashed border-stone-500 pb-2 font-bold"
-		>Step 3:Gender Fairness</Card.Title
+		>Step 3: Gender Fairness</Card.Title
 		>
 		<Card.Description
 		>Here is the list of Gender Fair appropriate words that I can suggest</Card.Description
