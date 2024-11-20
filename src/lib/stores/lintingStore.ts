@@ -15,5 +15,5 @@ export function omitObject<T extends TSuggestion, K extends keyof T>(
 export const aiSuggestions = writable<TSuggestion[]>([]);
 
 export const replaceStore = writable<
-	Omit<TSuggestion, 'analysis' | 'correctionType' | 'heading'>[]
+	Omit<TSuggestion, 'analysis' | 'correctionType' | 'heading'|'rationale'>[]
 >([]);

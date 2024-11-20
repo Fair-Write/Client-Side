@@ -4,7 +4,7 @@ import { Node as ProseMirrorNode } from 'prosemirror-model';
 import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 
 // lintStringArr: string[], lintingType:string
-type lintArgs = Omit<TSuggestion, 'correctPhrase' | 'analysis' | 'heading'>;
+type lintArgs = Omit<TSuggestion, 'correctPhrase' | 'analysis' | 'heading'|"rationale">;
 
 const linter = (doc: ProseMirrorNode, lintArgs: lintArgs[]): DecorationSet => {
 	const decorations: Decoration[] = [];

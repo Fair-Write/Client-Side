@@ -2,6 +2,7 @@ export type TSuggestion = {
 	wrongPhrase: string;
 	correctPhrase: string;
 	correctionType: 'grammar' | 'spelling' | 'gfl';
-	heading:string;
+	heading: string;
 	analysis: number;
+	rationale: string;
 };

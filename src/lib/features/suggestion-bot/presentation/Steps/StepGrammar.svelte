@@ -22,6 +22,10 @@
 		$aiSuggestions = [];
 	}
 
+	function ignoreMe(index: number) {
+		$aiSuggestions.splice(index, 1);
+	}
+
 	$effect(() => {
 		if ($aiSuggestions) {
 			suggestionsReference = $aiSuggestions;
@@ -35,7 +39,7 @@
 			>Step 2: Grammar Check</Card.Title
 		>
 		<Card.Description
-			>Here is the list of Gender Fair appropriate words that I can suggest</Card.Description
+			>Here is the list of grammar corrections that I can suggest</Card.Description
 		>
 	</Card.Header>
 	<Card.Content>
@@ -49,6 +53,7 @@
 		>
 		<Button
 			class="mt-2 w-full"
+			disabled={!isEmpty}
 			onclick={() => {
 				// nextSlide();
 				// $progressStore = 100;
@@ -63,7 +68,7 @@
 <ScrollArea class="h-[500px] w-full px-3">
 	{#key $aiSuggestions}
 		{#each suggestionsReference as payload, index}
-			<SuggestionCard suggestion={payload} {index} {removeMe} />
+			<SuggestionCard suggestion={payload} {index} {removeMe} {ignoreMe} />
 		{/each}
 	{/key}
 </ScrollArea>
