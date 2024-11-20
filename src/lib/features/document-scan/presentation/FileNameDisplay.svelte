@@ -1,31 +1,48 @@
 <script lang="ts">
-	import { cn } from '$lib/utils';
-	import { File, FileImage } from 'lucide-svelte';
-	import { Button } from '$lib/components/ui/button';
+	import type { IFileNameDisplay } from '$lib/features/document-scan/entities/FileType';
 
-	interface IFileNameDisplay {
-		fileName: string | undefined;
-		fileType: 'jpeg' | 'png' | 'docx' | 'pdf' | undefined;
-	}
 	let { fileType, fileName }: IFileNameDisplay = $props();
 </script>
 
 {#if fileType !== undefined}
-	<div class="flex flex-col items-center justify-center gap-2 mb-5 ">
-		<h1 class="font-semibold text-2xl">Selected File</h1>
+	<div class="flex items-center justify-center gap-2">
+		<!-- change icon based on file type-->
+		{#if fileType === 'jpeg' || fileType === 'png'}
+			<span
+				class=" flex items-center justify-center rounded-[9px] border border-solid border-yellow-500 bg-gradient-to-t from-amber-700 to-yellow-300 p-[1px]"
+			>
+				<span
+					class="material-symbols-outlined s26 rounded-[8px] bg-gradient-to-t from-amber-700 to-yellow-500 p-1 text-yellow-50"
+				>
+					photo_library
+				</span>
+			</span>
+		{:else if fileType === 'docx'}
+			<span
+				class=" flex items-center justify-center rounded-[9px] border border-solid border-indigo-500 bg-gradient-to-t from-violet-700 to-indigo-300 p-[1px]"
+			>
+				<span
+					class="material-symbols-outlined s26 rounded-[8px] bg-gradient-to-t from-violet-700 to-indigo-500 p-1 text-indigo-50"
+				>
+			description
+				</span>
+			</span>
+		{:else if fileType === 'pdf'}
+			<span
+				class=" flex items-center justify-center rounded-[9px] border border-solid border-pink-500 bg-gradient-to-t from-rose-700 to-pink-300 p-[1px]"
+			>
+				<span
+					class="material-symbols-outlined s26 rounded-[8px] bg-gradient-to-t from-rose-700 to-pink-500 p-1 text-pink-50"
+				>
+					picture_as_pdf
+				</span>
+			</span>
+		{/if}
 
-		<div
-			class="flex items-center justify-between gap-5 p-3 border-stone-300 border border-solid rounded-lg shadow-md"
+		<p
+			class="w-20 overflow-hidden overflow-ellipsis whitespace-nowrap text-base font-bold xl:w-auto"
 		>
-			<!-- change icon based on file type-->
-			{#if fileType === 'jpeg' || fileType === 'png'}
-				<FileImage class="w-8 h-8"></FileImage>
-			{:else if fileType === 'docx' || fileType === 'pdf'}
-				<File class="w-10 h-10"></File>
-			{/if}
-
-			<p class="text-lg">{fileName}</p>
-		</div>
-		<Button variant="link" class="text-lg text-stone-500">Move Text To Write Page</Button>
+			{fileName}
+		</p>
 	</div>
 {/if}

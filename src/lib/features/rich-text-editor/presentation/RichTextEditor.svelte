@@ -18,16 +18,12 @@
 	import { baseKeymap } from 'prosemirror-commands';
 	import { Transaction } from 'prosemirror-state';
 	import { replaceWordInDocument } from '$lib/features/rich-text-editor/use-case/replaceText';
-	import { linterStore } from '$lib/stores/lintingStore';
+	import { aiSuggestions, omitObject } from '$lib/stores/lintingStore';
 	import { replaceStore } from '$lib/stores/lintingStore';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
 	let linterPlugin = createLinterPlugin([]);
-
-	// todo:LINTER - add a store for this array of regexes i also have to have a regex factory
-	// todo:LINTER - create a linter will be instantiated easily DONE
-	// todo:REPLACE TEXT - add a store as well for the word to replace it with
 
 	function resetScroll(event: Event) {
 		const target = event.target as HTMLDivElement;
@@ -35,10 +31,14 @@
 	}
 
 	// when stores has changed, the plugins must be reconfigured
-	function reconfigAllPlugins(): void {
+	function reconfigureAllPlugins(): void {
 		if (!view) throw new Error('Editorview not defined');
 
-		linterPlugin = createLinterPlugin($linterStore);
+		linterPlugin = createLinterPlugin(
+			$aiSuggestions.map((aiSuggestion) =>
+				omitObject(aiSuggestion, 'correctPhrase', 'analysis', 'heading')
+			)
+		);
 
 		const state = view.state.reconfigure({
 			plugins: [
@@ -52,6 +52,12 @@
 
 		view.updateState(state);
 	}
+
+	$effect(() => {
+		if (aiSuggestions) {
+			if (view != null) reconfigureAllPlugins();
+		}
+	});
 
 	function replaceWordCommand(words: { correctPhrase: string; wrongPhrase: string }) {
 		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
@@ -95,7 +101,7 @@
 				$textContent = newState.doc.textContent.toString();
 			}
 		});
-		reconfigAllPlugins();
+		reconfigureAllPlugins();
 
 		return () => {
 			view?.destroy();
@@ -103,10 +109,10 @@
 	});
 </script>
 
-<section class="flex h-[100svh] min-h-0 flex-col items-center bg-stone-50 lg:flex-1">
+<section class="flex min-h-[100svh] flex-1 flex-col items-center bg-stone-50 xl:h-full">
 	<!-- Custom toolbar with Chadcn Svelte buttons -->
 	<div
-		class=" flex h-14 w-full items-center justify-between border-b border-stone-300 bg-stone-50 p-2"
+		class=" flex min-h-14 w-full items-center justify-between border-b border-stone-300 bg-stone-50 p-2"
 	>
 		<input
 			type="text"

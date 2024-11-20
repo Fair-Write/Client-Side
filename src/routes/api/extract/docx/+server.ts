@@ -14,10 +14,11 @@ export const POST: RequestHandler = async ({ request }) => {
 			status: 400
 		});
 	}
+
 	try {
 		const arrayBufferDocx = await file.arrayBuffer();
 		const bufferDocx = Buffer.from(arrayBufferDocx);
-		const conversion = await mammoth.convertToHtml({ buffer: bufferDocx });
+		const conversion = await mammoth.extractRawText({ buffer: bufferDocx });
 
 		return new Response(JSON.stringify({ data: conversion.value }), {
 			status: 200,
