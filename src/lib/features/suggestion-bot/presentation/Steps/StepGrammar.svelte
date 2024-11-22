@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
@@ -33,42 +34,45 @@
 	});
 </script>
 
-<Card.Root class="mx-3 w-full">
-	<Card.Header>
-		<Card.Title class="border-b border-dashed border-stone-500 pb-2 font-bold"
-			>Step 2: Grammar Check</Card.Title
-		>
-		<Card.Description
-			>Here is the list of grammar corrections that I can suggest</Card.Description
-		>
-	</Card.Header>
-	<Card.Content>
-		<Button
-			class="w-full"
-			disabled={isEmpty}
-			onclick={() => {
-				nextSlide();
-				$progressStore = 100;
-			}}>Proceed</Button
-		>
-		<Button
-			class="mt-2 w-full"
-			disabled={!isEmpty}
-			onclick={() => {
-				// nextSlide();
-				// $progressStore = 100;
-				applyAllChanges();
-			}}>Apply All Changes</Button
-		>
-	</Card.Content>
+<ScrollArea class=" h-[500px] w-full px-1 xl:h-[600px]">
+	<Card.Root class=" w-full">
+		<Card.Header>
+			<Card.Title class="border-b border-dashed border-stone-500 pb-2 font-bold"
+				>Step 2: Grammar Check</Card.Title
+			>
+			<Card.Description>Here is the list of grammar corrections that I can suggest</Card.Description
+			>
+		</Card.Header>
+		<Card.Content>
+			<Button
+				class="w-full"
+				disabled={isEmpty}
+				onclick={() => {
+					nextSlide();
+					$progressStore = 100;
+				}}>Proceed</Button
+			>
+			<Button
+				class="mt-2 w-full"
+				disabled={!isEmpty}
+				onclick={() => {
+					// nextSlide();
+					// $progressStore = 100;
+					applyAllChanges();
+				}}>Apply All Changes</Button
+			>
+		</Card.Content>
 
-	<!--compact	-->
-</Card.Root>
+		<!--compact	-->
+	</Card.Root>
 
-<ScrollArea class="h-[500px] w-full px-3">
-	{#key $aiSuggestions}
-		{#each suggestionsReference as payload, index}
-			<SuggestionCard suggestion={payload} {index} {removeMe} {ignoreMe} />
-		{/each}
-	{/key}
+	{#if $aiSuggestions.length == 0}
+		<Skeleton class="my-5 h-[500px] w-full bg-stone-300" />
+	{:else}
+		{#key $aiSuggestions}
+			{#each suggestionsReference as payload, index}
+				<SuggestionCard suggestion={payload} {index} {removeMe} {ignoreMe} />
+			{/each}
+		{/key}
+	{/if}
 </ScrollArea>

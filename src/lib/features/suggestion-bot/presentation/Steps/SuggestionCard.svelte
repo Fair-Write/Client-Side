@@ -27,7 +27,7 @@
 				<div class="flex items-center justify-center gap-2">
 					<div
 						class={cn(
-							'h-[10px] w-[10px] rounded-full',
+							'max-h-[10px] min-h-[10px] min-w-[10px] max-w-[10px] rounded-full',
 							suggestion.correctionType === 'grammar' && 'bg-blue-500',
 							suggestion.correctionType === 'spelling' && 'bg-red-500',
 							suggestion.correctionType === 'gfl' && 'bg-violet-500'
@@ -54,9 +54,9 @@
 			<p class="my-3 text-sm">
 				<span class="font-bold text-blue-500">Revision:&nbsp;</span>{suggestion.correctPhrase}
 			</p>
-			<p class="text-sm">
+			<!-- <p class="text-sm">
 				<span class="font-bold text-stone-500">Rationale:&nbsp;</span>{suggestion.rationale}
-			</p>
+			</p> -->
 		</Card.Content>
 		<Card.Footer class="flex flex-col items-center justify-start gap-2 p-3">
 			<button
@@ -114,8 +114,7 @@
 			<div class="flex items-center justify-center gap-1">
 				<button
 					class="material-symbols-outlined s16 cursor-pointer select-none rounded-full border border-solid border-red-500 p-1 text-red-500"
-					onclick={()=>ignoreMe(index)}
-					>delete</button
+					onclick={() => ignoreMe(index)}>delete</button
 				>
 				<button
 					class="material-symbols-outlined s16 cursor-pointer select-none rounded-full border border-solid border-stone-500 p-1 text-stone-500"

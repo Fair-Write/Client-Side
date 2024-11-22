@@ -12,6 +12,7 @@
 	import { type CarouselAPI } from '$lib/components/ui/carousel/context.js';
 	import { progressStore } from '$lib/stores/progressStore';
 	import { aiSuggestions } from '$lib/stores/lintingStore';
+	import { textContent } from '$lib/stores/textFromEditorStore';
 	let api = $state<CarouselAPI>();
 
 	function nextSlide() {
@@ -20,123 +21,159 @@
 		}
 	}
 
-	function initPayload() {
-		$aiSuggestions = [
-			{
-				heading: 'Change to plural',
-				wrongPhrase: 'firemen is',
-				correctPhrase: 'firemen are',
-				correctionType: 'grammar',
-				analysis: 5,
-				rationale: 'lorem ipsum somethign something'
-			},
-			{
-				heading: 'Missing Article',
-				wrongPhrase: 'to enforce law and order',
-				correctPhrase: 'to enforce law and order;',
-				correctionType: 'grammar',
-				analysis: 5,
-				rationale: 'lorem ipsum somethign something'
-			},
-			{
-				heading: 'Wrong Spelling',
-				wrongPhrase: 'physical strength and cowrage',
-				correctPhrase: 'physical strength and courage',
-				correctionType: 'spelling',
-				analysis: 5,
-				rationale: 'lorem ipsum somethign something'
-			},
+	async function initPayload() {
+		// $aiSuggestions = [
+		// 	{
+		// 		heading: 'Change to plural',
+		// 		wrongPhrase: 'firemen is',
+		// 		correctPhrase: 'firemen are',
+		// 		correctionType: 'grammar',
+		// 		analysis: 5,
+		// 		rationale: 'lorem ipsum somethign something'
+		// 	},
+		// 	{
+		// 		heading: 'Missing Article',
+		// 		wrongPhrase: 'to enforce law and order',
+		// 		correctPhrase: 'to enforce law and order;',
+		// 		correctionType: 'grammar',
+		// 		analysis: 5,
+		// 		rationale: 'lorem ipsum somethign something'
+		// 	},
+		// 	{
+		// 		heading: 'Wrong Spelling',
+		// 		wrongPhrase: 'physical strength and cowrage',
+		// 		correctPhrase: 'physical strength and courage',
+		// 		correctionType: 'spelling',
+		// 		analysis: 5,
+		// 		rationale: 'lorem ipsum somethign something'
+		// 	},
 
-			{
-				heading: 'Subject-Verb Agreement',
-				wrongPhrase: 'prepare them',
-				correctPhrase: 'prepares them',
-				correctionType: 'grammar',
-				analysis: 5,
-				rationale: 'lorem ipsum somethign something'
-			},
-			{
-				heading: 'Wrong Spelling',
-				wrongPhrase: 'knowed',
-				correctPhrase: 'known',
-				correctionType: 'spelling',
-				analysis: 5,
-				rationale: 'lorem ipsum somethign something'
+		// 	{
+		// 		heading: 'Subject-Verb Agreement',
+		// 		wrongPhrase: 'prepare them',
+		// 		correctPhrase: 'prepares them',
+		// 		correctionType: 'grammar',
+		// 		analysis: 5,
+		// 		rationale: 'lorem ipsum somethign something'
+		// 	},
+		// 	{
+		// 		heading: 'Wrong Spelling',
+		// 		wrongPhrase: 'knowed',
+		// 		correctPhrase: 'known',
+		// 		correctionType: 'spelling',
+		// 		analysis: 5,
+		// 		rationale: 'lorem ipsum somethign something'
+		// 	}
+		// ];
+
+		// fetch
+		await setTimeout(async () => {
+			try {
+				const payload = $textContent;
+				const post = await fetch('http://127.0.0.1:8080/grammar', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ prompt: payload })
+				});
+				if (!post.ok) {
+					throw new Error(`HTTP error! status: ${post.status}`);
+				}
+				const data = await post.json();
+				console.log(data);
+
+				let suggestions = data.corrections.map(
+					(correction: { original_text: string; replacements: string[]; message: string }) => ({
+						analysis: 5,
+						correctionType: 'grammar',
+						wrongPhrase: correction.original_text as string,
+						correctPhrase: correction.replacements[0] as string,
+						heading: correction.message as string,
+						rationale: 'test'
+					})
+				);
+
+				$aiSuggestions = await suggestions;
+
+				console.log($aiSuggestions);
+			} catch (error) {
+				console.error('Error:', error);
 			}
-		];
-		nextSlide();
+		}, 500);
+		await nextSlide();
 	}
 
 	function initGLF() {
-		setTimeout(() => {
-			$aiSuggestions = [
-				{
-					heading: 'Change to firefighter',
-					wrongPhrase: 'firemen',
-					correctPhrase: 'firefighter',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
-				{
-					heading: 'Change to Police Officers',
-					wrongPhrase: 'policemen',
-					correctPhrase: 'police officer',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
-				{
-					heading: 'Change to Police Officers',
-					wrongPhrase: 'policewomen',
-					correctPhrase: 'police officers',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
+		// setTimeout(() => {
+		// 	$aiSuggestions = [
+		// 		{
+		// 			heading: 'Change to firefighter',
+		// 			wrongPhrase: 'firemen',
+		// 			correctPhrase: 'firefighter',
+		// 			correctionType: 'gfl',
+		// 			analysis: 5,
+		// 			rationale: 'lorem ipsum somethign something'
+		// 		},
+		// 		{
+		// 			heading: 'Change to Police Officers',
+		// 			wrongPhrase: 'policemen',
+		// 			correctPhrase: 'police officer',
+		// 			correctionType: 'gfl',
+		// 			analysis: 5,
+		// 			rationale: 'lorem ipsum somethign something'
+		// 		},
+		// 		{
+		// 			heading: 'Change to Police Officers',
+		// 			wrongPhrase: 'policewomen',
+		// 			correctPhrase: 'police officers',
+		// 			correctionType: 'gfl',
+		// 			analysis: 5,
+		// 			rationale: 'lorem ipsum somethign something'
+		// 		},
 
-				{
-					heading: 'Change to firefighters',
-					wrongPhrase: 'lady firefighters',
-					correctPhrase: 'firefighters',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
-				{
-					heading: 'Change to businessperson',
-					wrongPhrase: 'businessman',
-					correctPhrase: 'businessperson',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
-				{
-					heading: 'Change to chairperson',
-					wrongPhrase: 'chairmen',
-					correctPhrase: 'chairperson',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
-				{
-					heading: 'Change to salesmen',
-					wrongPhrase: 'salesmen',
-					correctPhrase: 'salesperson',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
-				{
-					heading: 'Change to salesmen',
-					wrongPhrase: 'salesmen',
-					correctPhrase: 'salesperson',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				}
-			];
-		}, 500);
+		// 		{
+		// 			heading: 'Change to firefighters',
+		// 			wrongPhrase: 'lady firefighters',
+		// 			correctPhrase: 'firefighters',
+		// 			correctionType: 'gfl',
+		// 			analysis: 5,
+		// 			rationale: 'lorem ipsum somethign something'
+		// 		},
+		// 		{
+		// 			heading: 'Change to businessperson',
+		// 			wrongPhrase: 'businessman',
+		// 			correctPhrase: 'businessperson',
+		// 			correctionType: 'gfl',
+		// 			analysis: 5,
+		// 			rationale: 'lorem ipsum somethign something'
+		// 		},
+		// 		{
+		// 			heading: 'Change to chairperson',
+		// 			wrongPhrase: 'chairmen',
+		// 			correctPhrase: 'chairperson',
+		// 			correctionType: 'gfl',
+		// 			analysis: 5,
+		// 			rationale: 'lorem ipsum somethign something'
+		// 		},
+		// 		{
+		// 			heading: 'Change to salesmen',
+		// 			wrongPhrase: 'salesmen',
+		// 			correctPhrase: 'salesperson',
+		// 			correctionType: 'gfl',
+		// 			analysis: 5,
+		// 			rationale: 'lorem ipsum somethign something'
+		// 		},
+		// 		{
+		// 			heading: 'Change to salesmen',
+		// 			wrongPhrase: 'salesmen',
+		// 			correctPhrase: 'salesperson',
+		// 			correctionType: 'gfl',
+		// 			analysis: 5,
+		// 			rationale: 'lorem ipsum somethign something'
+		// 		}
+		// 	];
+		// }, 500);
 		nextSlide();
 	}
 
