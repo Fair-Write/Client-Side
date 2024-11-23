@@ -140,7 +140,7 @@
 		nextSlide();
 	}
 
-	function goBackFromStart() {
+	function backToTheStart() {
 		if (api) {
 			api.scrollTo(0);
 			$progressStore = 0;
@@ -148,12 +148,6 @@
 	}
 </script>
 
-<!--TODO:-->
-<!--create a step by step thingy ma bob-->
-<!-- 1. writing -->
-<!-- 2. grammar -->
-<!-- 3. GFL -->
-<!-- 4. analytics -->
 <section class=" h-full min-h-0 border-l border-stone-300 bg-stone-100 lg:w-80">
 	<div
 		class="flex h-14 w-full items-center justify-between border-b border-solid border-stone-300 bg-stone-50 p-5"
@@ -170,32 +164,12 @@
 			setApi={(emblaApi) => (api = emblaApi)}
 			opts={{ dragFree: true, watchDrag: false }}
 		>
-			<Carousel.Content>
+			<Carousel.Content class="w-[280px]">
 				<Carousel.Item><StepWrite nextSlide={initPayload}></StepWrite></Carousel.Item>
 				<Carousel.Item><StepGrammar nextSlide={initGLF}></StepGrammar></Carousel.Item>
 				<Carousel.Item><StepGLF {nextSlide}></StepGLF></Carousel.Item>
-				<Carousel.Item><Analytics></Analytics></Carousel.Item>
+				<Carousel.Item><Analytics {backToTheStart}></Analytics></Carousel.Item>
 			</Carousel.Content>
-			<button
-				onclick={() => {
-					if (api) {
-						api.scrollNext();
-					}
-				}}
-			>
-				NEXT</button
-			>
-
-			<button
-				onclick={() => {
-					if (api) {
-						api.scrollPrev();
-					}
-				}}
-			>
-				Previous</button
-			>
-			<button onclick={goBackFromStart}>From the start</button>
 		</Carousel.Root>
 	</div>
 </section>

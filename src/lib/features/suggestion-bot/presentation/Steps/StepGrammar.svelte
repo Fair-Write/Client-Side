@@ -38,19 +38,20 @@
 		<Card.Title class="border-b border-dashed border-stone-500 pb-2 font-bold"
 			>Step 2: Grammar Check</Card.Title
 		>
-		<Card.Description
-			>Here is the list of grammar corrections that I can suggest</Card.Description
-		>
+		<Card.Description>Here is the list of grammar corrections that I can suggest</Card.Description>
 	</Card.Header>
 	<Card.Content>
 		<Button
-			class="w-full"
+			class="flex w-full items-center  justify-between border-2 border-blue-500 bg-blue-50  text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
 			disabled={isEmpty}
 			onclick={() => {
 				nextSlide();
 				$progressStore = 100;
-			}}>Proceed</Button
-		>
+			}}
+			><p>Proceed</p>
+
+			<span class="material-symbols-outlined s16">arrow_forward_ios</span>
+		</Button>
 		<Button
 			class="mt-2 w-full"
 			disabled={!isEmpty}

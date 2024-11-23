@@ -2,10 +2,12 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Button } from '$lib/components/ui/button';
 	import Gauge from '$lib/features/suggestion-bot/presentation/Steps/Gauge.svelte';
+
+	let { backToTheStart }: { backToTheStart: () => void } = $props();
 </script>
 
-<div class="w-full flex items-center justify-stretch gap-2 flex-col  ">
-	<Gauge radius={100} percent={90}></Gauge>
+<div class="flex w-full flex-col items-center justify-stretch gap-2">
+	<Gauge radius={100} percent={50}></Gauge>
 
 	<Card.Root>
 		<Card.Header>
@@ -28,8 +30,23 @@
 			</ul>
 		</Card.Content>
 	</Card.Root>
-	<Button>Start All Over Again</Button>
-	<Button>Export As</Button>
+	<Button
+		variant="outline"
+		size="lg"
+		onclick={backToTheStart}
+		class="flex w-full items-center  justify-between border-2 border-blue-500 bg-blue-50 p-6 text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
+		><p>Start All Over Again</p>
+
+		<span class="material-symbols-outlined s26"> restart_alt</span>
+	</Button>
+	<Button
+		variant="outline"
+		size="lg"
+		class="flex w-full items-center  justify-between border-2 border-green-500 bg-green-50 p-6 text-base font-bold text-green-500 hover:bg-green-500 hover:text-green-50"
+		><p>Export As</p>
+
+		<span class="material-symbols-outlined s26"> upgrade</span>
+	</Button>
 </div>
 
 <style>

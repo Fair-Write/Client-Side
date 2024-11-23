@@ -36,20 +36,23 @@
 <Card.Root class="mx-3 w-full">
 	<Card.Header>
 		<Card.Title class="border-b border-dashed border-stone-500 pb-2 font-bold"
-		>Step 3: Gender Fairness</Card.Title
+			>Step 3: Gender Fairness</Card.Title
 		>
 		<Card.Description
-		>Here is the list of Gender Fair appropriate words that I can suggest</Card.Description
+			>Here is the list of Gender Fair appropriate words that I can suggest</Card.Description
 		>
 	</Card.Header>
 	<Card.Content>
 		<Button
-			class="w-full"
+			class="flex w-full items-center  justify-between border-2 border-blue-500 bg-blue-50  text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
 			disabled={isEmpty}
 			onclick={() => {
 				nextSlide();
 				$progressStore = 100;
-			}}>Proceed</Button
+			}}
+		>
+			<p>Proceed</p>
+			<span class="material-symbols-outlined s16">arrow_forward_ios</span></Button
 		>
 		<Button
 			class="mt-2 w-full"
