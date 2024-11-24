@@ -16,7 +16,7 @@
 	<Card.Content>
 		<Button
 
-			class="w-full  flex items-center  justify-between border-2 border-blue-500 bg-blue-50 p-3  text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
+			class="w-full  flex items-center  justify-between border border-blue-500 bg-blue-50 p-3  text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
 			disabled={$textContent.trim().split(/\s+/).length < 25}
 			variant="outline"
 			color="secondary"

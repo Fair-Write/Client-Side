@@ -44,7 +44,7 @@
 		</Card.Header>
 		<Card.Content>
 			<Button
-				class="flex w-full items-center  justify-between border-2 border-blue-500 bg-blue-50  text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
+				class="flex w-full items-center  justify-between border border-blue-500 bg-blue-50  text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
 				disabled={isEmpty}
 				onclick={() => {
 					nextSlide();

@@ -32,17 +32,17 @@
 	</Card.Root>
 	<Button
 		variant="outline"
-		size="lg"
+
 		onclick={backToTheStart}
-		class="flex w-full items-center  justify-between border-2 border-blue-500 bg-blue-50 p-6 text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
+		class="flex w-full items-center  justify-between border border-blue-500 bg-blue-50 p-6 text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
 		><p>Start All Over Again</p>
 
 		<span class="material-symbols-outlined s26"> restart_alt</span>
 	</Button>
 	<Button
 		variant="outline"
-		size="lg"
-		class="flex w-full items-center  justify-between border-2 border-green-500 bg-green-50 p-6 text-base font-bold text-green-500 hover:bg-green-500 hover:text-green-50"
+
+		class="flex w-full items-center  justify-between border border-green-500 bg-green-50 p-6 text-base font-bold text-green-500 hover:bg-green-500 hover:text-green-50"
 		><p>Export As</p>
 
 		<span class="material-symbols-outlined s26"> upgrade</span>
