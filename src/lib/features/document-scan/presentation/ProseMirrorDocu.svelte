@@ -5,7 +5,7 @@
 	import { EditorView } from 'prosemirror-view';
 	import { DOMParser } from 'prosemirror-model';
 
-	import { textContent, textTitle } from '$lib/stores/textFromEditorStore';
+	import { textContent, textContentHTML} from '$lib/stores/textFromEditorStore';
 	import mySchema from '$lib/features/rich-text-editor/entities/Schema';
 
 	import createLinterPlugin from '$lib/features/rich-text-editor/use-case/LinterPlugin';
@@ -23,9 +23,11 @@
 	function reconfigureAllPlugins(): void {
 		if (!view) throw new Error('Editorview not defined');
 
-		linterPlugin = createLinterPlugin(	$aiSuggestions.map((aiSuggestion) =>
-			omitObject(aiSuggestion, 'correctPhrase', 'analysis', 'heading', 'rationale')
-		));
+		linterPlugin = createLinterPlugin(
+			$aiSuggestions.map((aiSuggestion) =>
+				omitObject(aiSuggestion, 'correctPhrase', 'analysis', 'heading', 'rationale')
+			)
+		);
 
 		const state = view.state.reconfigure({
 			plugins: [linterPlugin]
@@ -59,7 +61,6 @@
 		}
 	});
 
-
 	$effect(() => {
 		if ($replaceStore.length != 0) {
 			$replaceStore.forEach((store) => {
@@ -72,7 +73,7 @@
 
 	$effect(() => {
 		$textContent = text as string;
-		if( view !==null) replaceEditorText($textContent, view as EditorView);
+		if (view !== null) replaceEditorText($textContent, view as EditorView);
 	});
 
 	onMount(() => {
@@ -92,6 +93,7 @@
 				const newState = view!.state.apply(transaction);
 				view!.updateState(newState);
 				$textContent = newState.doc.textContent.toString();
+				$textContentHTML = newState.doc.textContent;
 			}
 		});
 		reconfigureAllPlugins();
@@ -102,7 +104,7 @@
 	});
 </script>
 
-<div class="custom-shadow flex w-full h-full flex-1 items-start justify-center bg-stone-50">
+<div class="custom-shadow flex h-full w-full flex-1 items-start justify-center bg-stone-50">
 	<div
 		bind:this={editorContainer}
 		class="editor__paragraph prose prose-sm flex-1 lg:prose-base xl:prose-lg"
