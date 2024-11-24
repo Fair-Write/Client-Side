@@ -67,8 +67,9 @@
 				console.log('THIS IS PDF');
 				const response = await fetch('/api/extract/pdf', { method: 'POST', body: formData });
 				const result = await response.json();
-				console.log(result);
-				extractedText = result.message;
+				console.log(result.data);
+
+				extractedText = result.data;
 				break;
 			}
 			case 'png':
@@ -88,7 +89,7 @@
 </script>
 
 <div class="flex w-full flex-1 items-start justify-center lg:items-center">
-	{#if  extractedText === ''}
+	{#if extractedText === ''}
 		<form
 			class=" flex h-[350px] w-[250px] flex-col items-center justify-center
 		gap-5 rounded-sm border-2 border-dashed border-stone-300

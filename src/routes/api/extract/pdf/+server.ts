@@ -31,7 +31,11 @@ export const POST: RequestHandler = async ({ request }) => {
 			});
 		});
 
-		return new Response(JSON.stringify({ data:data }), { status: 200 });
+		const allPagesContent = await data.pages
+			.map((page) => page.content.reduce((acc, curr) => acc + curr.str, ''))
+			.join('\n');
+
+		return new Response(JSON.stringify({ data: allPagesContent }), { status: 200 });
 	} catch (err) {
 		return new Response(JSON.stringify({ error: String(err) }), { status: 500 });
 	}
