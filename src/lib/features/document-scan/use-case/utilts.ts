@@ -1,4 +1,4 @@
-// utils function
+// Utils function
 export function getSuffix(fileName: string): 'pdf'| 'docx'|  'jpeg'| 'png' {
 	const lookUpTable = ['pdf', 'docx',  'jpeg', 'png'] as const;
   let suffix: typeof lookUpTable[number] | undefined;

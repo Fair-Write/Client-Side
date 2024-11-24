@@ -1,10 +1,15 @@
-import type { EditorState } from 'prosemirror-state';
 import jsPDF from 'jspdf';
-export  function exportStateAsPDF(state: EditorState) {
+import { textTitle } from '$lib/stores/textFromEditorStore';
+export function exportStateAsPDF(state: string) {
+	let title: string = '';
+	textTitle.subscribe((value) => {
+		title = value;
+	});
+
 	const doc = new jsPDF();
-	doc.html(state.doc.textContent, {
+	doc.html(state, {
 		callback: function (doc) {
-			doc.save('Content.pdf');
+			doc.save(title);
 		},
 		margin: [10, 10, 10, 10],
 		autoPaging: 'text',

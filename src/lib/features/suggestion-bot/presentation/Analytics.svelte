@@ -2,6 +2,7 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Button } from '$lib/components/ui/button';
 	import Gauge from '$lib/features/suggestion-bot/presentation/Steps/Gauge.svelte';
+	import ExportButton from '$lib/features/suggestion-bot/presentation/Utils/ExportButton.svelte';
 
 	let { backToTheStart }: { backToTheStart: () => void } = $props();
 </script>
@@ -39,14 +40,7 @@
 
 		<span class="material-symbols-outlined s26"> restart_alt</span>
 	</Button>
-	<Button
-		variant="outline"
-
-		class="flex w-full items-center  justify-between border border-green-500 bg-green-50 p-6 text-base font-bold text-green-500 hover:bg-green-500 hover:text-green-50"
-		><p>Export As</p>
-
-		<span class="material-symbols-outlined s26"> upgrade</span>
-	</Button>
+	<ExportButton></ExportButton>
 </div>
 
 <style>
