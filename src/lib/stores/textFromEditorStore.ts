@@ -6,3 +6,5 @@ export const textContent = writable(
 		'In the business world, a successful businessman is admire for his ability to negotiate and lead a team effectively. Many companies prefer male chairmen since they are knowed for their decisiveness and strategic thinking. Even at lower levels, salesmen is often seen as more persuasive than their female counterparts, as people tend to trust men in these roles. Women on the other hand, usually pursue careers as secretaries or assistants, providing the vital support to their male bosses whom handle the main responsibilities.'
 );
 export const textTitle = writable('Untitled_1');
+
+export const textContentHTML = writable("")

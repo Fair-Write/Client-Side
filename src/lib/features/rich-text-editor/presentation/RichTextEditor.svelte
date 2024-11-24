@@ -6,7 +6,7 @@
 	import { DOMParser } from 'prosemirror-model';
 	import { history } from 'prosemirror-history';
 
-	import { textContent, textTitle } from '$lib/stores/textFromEditorStore';
+	import { textContent, textContentHTML, textTitle } from '$lib/stores/textFromEditorStore';
 	import mySchema from '$lib/features/rich-text-editor/entities/Schema';
 
 	import ToolBar from './ToolBar.svelte';
@@ -99,6 +99,7 @@
 				const newState = view!.state.apply(transaction);
 				view!.updateState(newState);
 				$textContent = newState.doc.textContent.toString();
+				$textContentHTML = newState.doc.textContent;
 			}
 		});
 		reconfigureAllPlugins();

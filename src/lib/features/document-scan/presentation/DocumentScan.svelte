@@ -4,6 +4,7 @@
 	import FileNameDisplay from '$lib/features/document-scan/presentation/FileNameDisplay.svelte';
 	import { fileStore } from '$lib/features/document-scan/store/fileStore';
 	import { convertInputToFile } from '../use-case/extractDocument';
+	import { textTitle } from '$lib/stores/textFromEditorStore';
 
 	let fileNameDisplay: IFileNameDisplay = $state({
 		fileName: undefined,
@@ -15,6 +16,7 @@
 		type: 'jpeg' | 'png' | 'docx' | 'pdf' | undefined
 	): void {
 		fileNameDisplay.fileName = name;
+		$textTitle = name;
 		fileNameDisplay.fileType = type;
 	}
 </script>
