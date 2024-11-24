@@ -160,15 +160,15 @@
 		<StepInfographic></StepInfographic>
 
 		<Carousel.Root
-			class="w-[280px]"
+			class="w-[300px]"
 			setApi={(emblaApi) => (api = emblaApi)}
 			opts={{ dragFree: true, watchDrag: false }}
 		>
-			<Carousel.Content class="w-[280px]">
-				<Carousel.Item><StepWrite nextSlide={initPayload}></StepWrite></Carousel.Item>
-				<Carousel.Item><StepGrammar nextSlide={initGLF}></StepGrammar></Carousel.Item>
+			<Carousel.Content class="-ml-5">
+				<Carousel.Item class="px-5"><StepWrite nextSlide={initPayload}></StepWrite></Carousel.Item>
+				<Carousel.Item class=""><StepGrammar nextSlide={initGLF}></StepGrammar></Carousel.Item>
 				<Carousel.Item><StepGLF {nextSlide}></StepGLF></Carousel.Item>
-				<Carousel.Item><Analytics {backToTheStart}></Analytics></Carousel.Item>
+				<Carousel.Item class="px-5"> <Analytics {backToTheStart}></Analytics></Carousel.Item>
 			</Carousel.Content>
 		</Carousel.Root>
 	</div>

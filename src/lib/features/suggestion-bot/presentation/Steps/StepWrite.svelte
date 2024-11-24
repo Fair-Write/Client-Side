@@ -6,7 +6,7 @@
 	import { textContent } from '$lib/stores/textFromEditorStore';
 </script>
 
-<Card.Root class="mx-3 w-full">
+<Card.Root class="mx-3 w-full ">
 	<Card.Header>
 		<Card.Title class="border-b border-dashed border-stone-500 pb-2 font-bold"
 			>Step 1: Write</Card.Title

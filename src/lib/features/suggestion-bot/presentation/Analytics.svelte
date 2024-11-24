@@ -6,7 +6,7 @@
 	let { backToTheStart }: { backToTheStart: () => void } = $props();
 </script>
 
-<div class="flex w-full flex-col items-center justify-stretch gap-2">
+<div class="flex w-full flex-col items-center justify-stretch gap-2 pl-4">
 	<Gauge radius={100} percent={50}></Gauge>
 
 	<Card.Root>
