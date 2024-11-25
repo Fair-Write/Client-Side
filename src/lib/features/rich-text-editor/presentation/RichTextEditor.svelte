@@ -20,6 +20,7 @@
 	import { replaceWordInDocument } from '$lib/features/rich-text-editor/use-case/replaceText';
 	import { aiSuggestions, omitObject } from '$lib/stores/lintingStore';
 	import { replaceStore } from '$lib/stores/lintingStore';
+	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -145,11 +146,13 @@
 	<!-- ProseMirror editor container -->
 
 	<div class="custom-shadow flex w-full flex-1 items-start justify-center bg-stone-50">
-		<div
-			bind:this={editorContainer}
-			class="editor__paragraph prose prose-sm flex-1 lg:prose-base xl:prose-lg"
-			id="editor"
-		></div>
+		<ScrollArea class="h-[500px]  w-full lg:h-[700px]">
+			<div
+				bind:this={editorContainer}
+				class="editor__paragraph prose prose-sm flex-1 lg:prose-base xl:prose-lg"
+				id="editor"
+			></div>
+		</ScrollArea>
 	</div>
 </section>
 

@@ -4,6 +4,8 @@
 
 	import { exportStateAsPDF } from '$lib/features/rich-text-editor/use-case/exportPDF.js';
 	import { textContentHTML, textTitle } from '$lib/stores/textFromEditorStore';
+	import { buttonVariants } from '$lib/components/ui/button/index.js';
+	import { cn } from '$lib/utils';
 
 	async function downloadDocx() {
 		const response = await fetch('/api/docx', {
@@ -26,18 +28,19 @@
 	}
 </script>
 
-<DropdownMenu.Root >
-	<DropdownMenu.Trigger class="w-full">
-		<Button
-			variant="outline"
-			class="flex w-full items-center  justify-between border border-green-500 bg-green-50 p-6 text-base font-bold text-green-500 hover:bg-green-500 hover:text-green-50"
-			><p>Export As</p>
+<DropdownMenu.Root>
+	<DropdownMenu.Trigger
+		class={cn(
+			buttonVariants({ variant: 'outline' }),
+			'flex w-full items-center  justify-between border border-green-500 bg-green-50 p-6 text-base font-bold text-green-500 hover:bg-green-500 hover:text-green-50'
+		)}
+	>
+		<p>Export As</p>
 
-			<span class="material-symbols-outlined s26"> upgrade</span>
-		</Button>
+		<span class="material-symbols-outlined s26"> upgrade</span>
 	</DropdownMenu.Trigger>
-	<DropdownMenu.Content >
-		<DropdownMenu.Group  class="w-[250px]" >
+	<DropdownMenu.Content>
+		<DropdownMenu.Group class="w-[250px]">
 			<DropdownMenu.Item
 				class="w-full"
 				onclick={() => {
@@ -45,7 +48,7 @@
 				}}><p class="font-semibold">DOCX</p></DropdownMenu.Item
 			>
 			<DropdownMenu.Item class="w-full" onclick={() => exportStateAsPDF($textContentHTML)}
-				><p class="font-semibold w-full">PDF</p></DropdownMenu.Item
+				><p class="w-full font-semibold">PDF</p></DropdownMenu.Item
 			>
 		</DropdownMenu.Group>
 	</DropdownMenu.Content>
