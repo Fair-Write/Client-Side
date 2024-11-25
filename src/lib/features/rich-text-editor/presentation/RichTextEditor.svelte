@@ -4,7 +4,7 @@
 	import { EditorState } from 'prosemirror-state';
 	import { EditorView } from 'prosemirror-view';
 	import { DOMParser } from 'prosemirror-model';
-	import { history } from 'prosemirror-history';
+	import { history, closeHistory } from 'prosemirror-history';
 
 	import { textContent, textContentHTML, textTitle } from '$lib/stores/textFromEditorStore';
 	import mySchema from '$lib/features/rich-text-editor/entities/Schema';
@@ -20,6 +20,7 @@
 	import { replaceWordInDocument } from '$lib/features/rich-text-editor/use-case/replaceText';
 	import { aiSuggestions, omitObject } from '$lib/stores/lintingStore';
 	import { replaceStore } from '$lib/stores/lintingStore';
+	import Error from '../../../../routes/+error.svelte';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -59,6 +60,15 @@
 		}
 	});
 
+	function resetHistory() {
+		if (view != null) {
+			// Use a transaction to close the current history and start a new one
+			const tr = view.state.tr;
+			closeHistory(tr); // Ends the current history session
+			view.dispatch(tr);
+		}
+	}
+
 	function replaceWordCommand(words: { correctPhrase: string; wrongPhrase: string }) {
 		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
 			if (!dispatch) return false; // No dispatch means no transaction to apply
@@ -75,6 +85,7 @@
 			});
 
 			$replaceStore = [];
+			resetHistory();
 		}
 	});
 
