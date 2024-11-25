@@ -20,7 +20,6 @@
 	import { replaceWordInDocument } from '$lib/features/rich-text-editor/use-case/replaceText';
 	import { aiSuggestions, omitObject } from '$lib/stores/lintingStore';
 	import { replaceStore } from '$lib/stores/lintingStore';
-	import Error from '../../../../routes/+error.svelte';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
