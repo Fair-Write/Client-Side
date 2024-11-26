@@ -145,15 +145,19 @@
 
 	<!-- ProseMirror editor container -->
 
-	<div class="custom-shadow flex w-full flex-1 items-start justify-center bg-stone-50">
-		<ScrollArea class="h-[500px]  w-full lg:h-[700px]">
+	<ScrollArea class="max-h-[400px] lg:max-h-[600px] w-full flex-1 shadow-inner xl:max-h-[800px]">
+
+		<div class="w-full h-full flex items-start justify-center ">
+
 			<div
 				bind:this={editorContainer}
-				class="editor__paragraph prose prose-sm flex-1 lg:prose-base xl:prose-lg"
+				class="editor__paragraph prose prose-sm w-full flex-1 lg:prose-base xl:prose-lg "
 				id="editor"
 			></div>
-		</ScrollArea>
-	</div>
+
+		</div>
+
+	</ScrollArea>
 </section>
 
 <style>
@@ -161,8 +165,9 @@
 		padding: 10px 10px;
 		width: 100%;
 		max-width: 900px; /* Optional: prevent overflow */
+		/*background: antiquewhite;*/
 	}
-	.custom-shadow {
+	.custom-shadows {
 		box-shadow: inset 0 0 3px 3px rgb(0 0 0 / 0.05);
 	}
 </style>

@@ -13,7 +13,8 @@ const linter = (doc: ProseMirrorNode, lintArgs: lintArgs[]): DecorationSet => {
 		if (node.isText) {
 			for (const lint of lintArgs) {
 				const regex = new RegExp(`\\b${lint.wrongPhrase}\\b`, 'g');
-
+				// pwede ko ditong gawin reference ko ung ireference ung
+				// wordEnd = wordStart + word.length - 1;
 				let match;
 				while ((match = regex.exec(node.text!)) !== null) {
 					const start = pos + match.index;
