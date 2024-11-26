@@ -1,8 +1,9 @@
 export type TSuggestion = {
-	wrongPhrase: string;
-	correctPhrase: string;
+	originalText: string;
+	indexReplacement:number;
+	offSet:number;
+	replacement: string;
 	correctionType: 'grammar' | 'spelling' | 'gfl';
-	heading: string;
-	analysis: number;
+	message: string;
 	rationale: string;
 };

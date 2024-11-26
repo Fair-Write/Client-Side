@@ -37,7 +37,7 @@
 
 		linterPlugin = createLinterPlugin(
 			$aiSuggestions.map((aiSuggestion) =>
-				omitObject(aiSuggestion, 'correctPhrase', 'analysis', 'heading', 'rationale')
+				omitObject(aiSuggestion, 'originalText', 'message', 'indexReplacement', 'rationale')
 			)
 		);
 
@@ -69,7 +69,7 @@
 		}
 	}
 
-	function replaceWordCommand(words: { correctPhrase: string; wrongPhrase: string }) {
+	function replaceWordCommand(words: {originalText:string, offSet:number, replacement:string }) {
 		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
 			if (!dispatch) return false; // No dispatch means no transaction to apply
 
@@ -167,7 +167,5 @@
 		max-width: 900px; /* Optional: prevent overflow */
 		/*background: antiquewhite;*/
 	}
-	.custom-shadows {
-		box-shadow: inset 0 0 3px 3px rgb(0 0 0 / 0.05);
-	}
+
 </style>

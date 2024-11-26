@@ -23,46 +23,15 @@
 	function initPayload() {
 		$aiSuggestions = [
 			{
-				heading: 'Change to plural',
-				wrongPhrase: 'firemen is',
-				correctPhrase: 'firemen are',
+				message: 'Change to plural',
+				originalText: 'is',
+				replacement: 'are',
 				correctionType: 'grammar',
-				analysis: 5,
-				rationale: 'lorem ipsum somethign something'
-			},
-			{
-				heading: 'Missing Article',
-				wrongPhrase: 'to enforce law and order',
-				correctPhrase: 'to enforce law and order;',
-				correctionType: 'grammar',
-				analysis: 5,
-				rationale: 'lorem ipsum somethign something'
-			},
-			{
-				heading: 'Wrong Spelling',
-				wrongPhrase: 'physical strength and cowrage',
-				correctPhrase: 'physical strength and courage',
-				correctionType: 'spelling',
-				analysis: 5,
-				rationale: 'lorem ipsum somethign something'
+				rationale: 'lorem ipsum somethign something',
+				offSet:23,
+				indexReplacement:4
 			},
 
-			{
-				heading: 'Subject-Verb Agreement',
-				wrongPhrase: 'prepare them',
-				correctPhrase: 'prepares them',
-				correctionType: 'grammar',
-				analysis: 5,
-				rationale: 'lorem ipsum somethign something'
-			},
-			{
-				heading: 'Wrong Spelling',
-				wrongPhrase: 'knowed',
-				correctPhrase: 'known',
-				correctionType: 'spelling',
-				analysis: 5,
-				rationale: 'lorem ipsum somethign something'
-			}
 		];
 		nextSlide();
 	}
@@ -71,70 +40,16 @@
 		setTimeout(() => {
 			$aiSuggestions = [
 				{
-					heading: 'Change to firefighter',
-					wrongPhrase: 'firemen',
-					correctPhrase: 'firefighter',
+					message: 'Change to firefighter',
+					originalText: 'firemen',
+					replacement: 'firefighter',
 					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
-				{
-					heading: 'Change to Police Officers',
-					wrongPhrase: 'policemen',
-					correctPhrase: 'police officer',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
-				{
-					heading: 'Change to Police Officers',
-					wrongPhrase: 'policewomen',
-					correctPhrase: 'police officers',
-					correctionType: 'gfl',
-					analysis: 5,
+					offSet:23,
+					indexReplacement:4,
 					rationale: 'lorem ipsum somethign something'
 				},
 
-				{
-					heading: 'Change to firefighters',
-					wrongPhrase: 'lady firefighters',
-					correctPhrase: 'firefighters',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
-				{
-					heading: 'Change to businessperson',
-					wrongPhrase: 'businessman',
-					correctPhrase: 'businessperson',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
-				{
-					heading: 'Change to chairperson',
-					wrongPhrase: 'chairmen',
-					correctPhrase: 'chairperson',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
-				{
-					heading: 'Change to salesmen',
-					wrongPhrase: 'salesmen',
-					correctPhrase: 'salesperson',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
-				{
-					heading: 'Change to salesmen',
-					wrongPhrase: 'salesmen',
-					correctPhrase: 'salesperson',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				}
+
 			];
 		}, 500);
 		nextSlide();

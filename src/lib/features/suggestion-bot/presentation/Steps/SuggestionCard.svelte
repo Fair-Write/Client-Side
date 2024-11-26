@@ -35,7 +35,7 @@
 					>
 						&nbsp;
 					</div>
-					{suggestion.heading}
+					{suggestion.message}
 				</div>
 
 				<button
@@ -49,10 +49,10 @@
 		<Card.Content class="p-3">
 			<p class="text-sm">
 				<span class="font-bold text-red-500">Original:&nbsp;</span>
-				{suggestion.wrongPhrase}
+				{suggestion.originalText}
 			</p>
 			<p class="my-3 text-sm">
-				<span class="font-bold text-blue-500">Revision:&nbsp;</span>{suggestion.correctPhrase}
+				<span class="font-bold text-blue-500">Revision:&nbsp;</span>{suggestion.replacement}
 			</p>
 			<p class="text-sm">
 				<span class="font-bold text-stone-500">Rationale:&nbsp;</span>{suggestion.rationale}
@@ -108,7 +108,7 @@
 			</div>
 
 			<p class="inline w-[120px] truncate text-start text-sm">
-				{suggestion.wrongPhrase}
+				{suggestion.message}
 			</p>
 
 			<div class="flex items-center justify-center gap-1">

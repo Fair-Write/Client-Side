@@ -8,9 +8,9 @@ import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggesti
 export function replaceWordInDocument(
 	editorState: EditorState,
 	dispatch: (tr: Transaction) => void,
-	words:Omit<TSuggestion, 'analysis'|'correctionType'|"heading"|"rationale">
+	words:Omit<TSuggestion, 'indexReplacement'|'correctionType'|"rationale"|"message">
 ): void {
-	const { wrongPhrase, correctPhrase } = words;
+	const { originalText,offSet,replacement} = words;
 	const { doc } = editorState;
 	const transaction = editorState.tr;
 
@@ -20,14 +20,15 @@ export function replaceWordInDocument(
 	// Traverse each text node in the document
 	doc.descendants((node: Node, pos: number) => {
 		if (node.isText && node.textContent) {
-			const regex = new RegExp(`\\b${wrongPhrase}\\b`, 'g');
-			const matches = [...node.textContent.matchAll(regex)];
+			console.log(node.textContent);
+			console.log(node.textContent);
+			// const regex = new RegExp(`\\b${wrongPhrase}\\b`, 'g');
+			// const matches = [...node.textContent.matchAll(regex)];
 
-			if (matches.length > 0) {
-				const newText = node.textContent.replace(regex, correctPhrase);
-
+			if (pos == offSet) {
+				const newText = node.textContent.replace(originalText, replacement);
 				// Store the replacement range and text
-				replacements.push({ from: pos, to: pos + node.nodeSize, text: newText });
+				replacements.push({ from: pos, to: pos + node.nodeSize-1, text: newText });
 			}
 		}
 	});
