@@ -6,35 +6,58 @@ import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggesti
 // lintStringArr: string[], lintingType:string
 type lintArgs = Omit<
 	TSuggestion,
-	'replacement' | 'originalText' | 'message' | 'rationale' | 'indexReplacement'
+	'replacement' | 'originalText' | 'message' | 'rationale'
 >;
-// this motherfucker gets the index
+
+const getWordIndices = (text: string, wordIndex: number): { start: number, end: number } | null => {
+	const words = text.split(/\s+/);
+	let currentIndex = 0;
+	let startPos = 0;
+
+	for (const word of words) {
+		if (currentIndex === wordIndex) {
+			const endPos = startPos + word.length;
+			return { start: startPos, end: endPos };
+		}
+		startPos += word.length + 1; // +1 for the space character
+		currentIndex++;
+	}
+
+	return null;
+};
+
+// Example usage:
+const text = "This is a sample string for testing";
+const wordIndex = 3;
+const result = getWordIndices(text, wordIndex);
+console.log(result); // { start: 10, end: 16 }
 
 const linter = (doc: ProseMirrorNode, lintArgs: lintArgs[]): DecorationSet => {
 	const decorations: Decoration[] = [];
 
 	doc.descendants((node: ProseMirrorNode, pos) => {
-
 		if (node.isText) {
 			for (const lint of lintArgs) {
-				const absoluteStart = pos + lint.offSet;
-				const absoluteEnd = pos + lint.endSet + 1;
+				const wordPosition = getWordIndices(doc.textContent, lint.indexReplacement);
+				if (wordPosition) {
+					const { start, end } = wordPosition;
 
-				switch (lint.correctionType) {
-					case 'spelling':
-						decorations.push(
-							Decoration.inline(absoluteStart, absoluteEnd, { class: 'linter-error ' })
-						);
-						break;
-					case 'grammar':
-						decorations.push(
-							Decoration.inline(absoluteStart, absoluteEnd, { class: 'linter-grammar' })
-						);
-						break;
-					case 'gfl':
-						decorations.push(
-							Decoration.inline(absoluteStart, absoluteEnd, { class: 'linter-gfl' })
-						);
+					switch (lint.correctionType) {
+						case 'spelling':
+							decorations.push(
+								Decoration.inline(start + pos, end + pos + 1, { class: 'linter-error' })
+							);
+							break;
+						case 'grammar':
+							decorations.push(
+								Decoration.inline(start + pos, end + pos + 1, { class: 'linter-grammar' })
+							);
+							break;
+						case 'gfl':
+							decorations.push(
+								Decoration.inline(start + pos, end + pos + 1, { class: 'linter-gfl' })
+							);
+					}
 				}
 			}
 		}
