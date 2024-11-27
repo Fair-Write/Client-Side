@@ -14,10 +14,11 @@ const linter = (doc: ProseMirrorNode, lintArgs: lintArgs[]): DecorationSet => {
 	const decorations: Decoration[] = [];
 
 	doc.descendants((node: ProseMirrorNode, pos) => {
+
 		if (node.isText) {
 			for (const lint of lintArgs) {
 				const absoluteStart = pos + lint.offSet;
-				const absoluteEnd = pos + lint.endSet +1;
+				const absoluteEnd = pos + lint.endSet + 1;
 
 				switch (lint.correctionType) {
 					case 'spelling':

@@ -22,18 +22,17 @@
 			api.scrollNext();
 		}
 	}
-	function isStringOrArrayOfStrings(value:string|string[]) {
+	function isStringOrArrayOfStrings(value: string | string[]) {
 		if (typeof value === 'string') {
 			return value; // It's a string
 		}
 
-		if (Array.isArray(value) && value.every(item => typeof item === 'string')) {
+		if (Array.isArray(value) && value.every((item) => typeof item === 'string')) {
 			return value[0]; // It's an array of strings
 		}
 
 		return false; // It's neither a string nor an array of strings
 	}
-
 
 	async function initPayload() {
 		//
@@ -71,13 +70,13 @@
 					character_endset: number;
 					original_text: string;
 					message: string;
-					replacements: string[] | string;
+					replacements: string[];
 				}) => ({
 					indexReplacement: correction.word_index,
 					originalText: correction.original_text,
 					offSet: correction.character_offset,
 					endSet: correction.character_endset,
-					replacements:isStringOrArrayOfStrings(correction.replacements),
+					replacement: isStringOrArrayOfStrings(correction.replacements),
 					correctionType: 'grammar',
 					message: correction.message,
 					rational: ''
@@ -109,7 +108,7 @@
 		// }, 500);
 		// nextSlide();
 		try {
-			const post = await fetch('http://127.0.0.1:8080/glf', {
+			const post = await fetch('http://127.0.0.1:8080/gfl', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -135,8 +134,8 @@
 					originalText: correction.original_text,
 					offSet: correction.character_offset,
 					endSet: correction.character_endset,
-					replacements:isStringOrArrayOfStrings(correction.replacements),
-					correctionType: 'grammar',
+					replacement: isStringOrArrayOfStrings(correction.replacements),
+					correctionType: 'gfl',
 					message: correction.message,
 					rational: ''
 				})
@@ -150,8 +149,6 @@
 		} catch (error) {
 			console.error('Error:', error);
 		}
-
-
 	}
 
 	function backToTheStart() {
