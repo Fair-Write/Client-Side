@@ -28,10 +28,10 @@
 				replacement: 'are',
 				correctionType: 'grammar',
 				rationale: 'lorem ipsum somethign something',
-				offSet:23,
-				indexReplacement:4
-			},
-
+				offSet: 31,
+				endSet:32,
+				indexReplacement: 9
+			}
 		];
 		nextSlide();
 	}
@@ -44,12 +44,11 @@
 					originalText: 'firemen',
 					replacement: 'firefighter',
 					correctionType: 'gfl',
-					offSet:23,
-					indexReplacement:4,
+					offSet: 23,
+					endSet: 30,
+					indexReplacement: 4,
 					rationale: 'lorem ipsum somethign something'
 				},
-
-
 			];
 		}, 500);
 		nextSlide();
@@ -83,7 +82,7 @@
 				<Carousel.Item class="px-5"><StepWrite nextSlide={initPayload}></StepWrite></Carousel.Item>
 				<Carousel.Item class=""><StepGrammar nextSlide={initGLF}></StepGrammar></Carousel.Item>
 				<Carousel.Item><StepGLF {nextSlide}></StepGLF></Carousel.Item>
-				<Carousel.Item class="px-5"> <Analytics {backToTheStart}></Analytics></Carousel.Item>
+				<Carousel.Item class="px-5"><Analytics {backToTheStart}></Analytics></Carousel.Item>
 			</Carousel.Content>
 		</Carousel.Root>
 	</div>

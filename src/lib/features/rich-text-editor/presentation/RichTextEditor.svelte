@@ -69,7 +69,11 @@
 		}
 	}
 
-	function replaceWordCommand(words: {originalText:string, offSet:number, replacement:string }) {
+	function replaceWordCommand(words: {
+		offSet: number;
+		endSet: number;
+		replacement: string;
+	}) {
 		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
 			if (!dispatch) return false; // No dispatch means no transaction to apply
 
@@ -145,18 +149,14 @@
 
 	<!-- ProseMirror editor container -->
 
-	<ScrollArea class="max-h-[400px] lg:max-h-[600px] w-full flex-1 shadow-inner xl:max-h-[800px]">
-
-		<div class="w-full h-full flex items-start justify-center ">
-
+	<ScrollArea class="max-h-[400px] w-full flex-1 shadow-inner lg:max-h-[600px] xl:max-h-[800px]">
+		<div class="flex h-full w-full items-start justify-center">
 			<div
 				bind:this={editorContainer}
-				class="editor__paragraph prose prose-sm w-full flex-1 lg:prose-base xl:prose-lg "
+				class="editor__paragraph prose prose-sm w-full flex-1 lg:prose-base xl:prose-lg"
 				id="editor"
 			></div>
-
 		</div>
-
 	</ScrollArea>
 </section>
 
@@ -167,5 +167,4 @@
 		max-width: 900px; /* Optional: prevent overflow */
 		/*background: antiquewhite;*/
 	}
-
 </style>

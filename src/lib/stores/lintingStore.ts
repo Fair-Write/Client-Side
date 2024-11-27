@@ -17,6 +17,6 @@ export const aiSuggestions = writable<TSuggestion[]>([]);
 export const replaceStore = writable<
 	Omit<
 		TSuggestion,
-		'indexReplacement'|'correctionType'|"rationale"|"message"
+		'correctionType'|"rationale"|"message"|'indexReplacement'|'originalText'
 	>[]
 >([]);
