@@ -45,7 +45,7 @@
 					replacement: 'firefighter',
 					correctionType: 'gfl',
 					offSet: 23,
-					endSet: 30,
+					endSet: 29,
 					indexReplacement: 4,
 					rationale: 'lorem ipsum somethign something'
 				},
