@@ -12,12 +12,12 @@
 	let isEmpty = $derived(suggestionsReference.length != 0);
 
 	function removeMe(index: number) {
-		$replaceStore = [omitObject($aiSuggestions[index], 'analysis', 'correctionType', 'heading')];
+		$replaceStore = [omitObject($aiSuggestions[index], 'indexReplacement', 'correctionType', 'message','rationale')];
 		$aiSuggestions.splice(index, 1);
 	}
 	function applyAllChanges() {
 		$replaceStore = $aiSuggestions.map((suggestion) => {
-			return omitObject(suggestion, 'analysis', 'correctionType');
+			return omitObject(suggestion,'indexReplacement', 'correctionType', 'message','rationale');
 		});
 		$aiSuggestions = [];
 	}

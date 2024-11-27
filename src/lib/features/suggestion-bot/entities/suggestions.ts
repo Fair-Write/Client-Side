@@ -1,6 +1,6 @@
 export type TSuggestion = {
-	originalText: string;
 	indexReplacement:number;
+	originalText: string;
 	offSet:number;
 	endSet:number;
 	replacement: string;

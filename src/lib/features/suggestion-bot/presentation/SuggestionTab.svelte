@@ -12,6 +12,9 @@
 	import { type CarouselAPI } from '$lib/components/ui/carousel/context.js';
 	import { progressStore } from '$lib/stores/progressStore';
 	import { aiSuggestions } from '$lib/stores/lintingStore';
+	import { textContent } from '$lib/stores/textFromEditorStore';
+	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
+	import { GLFScore } from '$lib/stores/omegaLOL';
 	let api = $state<CarouselAPI>();
 
 	function nextSlide() {
@@ -19,39 +22,136 @@
 			api.scrollNext();
 		}
 	}
+	function isStringOrArrayOfStrings(value:string|string[]) {
+		if (typeof value === 'string') {
+			return value; // It's a string
+		}
 
-	function initPayload() {
-		$aiSuggestions = [
-			{
-				message: 'Change to plural',
-				originalText: 'is',
-				replacement: 'are',
-				correctionType: 'grammar',
-				rationale: 'lorem ipsum somethign something',
-				offSet: 31,
-				endSet:32,
-				indexReplacement: 9
-			}
-		];
-		nextSlide();
+		if (Array.isArray(value) && value.every(item => typeof item === 'string')) {
+			return value[0]; // It's an array of strings
+		}
+
+		return false; // It's neither a string nor an array of strings
 	}
 
-	function initGLF() {
-		setTimeout(() => {
-			$aiSuggestions = [
-				{
-					message: 'Change to firefighter',
-					originalText: 'firemen',
-					replacement: 'firefighter',
-					correctionType: 'gfl',
-					offSet: 23,
-					endSet: 29,
-					indexReplacement: 4,
-					rationale: 'lorem ipsum somethign something'
+
+	async function initPayload() {
+		//
+		// $aiSuggestions = [
+		// 	{
+		// 		message: 'Change to plural',
+		// 		originalText: 'is',
+		// 		replacement: 'are',
+		// 		correctionType: 'grammar',
+		// 		rationale: 'lorem ipsum somethign something',
+		// 		offSet: 31,
+		// 		endSet:32,
+		// 		indexReplacement: 9
+		// 	}
+		// ];
+		// nextSlide()
+		try {
+			const post = await fetch('http://127.0.0.1:8080/grammar', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
 				},
-			];
-		}, 500);
-		nextSlide();
+				body: JSON.stringify({ prompt: $textContent })
+			});
+			if (!post.ok) {
+				throw new Error(`HTTP error! status: ${post.status}`);
+			}
+			const data = await post.json();
+			console.log(data);
+
+			let suggestions: Promise<TSuggestion[]> = data.corrections.map(
+				(correction: {
+					word_index: number;
+					character_offset: number;
+					character_endset: number;
+					original_text: string;
+					message: string;
+					replacements: string[] | string;
+				}) => ({
+					indexReplacement: correction.word_index,
+					originalText: correction.original_text,
+					offSet: correction.character_offset,
+					endSet: correction.character_endset,
+					replacements:isStringOrArrayOfStrings(correction.replacements),
+					correctionType: 'grammar',
+					message: correction.message,
+					rational: ''
+				})
+			);
+
+			$aiSuggestions = await suggestions;
+			console.log($aiSuggestions);
+			nextSlide();
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	}
+
+	async function initGLF() {
+		// setTimeout(() => {
+		// 	$aiSuggestions = [
+		// 		{
+		// 			message: 'Change to firefighter',
+		// 			originalText: 'firemen',
+		// 			replacement: 'firefighter',
+		// 			correctionType: 'gfl',
+		// 			offSet: 23,
+		// 			endSet: 29,
+		// 			indexReplacement: 4,
+		// 			rationale: 'lorem ipsum somethign something'
+		// 		}
+		// 	];
+		// }, 500);
+		// nextSlide();
+		try {
+			const post = await fetch('http://127.0.0.1:8080/glf', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ prompt: $textContent })
+			});
+			if (!post.ok) {
+				throw new Error(`HTTP error! status: ${post.status}`);
+			}
+			const data = await post.json();
+			console.log(data);
+
+			let suggestions: Promise<TSuggestion[]> = data.corrections.map(
+				(correction: {
+					word_index: number;
+					character_offset: number;
+					character_endset: number;
+					original_text: string;
+					message: string;
+					replacements: string[] | string;
+				}) => ({
+					indexReplacement: correction.word_index,
+					originalText: correction.original_text,
+					offSet: correction.character_offset,
+					endSet: correction.character_endset,
+					replacements:isStringOrArrayOfStrings(correction.replacements),
+					correctionType: 'grammar',
+					message: correction.message,
+					rational: ''
+				})
+			);
+
+			$GLFScore = (await suggestions).length;
+
+			$aiSuggestions = await suggestions;
+			console.log($aiSuggestions);
+			nextSlide();
+		} catch (error) {
+			console.error('Error:', error);
+		}
+
+
 	}
 
 	function backToTheStart() {
