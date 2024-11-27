@@ -1,3 +1,5 @@
+
+// this motherfucker gets the index
 import { Plugin } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { Node as ProseMirrorNode } from 'prosemirror-model';
@@ -6,35 +8,32 @@ import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggesti
 // lintStringArr: string[], lintingType:string
 type lintArgs = Omit<
 	TSuggestion,
-	'replacement' | 'originalText' | 'message' | 'rationale' | 'indexReplacement'
+	'replacement' | 'message' | 'rationale' | 'indexReplacement'
 >;
-// this motherfucker gets the index
 
 const linter = (doc: ProseMirrorNode, lintArgs: lintArgs[]): DecorationSet => {
 	const decorations: Decoration[] = [];
 
-	doc.descendants((node: ProseMirrorNode, pos) => {
-
+	doc.descendants((node: ProseMirrorNode, pos: number) => {
 		if (node.isText) {
 			for (const lint of lintArgs) {
-				const absoluteStart = pos + lint.offSet;
-				const absoluteEnd = pos + lint.endSet + 1;
+				const regex = new RegExp(`\\b${lint.originalText}\\b`, 'g');
 
-				switch (lint.correctionType) {
-					case 'spelling':
-						decorations.push(
-							Decoration.inline(absoluteStart, absoluteEnd, { class: 'linter-error ' })
-						);
-						break;
-					case 'grammar':
-						decorations.push(
-							Decoration.inline(absoluteStart, absoluteEnd, { class: 'linter-grammar' })
-						);
-						break;
-					case 'gfl':
-						decorations.push(
-							Decoration.inline(absoluteStart, absoluteEnd, { class: 'linter-gfl' })
-						);
+				let match;
+				while ((match = regex.exec(node.text!)) !== null) {
+					const start = pos + match.index;
+					const end = start + match[0].length;
+
+					switch (lint.correctionType) {
+						case 'spelling':
+							decorations.push(Decoration.inline(start, end, { class: 'linter-error ' }));
+							break;
+						case 'grammar':
+							decorations.push(Decoration.inline(start, end, { class: 'linter-grammar' }));
+							break;
+						case 'gfl':
+							decorations.push(Decoration.inline(start, end, { class: 'linter-gfl' }));
+					}
 				}
 			}
 		}

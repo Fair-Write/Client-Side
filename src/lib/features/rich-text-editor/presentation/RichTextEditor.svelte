@@ -37,7 +37,7 @@
 
 		linterPlugin = createLinterPlugin(
 			$aiSuggestions.map((aiSuggestion) =>
-				omitObject(aiSuggestion, 'originalText', 'message', 'indexReplacement', 'rationale')
+				omitObject(aiSuggestion, 'message', 'indexReplacement', 'rationale')
 			)
 		);
 
@@ -69,11 +69,7 @@
 		}
 	}
 
-	function replaceWordCommand(words: {
-		offSet: number;
-		endSet: number;
-		replacement: string;
-	}) {
+	function replaceWordCommand(words: { offSet: number; endSet: number; replacement: string }) {
 		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
 			if (!dispatch) return false; // No dispatch means no transaction to apply
 
