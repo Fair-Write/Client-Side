@@ -7,9 +7,9 @@
 
 	let { backToTheStart }: { backToTheStart: () => void } = $props();
 	let doubled = $derived.by(() => {
-		if ($GLFScore >= 1) {
-			return 90;
-		} else if ($GLFScore > 1 && $GLFScore <= 3) {
+		if ($GLFScore === 0) {
+			return 100;
+		} else if ($GLFScore >= 1 && $GLFScore <= 3) {
 			return 80;
 		} else if ($GLFScore > 2 && $GLFScore <= 5) {
 			return 50;

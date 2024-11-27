@@ -63,29 +63,33 @@
 			const data = await post.json();
 			console.log(data);
 
-			let suggestions: Promise<TSuggestion[]> = data.corrections.map(
-				(correction: {
-					word_index: number;
-					character_offset: number;
-					character_endset: number;
-					original_text: string;
-					message: string;
-					replacements: string[];
-				}) => ({
-					indexReplacement: correction.word_index,
-					originalText: correction.original_text,
-					offSet: correction.character_offset,
-					endSet: correction.character_endset,
-					replacement: isStringOrArrayOfStrings(correction.replacements),
-					correctionType: 'grammar',
-					message: correction.message,
-					rational: ''
-				})
-			);
+			if (Object.keys(data).length !== 0) {
+				let suggestions: Promise<TSuggestion[]> = data.corrections.map(
+					(correction: {
+						word_index: number;
+						character_offset: number;
+						character_endset: number;
+						original_text: string;
+						message: string;
+						replacements: string[];
+					}) => ({
+						indexReplacement: correction.word_index,
+						originalText: correction.original_text,
+						offSet: correction.character_offset,
+						endSet: correction.character_endset,
+						replacement: isStringOrArrayOfStrings(correction.replacements),
+						correctionType: 'grammar',
+						message: correction.message,
+						rational: ''
+					})
+				);
 
-			$aiSuggestions = await suggestions;
-			console.log($aiSuggestions);
-			nextSlide();
+				$aiSuggestions = await suggestions;
+				console.log($aiSuggestions);
+				nextSlide();
+			} else {
+				nextSlide();
+			}
 		} catch (error) {
 			console.error('Error:', error);
 		}
@@ -120,32 +124,35 @@
 			}
 			const data = await post.json();
 			console.log(data);
+			if (Object.keys(data).length !== 0) {
+				let suggestions: Promise<TSuggestion[]> = data.corrections.map(
+					(correction: {
+						word_index: number;
+						character_offset: number;
+						character_endset: number;
+						original_text: string;
+						message: string;
+						replacements: string[] | string;
+					}) => ({
+						indexReplacement: correction.word_index,
+						originalText: correction.original_text,
+						offSet: correction.character_offset,
+						endSet: correction.character_endset,
+						replacement: isStringOrArrayOfStrings(correction.replacements),
+						correctionType: 'gfl',
+						message: correction.message,
+						rational: ''
+					})
+				);
 
-			let suggestions: Promise<TSuggestion[]> = data.corrections.map(
-				(correction: {
-					word_index: number;
-					character_offset: number;
-					character_endset: number;
-					original_text: string;
-					message: string;
-					replacements: string[] | string;
-				}) => ({
-					indexReplacement: correction.word_index,
-					originalText: correction.original_text,
-					offSet: correction.character_offset,
-					endSet: correction.character_endset,
-					replacement: isStringOrArrayOfStrings(correction.replacements),
-					correctionType: 'gfl',
-					message: correction.message,
-					rational: ''
-				})
-			);
+				$GLFScore = (await suggestions).length;
 
-			$GLFScore = (await suggestions).length;
-
-			$aiSuggestions = await suggestions;
-			console.log($aiSuggestions);
-			nextSlide();
+				$aiSuggestions = await suggestions;
+				console.log($aiSuggestions);
+				nextSlide();
+			} else {
+				nextSlide();
+			}
 		} catch (error) {
 			console.error('Error:', error);
 		}

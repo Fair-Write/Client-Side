@@ -1,41 +1,44 @@
 import { EditorState, Transaction } from 'prosemirror-state';
-import { Node as ProseMirrorNode } from 'prosemirror-model';
+import { Node } from 'prosemirror-model';
 import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 
-// Main function to replace a word in the ProseMirror document
+
+// todo: rework this what you have to do is find the node that contains the exact word
+
 export function replaceWordInDocument(
 	editorState: EditorState,
 	dispatch: (tr: Transaction) => void,
-	words: Omit<TSuggestion, "indexReplacement"|'originalText'|'correctionType' | 'rationale' | 'message'>
+	words: Omit<TSuggestion, "offSet" | "indexReplacement" | 'correctionType' | 'rationale' | 'message' | 'endSet'>
 ): void {
-	const {offSet,endSet, replacement } = words;
+	const { replacement, originalText } = words;
 	const { doc } = editorState;
-	let transaction = editorState.tr;
+	const transaction = editorState.tr;
 
-	// Track changes to prevent redundant operations
-	let changed = false;
+	// Array to store replacements
+	const replacements: { from: number; to: number; text: string }[] = [];
 
 	// Traverse each text node in the document
-	doc.descendants((node: ProseMirrorNode, pos: number) => {
+	doc.descendants((node: Node, pos: number) => {
 		if (node.isText && node.textContent) {
-			// Use the helper function to find the word's position
+			const regex = new RegExp(`\\b${originalText}\\b`, 'g');
+			const matches = [...node.textContent.matchAll(regex)];
 
-			const absoluteStart = pos+offSet
-			const absoluteEnd = pos + endSet+1;
+			if (matches.length > 0) {
+				const newText = node.textContent.replace(regex, replacement);
 
-			console.log(absoluteStart, absoluteEnd);
-
-			transaction = transaction.replaceWith(
-				absoluteStart,
-				absoluteEnd,
-				editorState.schema.text(replacement)
-			);
-			changed = true;
+				// Store the replacement range and text
+				replacements.push({ from: pos, to: pos + node.nodeSize, text: newText });
+			}
 		}
 	});
 
+	// Apply replacements in reverse order to avoid range issues
+	replacements.reverse().forEach(({ from, to, text }) => {
+		transaction.replaceWith(from, to, editorState.schema.text(text));
+	});
+
 	// Apply the transaction if there were changes
-	if (changed) {
+	if (transaction.docChanged) {
 		dispatch(transaction);
 	}
 }
