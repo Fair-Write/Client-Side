@@ -54,9 +54,12 @@
 			<p class="my-3 text-sm">
 				<span class="font-bold text-blue-500">Revision:&nbsp;</span>{suggestion.replacement}
 			</p>
-			<p class="text-sm">
-				<span class="font-bold text-stone-500">Rationale:&nbsp;</span>{suggestion.rationale}
-			</p>
+
+			{#if suggestion.rationale}
+				<p class="text-sm">
+					<span class="font-bold text-stone-500">Rationale:&nbsp;</span>{suggestion.rationale}
+				</p>
+			{/if}
 		</Card.Content>
 		<Card.Footer class="flex flex-col items-center justify-start gap-2 p-3">
 			<button
@@ -114,8 +117,7 @@
 			<div class="flex items-center justify-center gap-1">
 				<button
 					class="material-symbols-outlined s16 cursor-pointer select-none rounded-full border border-solid border-red-500 p-1 text-red-500"
-					onclick={()=>ignoreMe(index)}
-					>delete</button
+					onclick={() => ignoreMe(index)}>delete</button
 				>
 				<button
 					class="material-symbols-outlined s16 cursor-pointer select-none rounded-full border border-solid border-stone-500 p-1 text-stone-500"

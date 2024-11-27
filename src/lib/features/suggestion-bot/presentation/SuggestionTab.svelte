@@ -140,7 +140,7 @@
 						endSet: correction.character_endset,
 						replacement: isStringOrArrayOfStrings(correction.replacements),
 						correctionType: 'gfl',
-						message: correction.message,
+						message: 'Gender Fair Language',
 						rational: ''
 					})
 				);
