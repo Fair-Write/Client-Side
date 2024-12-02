@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
 	import * as Card from '$lib/components/ui/card/index.js';
+	import { GLFScore } from '$lib/stores/omegaLOL';
 	let { radius, percent }: { radius: number; percent: number } = $props();
 	const strokeWidth = $derived(radius * 0.3);
 	const innerRadius = $derived(radius - strokeWidth / 2);
@@ -138,7 +139,7 @@
 			/>
 		</svg>
 
-		<p class="text-center text-base">Out of X phrases only Z is considered gender fair</p>
+		<p class="text-center text-base">{$GLFScore} word/s were found as non-gender fair</p>
 	</Card.Content>
 </Card.Root>
 

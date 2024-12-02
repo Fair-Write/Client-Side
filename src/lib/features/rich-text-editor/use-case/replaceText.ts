@@ -8,9 +8,9 @@ import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggesti
 export function replaceWordInDocument(
 	editorState: EditorState,
 	dispatch: (tr: Transaction) => void,
-	words:Omit<TSuggestion, 'analysis'|'correctionType'|"heading"|"rationale">
+	words: Omit<TSuggestion, "offSet" | "indexReplacement" | 'correctionType' | 'rationale' | 'message' | 'endSet'>
 ): void {
-	const { wrongPhrase, correctPhrase } = words;
+	const { replacement, originalText } = words;
 	const { doc } = editorState;
 	const transaction = editorState.tr;
 
@@ -20,11 +20,11 @@ export function replaceWordInDocument(
 	// Traverse each text node in the document
 	doc.descendants((node: Node, pos: number) => {
 		if (node.isText && node.textContent) {
-			const regex = new RegExp(`\\b${wrongPhrase}\\b`, 'g');
+			const regex = new RegExp(`\\b${originalText}\\b`, 'g');
 			const matches = [...node.textContent.matchAll(regex)];
 
 			if (matches.length > 0) {
-				const newText = node.textContent.replace(regex, correctPhrase);
+				const newText = node.textContent.replace(regex, replacement);
 
 				// Store the replacement range and text
 				replacements.push({ from: pos, to: pos + node.nodeSize, text: newText });

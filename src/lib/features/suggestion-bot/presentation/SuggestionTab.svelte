@@ -12,6 +12,9 @@
 	import { type CarouselAPI } from '$lib/components/ui/carousel/context.js';
 	import { progressStore } from '$lib/stores/progressStore';
 	import { aiSuggestions } from '$lib/stores/lintingStore';
+	import { textContent } from '$lib/stores/textFromEditorStore';
+	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
+	import { GLFScore } from '$lib/stores/omegaLOL';
 	let api = $state<CarouselAPI>();
 
 	function nextSlide() {
@@ -19,125 +22,140 @@
 			api.scrollNext();
 		}
 	}
+	function isStringOrArrayOfStrings(value: string | string[]) {
+		if (typeof value === 'string') {
+			return value; // It's a string
+		}
 
-	function initPayload() {
-		$aiSuggestions = [
-			{
-				heading: 'Change to plural',
-				wrongPhrase: 'firemen is',
-				correctPhrase: 'firemen are',
-				correctionType: 'grammar',
-				analysis: 5,
-				rationale: 'lorem ipsum somethign something'
-			},
-			{
-				heading: 'Missing Article',
-				wrongPhrase: 'to enforce law and order',
-				correctPhrase: 'to enforce law and order;',
-				correctionType: 'grammar',
-				analysis: 5,
-				rationale: 'lorem ipsum somethign something'
-			},
-			{
-				heading: 'Wrong Spelling',
-				wrongPhrase: 'physical strength and cowrage',
-				correctPhrase: 'physical strength and courage',
-				correctionType: 'spelling',
-				analysis: 5,
-				rationale: 'lorem ipsum somethign something'
-			},
+		if (Array.isArray(value) && value.every((item) => typeof item === 'string')) {
+			return value[0]; // It's an array of strings
+		}
 
-			{
-				heading: 'Subject-Verb Agreement',
-				wrongPhrase: 'prepare them',
-				correctPhrase: 'prepares them',
-				correctionType: 'grammar',
-				analysis: 5,
-				rationale: 'lorem ipsum somethign something'
-			},
-			{
-				heading: 'Wrong Spelling',
-				wrongPhrase: 'knowed',
-				correctPhrase: 'known',
-				correctionType: 'spelling',
-				analysis: 5,
-				rationale: 'lorem ipsum somethign something'
-			}
-		];
-		nextSlide();
+		return false; // It's neither a string nor an array of strings
 	}
 
-	function initGLF() {
-		setTimeout(() => {
-			$aiSuggestions = [
-				{
-					heading: 'Change to firefighter',
-					wrongPhrase: 'firemen',
-					correctPhrase: 'firefighter',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
+	async function initPayload() {
+		//
+		// $aiSuggestions = [
+		// 	{
+		// 		message: 'Change to plural',
+		// 		originalText: 'is',
+		// 		replacement: 'are',
+		// 		correctionType: 'grammar',
+		// 		rationale: 'lorem ipsum somethign something',
+		// 		offSet: 31,
+		// 		endSet:32,
+		// 		indexReplacement: 9
+		// 	}
+		// ];
+		// nextSlide()
+		try {
+			const post = await fetch('http://127.0.0.1:8080/grammar', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
 				},
-				{
-					heading: 'Change to Police Officers',
-					wrongPhrase: 'policemen',
-					correctPhrase: 'police officer',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
-				{
-					heading: 'Change to Police Officers',
-					wrongPhrase: 'policewomen',
-					correctPhrase: 'police officers',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
+				body: JSON.stringify({ prompt: $textContent })
+			});
 
-				{
-					heading: 'Change to firefighters',
-					wrongPhrase: 'lady firefighters',
-					correctPhrase: 'firefighters',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
+			const data = await post.json();
+			console.log(data);
+
+			if (Object.keys(data).length !== 0) {
+				let suggestions: Promise<TSuggestion[]> = data.corrections.map(
+					(correction: {
+						word_index: number;
+						character_offset: number;
+						character_endset: number;
+						original_text: string;
+						message: string;
+						replacements: string[];
+					}) => ({
+						indexReplacement: correction.word_index,
+						originalText: correction.original_text,
+						offSet: correction.character_offset,
+						endSet: correction.character_endset,
+						replacement: isStringOrArrayOfStrings(correction.replacements),
+						correctionType: 'grammar',
+						message: correction.message,
+						rational: ''
+					})
+				);
+
+				$aiSuggestions = await suggestions;
+				console.log($aiSuggestions);
+				nextSlide();
+				$progressStore = 50;
+			} else {
+				nextSlide();
+				$progressStore = 50;
+			}
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	}
+
+	async function initGLF() {
+		// setTimeout(() => {
+		// 	$aiSuggestions = [
+		// 		{
+		// 			message: 'Change to firefighter',
+		// 			originalText: 'firemen',
+		// 			replacement: 'firefighter',
+		// 			correctionType: 'gfl',
+		// 			offSet: 23,
+		// 			endSet: 29,
+		// 			indexReplacement: 4,
+		// 			rationale: 'lorem ipsum somethign something'
+		// 		}
+		// 	];
+		// }, 500);
+		// nextSlide();
+		try {
+			const post = await fetch('http://127.0.0.1:8080/gfl', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
 				},
-				{
-					heading: 'Change to businessperson',
-					wrongPhrase: 'businessman',
-					correctPhrase: 'businessperson',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
-				{
-					heading: 'Change to chairperson',
-					wrongPhrase: 'chairmen',
-					correctPhrase: 'chairperson',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
-				{
-					heading: 'Change to salesmen',
-					wrongPhrase: 'salesmen',
-					correctPhrase: 'salesperson',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				},
-				{
-					heading: 'Change to salesmen',
-					wrongPhrase: 'salesmen',
-					correctPhrase: 'salesperson',
-					correctionType: 'gfl',
-					analysis: 5,
-					rationale: 'lorem ipsum somethign something'
-				}
-			];
-		}, 500);
-		nextSlide();
+				body: JSON.stringify({ prompt: $textContent })
+			});
+
+			const data = await post.json();
+			console.log(data);
+			if (Object.keys(data).length !== 0) {
+				let suggestions: Promise<TSuggestion[]> = data.corrections.map(
+					(correction: {
+						word_index: number;
+						character_offset: number;
+						character_endset: number;
+						original_text: string;
+						message: string;
+						replacements: string[] | string;
+					}) => ({
+						indexReplacement: correction.word_index,
+						originalText: correction.original_text,
+						offSet: correction.character_offset,
+						endSet: correction.character_endset,
+						replacement: isStringOrArrayOfStrings(correction.replacements),
+						correctionType: 'gfl',
+						message: 'Gender Fair Language',
+						rational: ''
+					})
+				);
+
+				$GLFScore = (await suggestions).length;
+
+				$aiSuggestions = await suggestions;
+				console.log($aiSuggestions);
+				nextSlide();
+				$progressStore = 100;
+			} else {
+				$progressStore = 100;
+				nextSlide();
+			}
+		} catch (error) {
+			console.error('Error:', error);
+		}
 	}
 
 	function backToTheStart() {
@@ -168,7 +186,7 @@
 				<Carousel.Item class="px-5"><StepWrite nextSlide={initPayload}></StepWrite></Carousel.Item>
 				<Carousel.Item class=""><StepGrammar nextSlide={initGLF}></StepGrammar></Carousel.Item>
 				<Carousel.Item><StepGLF {nextSlide}></StepGLF></Carousel.Item>
-				<Carousel.Item class="px-5"> <Analytics {backToTheStart}></Analytics></Carousel.Item>
+				<Carousel.Item class="px-5"><Analytics {backToTheStart}></Analytics></Carousel.Item>
 			</Carousel.Content>
 		</Carousel.Root>
 	</div>

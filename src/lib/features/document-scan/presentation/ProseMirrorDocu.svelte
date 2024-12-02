@@ -5,7 +5,7 @@
 	import { EditorView } from 'prosemirror-view';
 	import { DOMParser } from 'prosemirror-model';
 
-	import { textContent, textContentHTML} from '$lib/stores/textFromEditorStore';
+	import { textContent, textContentHTML } from '$lib/stores/textFromEditorStore';
 	import mySchema from '$lib/features/rich-text-editor/entities/Schema';
 
 	import createLinterPlugin from '$lib/features/rich-text-editor/use-case/LinterPlugin';
@@ -25,7 +25,7 @@
 
 		linterPlugin = createLinterPlugin(
 			$aiSuggestions.map((aiSuggestion) =>
-				omitObject(aiSuggestion, 'correctPhrase', 'analysis', 'heading', 'rationale')
+				omitObject(aiSuggestion, 'message', 'indexReplacement', 'rationale')
 			)
 		);
 
@@ -36,7 +36,7 @@
 		view.updateState(state);
 	}
 
-	function replaceWordCommand(words: { correctPhrase: string; wrongPhrase: string }) {
+	function replaceWordCommand(words: { originalText: string; replacement: string }) {
 		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
 			if (!dispatch) return false; // No dispatch means no transaction to apply
 

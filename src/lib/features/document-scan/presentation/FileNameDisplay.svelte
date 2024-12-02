@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { IFileNameDisplay } from '$lib/features/document-scan/entities/FileType';
-
 	let { fileType, fileName }: IFileNameDisplay = $props();
 </script>
 
@@ -24,7 +23,7 @@
 				<span
 					class="material-symbols-outlined s26 rounded-[8px] bg-gradient-to-t from-violet-700 to-indigo-500 p-1 text-indigo-50"
 				>
-			description
+					description
 				</span>
 			</span>
 		{:else if fileType === 'pdf'}

@@ -37,7 +37,7 @@
 
 		linterPlugin = createLinterPlugin(
 			$aiSuggestions.map((aiSuggestion) =>
-				omitObject(aiSuggestion, 'correctPhrase', 'analysis', 'heading', 'rationale')
+				omitObject(aiSuggestion, 'message', 'indexReplacement', 'rationale')
 			)
 		);
 
@@ -69,7 +69,7 @@
 		}
 	}
 
-	function replaceWordCommand(words: { correctPhrase: string; wrongPhrase: string }) {
+	function replaceWordCommand(words: { originalText: string; replacement: string }) {
 		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
 			if (!dispatch) return false; // No dispatch means no transaction to apply
 
@@ -145,15 +145,15 @@
 
 	<!-- ProseMirror editor container -->
 
-	<div class="custom-shadow flex w-full flex-1 items-start justify-center bg-stone-50">
-		<ScrollArea class="h-[500px]  w-full lg:h-[700px]">
+	<ScrollArea class="max-h-[400px] w-full flex-1 shadow-inner lg:max-h-[600px] xl:max-h-[800px]">
+		<div class="flex h-full w-full items-start justify-center">
 			<div
 				bind:this={editorContainer}
-				class="editor__paragraph prose prose-sm flex-1 lg:prose-base xl:prose-lg"
+				class="editor__paragraph prose prose-sm w-full flex-1 lg:prose-base xl:prose-lg"
 				id="editor"
 			></div>
-		</ScrollArea>
-	</div>
+		</div>
+	</ScrollArea>
 </section>
 
 <style>
@@ -161,8 +161,6 @@
 		padding: 10px 10px;
 		width: 100%;
 		max-width: 900px; /* Optional: prevent overflow */
-	}
-	.custom-shadow {
-		box-shadow: inset 0 0 3px 3px rgb(0 0 0 / 0.05);
+		/*background: antiquewhite;*/
 	}
 </style>

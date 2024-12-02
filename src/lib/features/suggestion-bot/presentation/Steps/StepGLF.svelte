@@ -2,7 +2,6 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
-	import { progressStore } from '$lib/stores/progressStore';
 	import SuggestionCard from './SuggestionCard.svelte';
 	import { aiSuggestions, omitObject, replaceStore } from '$lib/stores/lintingStore';
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
@@ -12,12 +11,12 @@
 	let isEmpty = $derived(suggestionsReference.length != 0);
 
 	function removeMe(index: number) {
-		$replaceStore = [omitObject($aiSuggestions[index], 'analysis', 'correctionType', 'heading')];
+		$replaceStore = [omitObject($aiSuggestions[index], 'indexReplacement', 'correctionType', 'message','rationale')];
 		$aiSuggestions.splice(index, 1);
 	}
 	function applyAllChanges() {
 		$replaceStore = $aiSuggestions.map((suggestion) => {
-			return omitObject(suggestion, 'analysis', 'correctionType');
+			return omitObject(suggestion,'indexReplacement', 'correctionType', 'message','rationale');
 		});
 		$aiSuggestions = [];
 	}
@@ -49,7 +48,7 @@
 				disabled={isEmpty}
 				onclick={() => {
 					nextSlide();
-					$progressStore = 100;
+
 				}}
 			>
 				<p>Proceed</p>
@@ -60,8 +59,6 @@
 				disabled={!isEmpty}
 				variant="outline"
 				onclick={() => {
-					// nextSlide();
-					// $progressStore = 100;
 					applyAllChanges();
 				}}>Apply All Changes</Button
 			>

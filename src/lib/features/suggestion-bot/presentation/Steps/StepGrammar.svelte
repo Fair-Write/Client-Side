@@ -6,18 +6,20 @@
 	import SuggestionCard from './SuggestionCard.svelte';
 	import { aiSuggestions, omitObject, replaceStore } from '$lib/stores/lintingStore';
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
+	import { LoaderCircle } from 'lucide-svelte';
 
-	let { nextSlide }: { nextSlide: () => void } = $props();
+	let { nextSlide }: { nextSlide: () => Promise<void> } = $props();
 	let suggestionsReference = $state<TSuggestion[]>($aiSuggestions);
 	let isEmpty = $derived(suggestionsReference.length != 0);
 
+	let isLoading = $state(false);
 	function removeMe(index: number) {
-		$replaceStore = [omitObject($aiSuggestions[index], 'analysis', 'correctionType', 'heading')];
+		$replaceStore = [omitObject($aiSuggestions[index], 'indexReplacement', 'correctionType', 'message','rationale')];
 		$aiSuggestions.splice(index, 1);
 	}
 	function applyAllChanges() {
 		$replaceStore = $aiSuggestions.map((suggestion) => {
-			return omitObject(suggestion, 'analysis', 'correctionType');
+			return omitObject(suggestion,'indexReplacement', 'correctionType', 'message','rationale');
 		});
 		$aiSuggestions = [];
 	}
@@ -30,7 +32,16 @@
 		if ($aiSuggestions) {
 			suggestionsReference = $aiSuggestions;
 		}
+
+
 	});
+
+	async function proceed() {
+		isLoading = true;
+		await nextSlide();
+		$progressStore = 50;
+		isLoading = false;
+	}
 </script>
 
 <ScrollArea class="h-[700px] w-full px-3 ">
@@ -45,15 +56,14 @@
 		<Card.Content>
 			<Button
 				class="flex w-full items-center  justify-between border border-blue-500 bg-blue-50  text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
-				disabled={isEmpty}
-				onclick={() => {
-					nextSlide();
-					$progressStore = 100;
-				}}
+				disabled={isEmpty||isLoading}
+				onclick={proceed}
 				><p>Proceed</p>
-
-				<span class="material-symbols-outlined s16">arrow_forward_ios</span>
-			</Button>
+				{#if isLoading}
+					<LoaderCircle class="animate-spin" />
+				{:else}
+					<span class="material-symbols-outlined s16">arrow_forward_ios</span>
+				{/if}		</Button>
 			<Button
 				class="mt-2 w-full"
 				variant="outline"

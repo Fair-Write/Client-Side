@@ -1,10 +1,15 @@
+
+// this motherfucker gets the index
 import { Plugin } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { Node as ProseMirrorNode } from 'prosemirror-model';
 import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 
 // lintStringArr: string[], lintingType:string
-type lintArgs = Omit<TSuggestion, 'correctPhrase' | 'analysis' | 'heading'|"rationale">;
+type lintArgs = Omit<
+	TSuggestion,
+	'replacement' | 'message' | 'rationale' | 'indexReplacement'
+>;
 
 const linter = (doc: ProseMirrorNode, lintArgs: lintArgs[]): DecorationSet => {
 	const decorations: Decoration[] = [];
@@ -12,7 +17,7 @@ const linter = (doc: ProseMirrorNode, lintArgs: lintArgs[]): DecorationSet => {
 	doc.descendants((node: ProseMirrorNode, pos: number) => {
 		if (node.isText) {
 			for (const lint of lintArgs) {
-				const regex = new RegExp(`\\b${lint.wrongPhrase}\\b`, 'g');
+				const regex = new RegExp(`\\b${lint.originalText}\\b`, 'g');
 
 				let match;
 				while ((match = regex.exec(node.text!)) !== null) {
