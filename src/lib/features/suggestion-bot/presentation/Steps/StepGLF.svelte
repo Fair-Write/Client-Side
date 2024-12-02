@@ -2,7 +2,6 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
-	import { progressStore } from '$lib/stores/progressStore';
 	import SuggestionCard from './SuggestionCard.svelte';
 	import { aiSuggestions, omitObject, replaceStore } from '$lib/stores/lintingStore';
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';

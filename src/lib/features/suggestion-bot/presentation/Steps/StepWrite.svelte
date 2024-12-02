@@ -2,7 +2,6 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	let { nextSlide }: { nextSlide: () => Promise<void> } = $props();
-	import { progressStore } from '$lib/stores/progressStore';
 	import { textContent } from '$lib/stores/textFromEditorStore';
 	import { LoaderCircle } from 'lucide-svelte';
 
