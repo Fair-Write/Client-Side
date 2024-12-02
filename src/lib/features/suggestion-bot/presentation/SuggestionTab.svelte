@@ -57,9 +57,7 @@
 				},
 				body: JSON.stringify({ prompt: $textContent })
 			});
-			if (!post.ok) {
-				throw new Error(`HTTP error! status: ${post.status}`);
-			}
+
 			const data = await post.json();
 			console.log(data);
 
@@ -87,8 +85,10 @@
 				$aiSuggestions = await suggestions;
 				console.log($aiSuggestions);
 				nextSlide();
+				$progressStore = 50;
 			} else {
 				nextSlide();
+				$progressStore = 50;
 			}
 		} catch (error) {
 			console.error('Error:', error);
@@ -119,9 +119,7 @@
 				},
 				body: JSON.stringify({ prompt: $textContent })
 			});
-			if (!post.ok) {
-				throw new Error(`HTTP error! status: ${post.status}`);
-			}
+
 			const data = await post.json();
 			console.log(data);
 			if (Object.keys(data).length !== 0) {
@@ -150,7 +148,9 @@
 				$aiSuggestions = await suggestions;
 				console.log($aiSuggestions);
 				nextSlide();
+				$progressStore = 100;
 			} else {
+				$progressStore = 100;
 				nextSlide();
 			}
 		} catch (error) {

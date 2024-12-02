@@ -10,7 +10,6 @@
 	async function proceed() {
 		isLoading = true;
 		await nextSlide();
-		$progressStore = 50;
 		isLoading = false;
 	}
 </script>

@@ -49,7 +49,7 @@
 				disabled={isEmpty}
 				onclick={() => {
 					nextSlide();
-					$progressStore = 100;
+
 				}}
 			>
 				<p>Proceed</p>
@@ -60,8 +60,6 @@
 				disabled={!isEmpty}
 				variant="outline"
 				onclick={() => {
-					// nextSlide();
-					// $progressStore = 100;
 					applyAllChanges();
 				}}>Apply All Changes</Button
 			>
