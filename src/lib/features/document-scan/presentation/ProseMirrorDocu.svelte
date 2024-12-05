@@ -11,7 +11,7 @@
 	import createLinterPlugin from '$lib/features/rich-text-editor/use-case/LinterPlugin';
 	import { Transaction } from 'prosemirror-state';
 	import { replaceWordInDocument } from '$lib/features/rich-text-editor/use-case/replaceText';
-	import { aiSuggestions, omitObject, replaceStore } from '$lib/stores/lintingStore';
+	import { aiSuggestions } from '$lib/stores/lintingStore';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -23,11 +23,7 @@
 	function reconfigureAllPlugins(): void {
 		if (!view) throw new Error('Editorview not defined');
 
-		linterPlugin = createLinterPlugin(
-			$aiSuggestions.map((aiSuggestion) =>
-				omitObject(aiSuggestion, 'message', 'indexReplacement', 'rationale')
-			)
-		);
+		linterPlugin = createLinterPlugin($aiSuggestions);
 
 		const state = view.state.reconfigure({
 			plugins: [linterPlugin]
@@ -62,12 +58,12 @@
 	});
 
 	$effect(() => {
-		if ($replaceStore.length != 0) {
-			$replaceStore.forEach((store) => {
+		if ($aiSuggestions.length != 0) {
+			$aiSuggestions.forEach((store) => {
 				replaceWordCommand(store)(view!.state, view!.dispatch);
 			});
 
-			$replaceStore = [];
+			$aiSuggestions = [];
 		}
 	});
 

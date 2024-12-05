@@ -4,7 +4,7 @@
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
 	import { progressStore } from '$lib/stores/progressStore';
 	import SuggestionCard from './SuggestionCard.svelte';
-	import { aiSuggestions, omitObject, replaceStore } from '$lib/stores/lintingStore';
+	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 	import { LoaderCircle } from 'lucide-svelte';
 
@@ -14,12 +14,12 @@
 
 	let isLoading = $state(false);
 	function removeMe(index: number) {
-		$replaceStore = [omitObject($aiSuggestions[index], 'indexReplacement', 'correctionType', 'message','rationale')];
+		$replaceStore = [$aiSuggestions[index]];
 		$aiSuggestions.splice(index, 1);
 	}
 	function applyAllChanges() {
 		$replaceStore = $aiSuggestions.map((suggestion) => {
-			return omitObject(suggestion,'indexReplacement', 'correctionType', 'message','rationale');
+			return suggestion;
 		});
 		$aiSuggestions = [];
 	}
