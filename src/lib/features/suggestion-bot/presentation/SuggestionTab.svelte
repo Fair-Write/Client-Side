@@ -27,7 +27,7 @@
 			return value; // It's a string
 		}
 
-		if (Array.isArray(value) && value.every((item) => typeof item === 'string')) {
+		if (Array.isArray(value)) {
 			return value[0]; // It's an array of strings
 		}
 
@@ -111,6 +111,7 @@
 		// 	];
 		// }, 500);
 		// nextSlide();
+		// $progressStore = 100;
 		try {
 			const post = await fetch('http://127.0.0.1:8080/gfl', {
 				method: 'POST',
