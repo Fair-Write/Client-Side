@@ -145,7 +145,7 @@
 		<div class="flex h-full w-full items-start justify-center">
 			<div
 				bind:this={editorContainer}
-				class="editor__paragraph prose prose-sm w-full flex-1 lg:prose-base xl:prose-lg"
+				class="editor__paragraph prose prose-sm w-full flex-1 lg:prose-base xl:prose-lg text-stone-800"
 				id="editor"
 			></div>
 		</div>
