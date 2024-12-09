@@ -18,9 +18,9 @@
 	} = $props();
 </script>
 
-<Card.Root class="my-3 ">
+<Card.Root class="my-3">
 	{#if !isCompact}
-		<Card.Header class="p-3">
+		<Card.Header class="px-3 py-2">
 			<Card.Title
 				class="flex items-center justify-between border-b border-dashed border-stone-500 pb-2 text-base "
 			>
@@ -39,14 +39,14 @@
 				</div>
 
 				<button
-					class="material-symbols-outlined s16 cursor-pointer select-none rounded-full border border-solid border-stone-500 p-1 text-stone-500"
+					class="material-symbols-outlined s18 cursor-pointer select-none rounded-full border border-solid border-stone-500 p-1 text-stone-500 hover:bg-stone-500 hover:text-stone-50 hover:transition-all hover:ease-in-out"
 					onclick={() => (isCompact = true)}
 				>
 					collapse_content</button
 				>
 			</Card.Title>
 		</Card.Header>
-		<Card.Content class="p-3">
+		<Card.Content class="px-2 pt-2 pb-0">
 			<p class="text-sm">
 				<span class="font-bold text-red-500">Original:&nbsp;</span>
 				{suggestion.originalText}
@@ -55,13 +55,8 @@
 				<span class="font-bold text-blue-500">Revision:&nbsp;</span>{suggestion.replacement}
 			</p>
 
-			{#if suggestion.rationale}
-				<p class="text-sm">
-					<span class="font-bold text-stone-500">Rationale:&nbsp;</span>{suggestion.rationale}
-				</p>
-			{/if}
 		</Card.Content>
-		<Card.Footer class="flex flex-col items-center justify-start gap-2 p-3">
+		<Card.Footer class="flex flex-col items-center justify-start gap-2 p-3 py-2">
 			<button
 				class={cn(
 					'flex w-full items-center justify-center rounded-[9px] border border-solid p-[1px]',
@@ -98,7 +93,7 @@
 			>
 		</Card.Footer>
 	{:else}
-		<Card.Content class="flex items-center justify-between p-2">
+		<Card.Content class="flex items-center justify-between px-3 py-2">
 			<div
 				class={cn(
 					'h-[10px] w-[10px] rounded-full',
@@ -116,11 +111,11 @@
 
 			<div class="flex items-center justify-center gap-1">
 				<button
-					class="material-symbols-outlined s16 cursor-pointer select-none rounded-full border border-solid border-red-500 p-1 text-red-500"
+					class="material-symbols-outlined s18 cursor-pointer select-none rounded-full border border-solid border-red-500 bg-transparent p-1 text-red-500 hover:bg-red-500 hover:text-red-50 hover:transition-all hover:ease-in-out"
 					onclick={() => ignoreMe(index)}>delete</button
 				>
 				<button
-					class="material-symbols-outlined s16 cursor-pointer select-none rounded-full border border-solid border-stone-500 p-1 text-stone-500"
+					class="material-symbols-outlined s18 cursor-pointer select-none rounded-full border border-solid border-stone-500 bg-transparent p-1 text-stone-500 hover:bg-stone-500 hover:text-stone-50 hover:transition-all hover:ease-in-out"
 					onclick={() => (isCompact = false)}
 					>expand_content
 				</button>
