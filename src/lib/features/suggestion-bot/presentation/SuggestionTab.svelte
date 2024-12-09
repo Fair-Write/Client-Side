@@ -15,6 +15,7 @@
 	import { textContent } from '$lib/stores/textFromEditorStore';
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 	import { GLFScore } from '$lib/stores/omegaLOL';
+	import { toast } from 'svelte-sonner';
 	let api = $state<CarouselAPI>();
 
 	function nextSlide() {
@@ -92,6 +93,7 @@
 				$progressStore = 50;
 			}
 		} catch (error) {
+			toast.error('An Error Has Occured');
 			console.error('Error:', error);
 		}
 	}
@@ -157,6 +159,7 @@
 			}
 		} catch (error) {
 			console.error('Error:', error);
+			toast.error('An Error Has Occured');
 		}
 	}
 

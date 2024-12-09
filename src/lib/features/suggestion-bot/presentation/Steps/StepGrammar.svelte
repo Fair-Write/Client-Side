@@ -7,6 +7,7 @@
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 	import { textContent } from '$lib/stores/textFromEditorStore';
 	import { LoaderCircle } from 'lucide-svelte';
+	import { toast } from 'svelte-sonner';
 
 	let { nextSlide }: { nextSlide: () => Promise<void> } = $props();
 	let suggestionsReference = $state<TSuggestion[]>($aiSuggestions);
@@ -71,9 +72,11 @@
 				await nextSlide();
 
 			} else {
+
 				await nextSlide();
 			}
 		} catch (error) {
+			toast.error('An Error Has Occured');
 			console.error('Error:', error);
 		}
 	}
