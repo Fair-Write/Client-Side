@@ -8,6 +8,7 @@
 	import { textContent } from '$lib/stores/textFromEditorStore';
 	import { progressStore } from '$lib/stores/progressStore';
 	import { Skeleton } from '$lib/components/ui/skeleton';
+	import { toast } from 'svelte-sonner';
 
 	let { nextSlide }: { nextSlide: () => void } = $props();
 	let suggestionsReference = $state<TSuggestion[]>($aiSuggestions);
@@ -74,6 +75,7 @@
 				$progressStore = 50;
 			}
 		} catch (error) {
+			toast.error('An Error Has Occured');
 			console.error('Error:', error);
 		}
 	}
@@ -129,20 +131,14 @@
 	</Card.Root>
 
 	{#if !isLoading}
-
-	{#key $aiSuggestions}
-		{#each suggestionsReference as payload, index}
-			<SuggestionCard suggestion={payload} {index} {removeMe} {ignoreMe} />
-		{/each}
-	{/key}
-
+		{#key $aiSuggestions}
+			{#each suggestionsReference as payload, index}
+				<SuggestionCard suggestion={payload} {index} {removeMe} {ignoreMe} />
+			{/each}
+		{/key}
 	{:else}
-
-		<Skeleton class="w-full h-32 bg-stone-200 my-2	" />
-		<Skeleton class="w-full h-32 bg-stone-200	my-2 " />
-		<Skeleton class="w-full h-32 bg-stone-200	my-2" />
-
+		<Skeleton class="my-2 h-32 w-full bg-stone-200	" />
+		<Skeleton class="my-2 h-32 w-full	bg-stone-200 " />
+		<Skeleton class="my-2 h-32 w-full	bg-stone-200" />
 	{/if}
-
-
 </ScrollArea>

@@ -6,6 +6,7 @@
 	import { textContentHTML, textTitle } from '$lib/stores/textFromEditorStore';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import { cn } from '$lib/utils';
+	import { toast } from 'svelte-sonner';
 
 	async function downloadDocx() {
 		const response = await fetch('/api/docx', {
@@ -23,6 +24,7 @@
 			link.click();
 			URL.revokeObjectURL(url);
 		} else {
+			toast.error('Failed to Export Docx');
 			console.error('Failed to generate docx');
 		}
 	}

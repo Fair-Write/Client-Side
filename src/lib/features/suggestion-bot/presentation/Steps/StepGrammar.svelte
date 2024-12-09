@@ -2,12 +2,12 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
-	import { progressStore } from '$lib/stores/progressStore';
 	import SuggestionCard from './SuggestionCard.svelte';
 	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 	import { textContent } from '$lib/stores/textFromEditorStore';
 	import { LoaderCircle } from 'lucide-svelte';
+	import { toast } from 'svelte-sonner';
 
 	let { nextSlide }: { nextSlide: () => Promise<void> } = $props();
 	let suggestionsReference = $state<TSuggestion[]>($aiSuggestions);
@@ -70,12 +70,13 @@
 				isLoading = false;
 				console.log($aiSuggestions);
 				await nextSlide();
-				$progressStore = 50;
+
 			} else {
+
 				await nextSlide();
-				$progressStore = 50;
 			}
 		} catch (error) {
+			toast.error('An Error Has Occured');
 			console.error('Error:', error);
 		}
 	}
@@ -99,7 +100,7 @@
 	async function proceed() {
 		isLoading = true;
 		await nextSlide();
-		$progressStore = 50;
+
 		isLoading = false;
 	}
 </script>
@@ -130,8 +131,7 @@
 				variant="outline"
 				disabled={!isEmpty || isLoading}
 				onclick={() => {
-					// nextSlide();
-					// $progressStore = 100;
+
 					applyAllChanges();
 				}}>Apply All Changes</Button
 			>
