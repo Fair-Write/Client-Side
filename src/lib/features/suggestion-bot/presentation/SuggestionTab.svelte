@@ -37,65 +37,85 @@
 
 	async function initPayload() {
 		//
-		// $aiSuggestions = [
-		// 	{
-		// 		message: 'Change to plural',
-		// 		originalText: 'is',
-		// 		replacement: 'are',
-		// 		correctionType: 'grammar',
-		// 		rationale: 'lorem ipsum somethign something',
-		// 		offSet: 31,
-		// 		endSet:32,
-		// 		indexReplacement: 9
-		// 	}
-		// ];
-		// $progressStore = 50;
-		// nextSlide()
-		try {
-			const post = await fetch('http://127.0.0.1:8080/grammar', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ prompt: $textContent })
-			});
-
-			const data = await post.json();
-			console.log(data);
-
-			if (Object.keys(data).length !== 0) {
-				let suggestions: Promise<TSuggestion[]> = data.corrections.map(
-					(correction: {
-						word_index: number;
-						character_offset: number;
-						character_endset: number;
-						original_text: string;
-						message: string;
-						replacements: string[];
-					}) => ({
-						indexReplacement: correction.word_index,
-						originalText: correction.original_text,
-						offSet: correction.character_offset,
-						endSet: correction.character_endset,
-						replacement: isStringOrArrayOfStrings(correction.replacements),
-						correctionType: 'grammar',
-						message: correction.message,
-						rational: ''
-					})
-				);
-
-				$aiSuggestions = await suggestions;
-				console.log($aiSuggestions);
-				nextSlide();
-				$progressStore = 50;
-			} else {
-				nextSlide();
-				$progressStore = 50;
+		$aiSuggestions = [
+			{
+				message: 'Change to plural',
+				originalText: 'is',
+				replacement: 'are',
+				correctionType: 'grammar',
+				rationale: 'lorem ipsum somethign something',
+				offSet: 31,
+				endSet: 32,
+				indexReplacement: 5
+			},
+			{
+				message: 'Change to joe biden',
+				originalText: 'emergency,',
+				replacement: 'joebiden',
+				correctionType: 'grammar',
+				rationale: 'lorem ipsum somethign something',
+				offSet: 31,
+				endSet: 32,
+				indexReplacement: 3
+			},
+			{
+				message: 'Change to donald trump',
+				originalText: 'lives',
+				replacement: 'donald trump',
+				correctionType: 'grammar',
+				rationale: 'lorem ipsum somethign something',
+				offSet: 31,
+				endSet: 32,
+				indexReplacement: 12
 			}
-		} catch (error) {
-			toast.error('An Error Has Occured');
-			console.error('Error:', error);
-		}
+		];
+		$progressStore = 50;
+		nextSlide();
+		// try {
+		// 	const post = await fetch('http://127.0.0.1:8080/grammar', {
+		// 		method: 'POST',
+		// 		headers: {
+		// 			'Content-Type': 'application/json'
+		// 		},
+		// 		body: JSON.stringify({ prompt: $textContent })
+		// 	});
+
+		// 	const data = await post.json();
+		// 	console.log(data);
+
+		// 	if (Object.keys(data).length !== 0) {
+		// 		let suggestions: Promise<TSuggestion[]> = data.corrections.map(
+		// 			(correction: {
+		// 				word_index: number;
+		// 				character_offset: number;
+		// 				character_endset: number;
+		// 				original_text: string;
+		// 				message: string;
+		// 				replacements: string[];
+		// 			}) => ({
+		// 				indexReplacement: correction.word_index,
+		// 				originalText: correction.original_text,
+		// 				offSet: correction.character_offset,
+		// 				endSet: correction.character_endset,
+		// 				replacement: isStringOrArrayOfStrings(correction.replacements),
+		// 				correctionType: 'grammar',
+		// 				message: correction.message,
+		// 				rational: ''
+		// 			})
+		// 		);
+
+		// 		$aiSuggestions = await suggestions;
+		// 		console.log($aiSuggestions);
+		// 		nextSlide();
+		// 		$progressStore = 50;
+		// 	} else {
+		// 		nextSlide();
+		// 		$progressStore = 50;
+		// 	}
+		// } catch (error) {
+		// 	toast.error('An Error Has Occured');
+		// 	console.error('Error:', error);
+		// }
 	}
 
 	async function initGLF() {

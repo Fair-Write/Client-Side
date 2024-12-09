@@ -1,26 +1,51 @@
-
 // this motherfucker gets the index
 import { Plugin } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { Node as ProseMirrorNode } from 'prosemirror-model';
 import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
+import { text } from '@sveltejs/kit';
 
 // lintStringArr: string[], lintingType:string
 
+function getWordIndices(
+	sentence: string,
+	wordIndex: number
+): { start: number; end: number } | null {
+	const words = sentence.split(/\s+/); // Split the sentence into words by whitespace
+	if (wordIndex < 0 || wordIndex >= words.length) {
+		return null; // Return null if the word index is out of bounds
+	}
 
-const linter = (doc: ProseMirrorNode, lintArgs:TSuggestion[]): DecorationSet => {
+	let currentIndex = 0; // Keep track of the current index in the original sentence
+
+	for (let i = 0; i < words.length; i++) {
+		const word = words[i];
+		const wordStart = sentence.indexOf(word, currentIndex);
+		const wordEnd = wordStart + word.length - 1;
+
+		if (i === wordIndex) {
+			return { start: wordStart, end: wordEnd };
+		}
+
+		currentIndex = wordEnd + 1; // Move the current index past the current word
+	}
+
+	return null; // This shouldn't be reached under normal circumstances
+}
+
+const linter = (doc: ProseMirrorNode, lintArgs: TSuggestion[]): DecorationSet => {
 	const decorations: Decoration[] = [];
 
 	doc.descendants((node: ProseMirrorNode, pos: number) => {
 		if (node.isText) {
 			for (const lint of lintArgs) {
-				const regex = new RegExp(`\\b${lint.originalText}\\b`, 'g');
+				const match = getWordIndices(node.text!, lint.indexReplacement);
+				if (match !== null && node.text!.split(' ')[lint.indexReplacement] == lint.originalText) {
+					const start = match.start + 1;
+					console.log(match);
 
-				let match;
-				while ((match = regex.exec(node.text!)) !== null) {
-					const start = pos + match.index;
-					const end = start + match[0].length;
-
+					const end = match.end + 2;
+					console.log(start, end);
 					switch (lint.correctionType) {
 						case 'spelling':
 							decorations.push(Decoration.inline(start, end, { class: 'linter-error ' }));
