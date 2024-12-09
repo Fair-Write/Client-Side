@@ -8,6 +8,7 @@
 	} from '$lib/features/document-scan/use-case/extractDocument';
 	import ProseMirrorDocu from '$lib/features/document-scan/presentation/ProseMirrorDocu.svelte';
 	import { fileStore } from '../store/fileStore';
+	import { toast } from 'svelte-sonner';
 
 	let {
 		setFileNameDisplay
@@ -74,11 +75,16 @@
 			}
 			case 'png':
 			case 'jpeg': {
-				console.log('THIS IS PICTURE');
-				const response = await fetch('/api/extract/image', { method: 'POST', body: formData });
-				const result = await response.json();
-				console.log(result);
-				extractedText = result.message;
+				try {
+					const response = await fetch('/api/extract/image', { method: 'POST', body: formData });
+					const result = await response.json();
+					console.log(result);
+					extractedText = result.message;
+				} catch (e) {
+					console.log('Error:', e);
+					toast.error('An Error Has Occured');
+				}
+
 				break;
 			}
 			case undefined: {
@@ -129,7 +135,7 @@
 			/>
 		</form>
 	{:else}
-		<ProseMirrorDocu text={extractedText}></ProseMirrorDocu>
+		<ProseMirrorDocu></ProseMirrorDocu>
 	{/if}
 </div>
 
