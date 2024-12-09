@@ -18,7 +18,7 @@
 	import { baseKeymap } from 'prosemirror-commands';
 	import { Transaction } from 'prosemirror-state';
 	import { replaceWordInDocument } from '$lib/features/rich-text-editor/use-case/replaceText';
-	import { aiSuggestions, omitObject } from '$lib/stores/lintingStore';
+	import { aiSuggestions } from '$lib/stores/lintingStore';
 	import { replaceStore } from '$lib/stores/lintingStore';
 	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 
@@ -35,11 +35,7 @@
 	function reconfigureAllPlugins(): void {
 		if (!view) throw new Error('Editorview not defined');
 
-		linterPlugin = createLinterPlugin(
-			$aiSuggestions.map((aiSuggestion) =>
-				omitObject(aiSuggestion, 'message', 'indexReplacement', 'rationale')
-			)
-		);
+		linterPlugin = createLinterPlugin($aiSuggestions);
 
 		const state = view.state.reconfigure({
 			plugins: [
@@ -149,7 +145,7 @@
 		<div class="flex h-full w-full items-start justify-center">
 			<div
 				bind:this={editorContainer}
-				class="editor__paragraph prose prose-sm w-full flex-1 lg:prose-base xl:prose-lg"
+				class="editor__paragraph prose prose-sm w-full flex-1 lg:prose-base xl:prose-lg text-stone-800"
 				id="editor"
 			></div>
 		</div>

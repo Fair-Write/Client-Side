@@ -6,12 +6,9 @@ import { Node as ProseMirrorNode } from 'prosemirror-model';
 import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 
 // lintStringArr: string[], lintingType:string
-type lintArgs = Omit<
-	TSuggestion,
-	'replacement' | 'message' | 'rationale' | 'indexReplacement'
->;
 
-const linter = (doc: ProseMirrorNode, lintArgs: lintArgs[]): DecorationSet => {
+
+const linter = (doc: ProseMirrorNode, lintArgs:TSuggestion[]): DecorationSet => {
 	const decorations: Decoration[] = [];
 
 	doc.descendants((node: ProseMirrorNode, pos: number) => {
@@ -43,7 +40,7 @@ const linter = (doc: ProseMirrorNode, lintArgs: lintArgs[]): DecorationSet => {
 };
 
 // Create a ProseMirror plugin
-const createLinterPlugin = (lintArgs: lintArgs[]) =>
+const createLinterPlugin = (lintArgs: TSuggestion[]) =>
 	new Plugin({
 		state: {
 			init(_, { doc }) {
