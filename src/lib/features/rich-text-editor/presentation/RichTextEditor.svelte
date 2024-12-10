@@ -21,6 +21,7 @@
 	import { aiSuggestions } from '$lib/stores/lintingStore';
 	import { replaceStore } from '$lib/stores/lintingStore';
 	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
+	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -65,7 +66,7 @@
 		}
 	}
 
-	function replaceWordCommand(words: { originalText: string; replacement: string }) {
+	function replaceWordCommand(words:TSuggestion) {
 		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
 			if (!dispatch) return false; // No dispatch means no transaction to apply
 

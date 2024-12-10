@@ -2,39 +2,32 @@ import { EditorState, Transaction } from 'prosemirror-state';
 import { Node } from 'prosemirror-model';
 import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 
-
 // todo: rework this what you have to do is find the node that contains the exact word
-
+import { getWordIndices } from '$lib/utils';
 export function replaceWordInDocument(
 	editorState: EditorState,
 	dispatch: (tr: Transaction) => void,
-	words: Omit<TSuggestion, "offSet" | "indexReplacement" | 'correctionType' | 'rationale' | 'message' | 'endSet'>
+	words: TSuggestion
 ): void {
-	const { replacement, originalText } = words;
+	const { replacement, originalText, indexReplacement } = words;
 	const { doc } = editorState;
 	const transaction = editorState.tr;
 
 	// Array to store replacements
-	const replacements: { from: number; to: number; text: string }[] = [];
 
 	// Traverse each text node in the document
 	doc.descendants((node: Node, pos: number) => {
 		if (node.isText && node.textContent) {
-			const regex = new RegExp(`\\b${originalText}\\b`, 'g');
-			const matches = [...node.textContent.matchAll(regex)];
-
-			if (matches.length > 0) {
-				const newText = node.textContent.replace(regex, replacement);
-
-				// Store the replacement range and text
-				replacements.push({ from: pos, to: pos + node.nodeSize, text: newText });
+			const nodeSplit = node.text!.split(' ')[indexReplacement];
+			const match = getWordIndices(node.text as string, indexReplacement);
+			if (match !== null && nodeSplit == originalText) {
+				transaction.replaceWith(
+					match.start + 1,
+					match.end + 2,
+					editorState.schema.text(replacement)
+				);
 			}
 		}
-	});
-
-	// Apply replacements in reverse order to avoid range issues
-	replacements.reverse().forEach(({ from, to, text }) => {
-		transaction.replaceWith(from, to, editorState.schema.text(text));
 	});
 
 	// Apply the transaction if there were changes
