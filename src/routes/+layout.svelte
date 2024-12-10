@@ -3,5 +3,5 @@
 	let { children } = $props();
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
 </script>
-<Toaster richColors></Toaster>
+<Toaster richColors position="top-center"></Toaster>
 {@render children()}

@@ -1,26 +1,23 @@
-
 // this motherfucker gets the index
 import { Plugin } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { Node as ProseMirrorNode } from 'prosemirror-model';
 import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
+import { getWordIndices } from '$lib/utils';
 
-// lintStringArr: string[], lintingType:string
-
-
-const linter = (doc: ProseMirrorNode, lintArgs:TSuggestion[]): DecorationSet => {
+const linter = (doc: ProseMirrorNode, lintArgs: TSuggestion[]): DecorationSet => {
 	const decorations: Decoration[] = [];
 
 	doc.descendants((node: ProseMirrorNode, pos: number) => {
 		if (node.isText) {
 			for (const lint of lintArgs) {
-				const regex = new RegExp(`\\b${lint.originalText}\\b`, 'g');
+				const match = getWordIndices(node.text!, lint.indexReplacement);
+				if (match !== null && node.text!.split(' ')[lint.indexReplacement] == lint.originalText) {
+					const start = match.start + 1;
+					console.log(match);
 
-				let match;
-				while ((match = regex.exec(node.text!)) !== null) {
-					const start = pos + match.index;
-					const end = start + match[0].length;
-
+					const end = match.end + 2;
+					console.log(start, end);
 					switch (lint.correctionType) {
 						case 'spelling':
 							decorations.push(Decoration.inline(start, end, { class: 'linter-error ' }));

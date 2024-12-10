@@ -36,7 +36,7 @@
 	}
 
 	async function initPayload() {
-		//
+		// FOR TESTING
 		// $aiSuggestions = [
 		// 	{
 		// 		message: 'Change to plural',
@@ -45,12 +45,34 @@
 		// 		correctionType: 'grammar',
 		// 		rationale: 'lorem ipsum somethign something',
 		// 		offSet: 31,
-		// 		endSet:32,
-		// 		indexReplacement: 9
+		// 		endSet: 32,
+		// 		indexReplacement: 5
+		// 	},
+		// 	{
+		// 		message: 'Change to joe biden',
+		// 		originalText: 'emergency,',
+		// 		replacement: 'joebiden',
+		// 		correctionType: 'grammar',
+		// 		rationale: 'lorem ipsum somethign something',
+		// 		offSet: 31,
+		// 		endSet: 32,
+		// 		indexReplacement: 3
+		// 	},
+		// 	{
+		// 		message: 'Change to donald trump',
+		// 		originalText: 'lives',
+		// 		replacement: 'donald trump',
+		// 		correctionType: 'grammar',
+		// 		rationale: 'lorem ipsum somethign something',
+		// 		offSet: 31,
+		// 		endSet: 32,
+		// 		indexReplacement: 12
 		// 	}
 		// ];
 		// $progressStore = 50;
-		// nextSlide()
+		// nextSlide();
+
+		// FOR DEPLOYMENT
 		try {
 			const post = await fetch('http://127.0.0.1:8080/grammar', {
 				method: 'POST',
@@ -62,7 +84,6 @@
 
 			const data = await post.json();
 			console.log(data);
-
 			if (Object.keys(data).length !== 0) {
 				let suggestions: Promise<TSuggestion[]> = data.corrections.map(
 					(correction: {
