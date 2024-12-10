@@ -22,6 +22,9 @@
 	import { replaceStore } from '$lib/stores/lintingStore';
 	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
+	import { cn } from '$lib/utils';
+	import { progressStore } from '$lib/stores/progressStore';
+	import { toast } from 'svelte-sonner';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -66,7 +69,7 @@
 		}
 	}
 
-	function replaceWordCommand(words:TSuggestion) {
+	function replaceWordCommand(words: TSuggestion) {
 		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
 			if (!dispatch) return false; // No dispatch means no transaction to apply
 
@@ -142,11 +145,21 @@
 
 	<!-- ProseMirror editor container -->
 
-	<ScrollArea class="max-h-[400px] w-full flex-1 shadow-inner lg:max-h-[600px] xl:max-h-[800px]">
+	<ScrollArea
+		class="max-h-[400px] w-full flex-1 shadow-inner lg:max-h-[600px] xl:max-h-[800px]"
+		onclick={() => {
+			if ($progressStore > 0) {
+				toast.info('You can only edit text during the Write Step');
+			}
+		}}
+	>
 		<div class="flex h-full w-full items-start justify-center">
 			<div
 				bind:this={editorContainer}
-				class="editor__paragraph prose prose-sm w-full flex-1 lg:prose-base xl:prose-lg text-stone-800"
+				class={cn(
+					'editor__paragraph prose prose-sm w-full flex-1 text-stone-800 lg:prose-base xl:prose-lg',
+					$progressStore > 0 && 'pointer-events-none'
+				)}
 				id="editor"
 			></div>
 		</div>
