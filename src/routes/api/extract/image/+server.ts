@@ -1,7 +1,9 @@
 import { type RequestHandler } from '@sveltejs/kit';
-import { createWorker } from 'tesseract.js';
+
+import Tesseract from "tesseract.js";
 
 export const POST: RequestHandler = async ({ request }) => {
+
 	const payload = await request.formData();
 
 	const file = payload.get('file') as File;
@@ -19,7 +21,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	try {
 		const arrayBuffer = await file.arrayBuffer();
 		const bufferDocx = Buffer.from(arrayBuffer);
-		const worker = await createWorker('eng');
+		const worker = await	Tesseract.createWorker("eng");
 		const {
 			data: { text }
 		} = await worker.recognize(bufferDocx);
