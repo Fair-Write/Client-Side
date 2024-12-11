@@ -2,7 +2,6 @@
 	import DragAndDrop from './DragAndDrop.svelte';
 	import type { IFileNameDisplay } from '$lib/features/document-scan/entities/FileType';
 	import FileNameDisplay from '$lib/features/document-scan/presentation/FileNameDisplay.svelte';
-	import { fileStore } from '$lib/features/document-scan/store/fileStore';
 	import { convertInputToFile } from '../use-case/extractDocument';
 	import { textTitle } from '$lib/stores/textFromEditorStore';
 
@@ -10,6 +9,7 @@
 		fileName: undefined,
 		fileType: undefined
 	});
+	let fileDocument = $state<File | null>(null);
 
 	function setFileNameDisplay(
 		name: string,
@@ -40,13 +40,13 @@
 					for="File_Drop2"
 				>
 					<span
-						class="bg-gradient-to-b from-sky-50 to-sky-200 bg-clip-text text-center text-sm lg:text-base font-semibold text-transparent"
+						class="bg-gradient-to-b from-sky-50 to-sky-200 bg-clip-text text-center text-sm font-semibold text-transparent lg:text-base"
 						>Select Another File
 					</span>
 				</label>
 				<input
 					onchange={(e) => {
-						$fileStore = convertInputToFile(e);
+						fileDocument = convertInputToFile(e);
 					}}
 					id="File_Drop2"
 					accept=".pdf,.docx,.png,.jpeg"
@@ -57,5 +57,5 @@
 		{/if}
 	</div>
 
-	<DragAndDrop {setFileNameDisplay}></DragAndDrop>
+	<DragAndDrop {setFileNameDisplay} {fileDocument}></DragAndDrop>
 </div>
