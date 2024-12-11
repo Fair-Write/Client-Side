@@ -1,4 +1,10 @@
-import { PDFExtract, type PDFExtractOptions, type PDFExtractResult } from 'pdf.js-extract';
+import { getDocument } from 'pdfjs-dist';
+import {
+	type DocumentInitParameters,
+	PDFDataRangeTransport,
+	type TypedArray
+} from 'pdfjs-dist/types/src/display/api';
+
 import { type RequestHandler } from '@sveltejs/kit';
 
 export const POST: RequestHandler = async ({ request }) => {
@@ -15,27 +21,27 @@ export const POST: RequestHandler = async ({ request }) => {
 		});
 	}
 
-	const pdfExtract = new PDFExtract();
-	const options: PDFExtractOptions = {}; // specify options as needed
-	const arrayBuffer = await file.arrayBuffer();
-	const bufferDocx = Buffer.from(arrayBuffer);
+	const getPdfText = async (
+		src: DocumentInitParameters | PDFDataRangeTransport | TypedArray
+	): Promise<string> => {
+		const pdf = await getDocument(src).promise;
+
+		const pageList = await Promise.all(
+			Array.from({ length: pdf.numPages }, (_, i) => pdf.getPage(i + 1))
+		);
+
+		const textList = await Promise.all(pageList.map((p) => p.getTextContent()));
+
+		return textList.map(({ items }) => items.map(({ str }) => str).join('')).join('');
+	};
+	const pdfSource = file.arrayBuffer().then((ab: ArrayBuffer) => {
+		return Buffer.from(ab);
+	});
+	const results = getPdfText(await pdfSource);
+	console.log(results);
 
 	try {
-		const data: PDFExtractResult = await new Promise((resolve, reject) => {
-			pdfExtract.extractBuffer(bufferDocx, options, (err, data) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(data as PDFExtractResult);
-				}
-			});
-		});
-
-		const allPagesContent = await data.pages
-			.map((page) => page.content.reduce((acc, curr) => acc + curr.str, ''))
-			.join('\n');
-
-		return new Response(JSON.stringify({ data: allPagesContent }), { status: 200 });
+		return new Response(JSON.stringify({ data: await results }), { status: 200 });
 	} catch (err) {
 		return new Response(JSON.stringify({ error: String(err) }), { status: 500 });
 	}
