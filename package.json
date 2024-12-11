@@ -3,6 +3,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
+		"install": "npm install --legacy-peer-deps",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
