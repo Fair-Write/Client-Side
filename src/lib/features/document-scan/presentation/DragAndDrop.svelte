@@ -7,27 +7,27 @@
 		convertInputToFile
 	} from '$lib/features/document-scan/use-case/extractDocument';
 	import ProseMirrorDocu from '$lib/features/document-scan/presentation/ProseMirrorDocu.svelte';
-	import { fileStore } from '../store/fileStore';
+
 	import { toast } from 'svelte-sonner';
+	import { textContent } from '$lib/stores/textFromEditorStore';
 
 	let {
-		setFileNameDisplay
+		setFileNameDisplay,
+		fileDocument
 	}: {
 		setFileNameDisplay: (name: string, type: 'jpeg' | 'png' | 'docx' | 'pdf' | undefined) => void;
+		fileDocument: File | null;
 	} = $props();
 
-	let fileDocument: File | null = $state(null);
-
 	$effect(() => {
-		if ($fileStore != null) {
-			fileDocument = $fileStore;
+		if (fileDocument) {
 			setFileNameDisplay(fileName, fileSuffix);
 			convertToText(fileDocument, fileSuffix);
 		}
 	});
 
 	let fileSuffix: 'jpeg' | 'png' | 'docx' | 'pdf' | undefined = $derived.by(() => {
-		if (fileDocument != null) {
+		if (fileDocument) {
 			let doc = fileDocument as File;
 			return getSuffix(doc.name);
 		} else {
@@ -36,7 +36,7 @@
 	});
 
 	let fileName = $derived.by(() => {
-		if (fileDocument != null) {
+		if (fileDocument) {
 			let doc = fileDocument as File;
 			return doc.name;
 		} else {
@@ -59,8 +59,11 @@
 				console.log('THIS IS DOCX');
 				const response = await fetch('/api/extract/docx', { method: 'POST', body: formData });
 				const result = await response.json();
-				console.log(result);
-				extractedText = result.data;
+				if (result) {
+					extractedText = result.data;
+					$textContent = result.data;
+				}
+
 				break;
 			}
 
@@ -69,8 +72,11 @@
 				const response = await fetch('/api/extract/pdf', { method: 'POST', body: formData });
 				const result = await response.json();
 				console.log(result.data);
+				if (result) {
+					extractedText = result.data;
+					$textContent = result.data;
+				}
 
-				extractedText = result.data;
 				break;
 			}
 			case 'png':
@@ -80,6 +86,7 @@
 					const result = await response.json();
 					console.log(result);
 					extractedText = result.message;
+					$textContent = result.message;
 				} catch (e) {
 					console.log('Error:', e);
 					toast.error('An Error Has Occured');
