@@ -10,11 +10,11 @@ PDFJS.GlobalWorkerOptions.workerSrc = import.meta.url + 'pdfjs-dist/build/pdf.wo
 
 export async function getTextFromPDF(file: File | null) {
 	if (!file) {
-		return new Error('File not found');
+		throw new Error('File not found');
 	}
 
 	if (file.type !== 'application/pdf') {
-		return new Error('Invalid PDF type');
+		throw new Error('Invalid PDF type');
 	}
 
 	const getPageText = async (pdf: PDFJS.PDFDocument, pageNo: number) => {
@@ -49,6 +49,6 @@ export async function getTextFromPDF(file: File | null) {
 
 		return await getPDFText(pdfBuffer);
 	} catch (err) {
-		return new Error(`Could not get PDF text from PDF: ${err}`);
+	throw new Error(`Could not get PDF text from PDF: ${err}`);
 	}
 }

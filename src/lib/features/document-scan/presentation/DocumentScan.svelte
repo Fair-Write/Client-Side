@@ -10,7 +10,11 @@
 		fileType: undefined
 	});
 	let fileDocument = $state<File | null>(null);
+	let signal = $state<boolean>(false);
 
+	function changeState(e: boolean) {
+		signal = e;
+	}
 	function setFileNameDisplay(
 		name: string,
 		type: 'jpeg' | 'png' | 'docx' | 'pdf' | undefined
@@ -47,6 +51,7 @@
 				<input
 					onchange={(e) => {
 						fileDocument = convertInputToFile(e);
+						signal = true;
 					}}
 					id="File_Drop2"
 					accept=".pdf,.docx,.png,.jpeg"
@@ -57,5 +62,5 @@
 		{/if}
 	</div>
 
-	<DragAndDrop {setFileNameDisplay} {fileDocument}></DragAndDrop>
+	<DragAndDrop {setFileNameDisplay} {fileDocument} {changeState} {signal}></DragAndDrop>
 </div>

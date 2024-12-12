@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CloudUpload, FolderOpen } from 'lucide-svelte';
+	import { CloudUpload, FolderOpen, LoaderCircle } from 'lucide-svelte';
 	import { dragOverHandler } from '../use-case/dragAndDropEvents';
 	import { getSuffix } from '$lib/features/document-scan/use-case/utilts';
 	import {
@@ -13,18 +13,28 @@
 	import { getTextFromPDF } from '$lib/features/document-scan/use-case/extractPDF';
 	import { ocrToText } from '$lib/features/document-scan/use-case/imgToText';
 
+
 	let {
 		setFileNameDisplay,
-		fileDocument
+		fileDocument,
+		signal = false,
+		changeState
 	}: {
 		setFileNameDisplay: (name: string, type: 'jpeg' | 'png' | 'docx' | 'pdf' | undefined) => void;
 		fileDocument: File | null;
+		signal: boolean;
+		changeState: (e: boolean) => void;
 	} = $props();
 
+	let isLoading = $state(false);
+
 	$effect(() => {
-		if (fileDocument) {
+		if (signal == true) {
+			console.log('Foo');
 			setFileNameDisplay(fileName, fileSuffix);
-			convertToText(fileDocument, fileSuffix);
+			convertToText(fileDocument as File, fileSuffix);
+			signal = false;
+			changeState(false);
 		}
 	});
 
@@ -46,77 +56,65 @@
 		}
 	});
 	// todo: add store to this stupid shit v
-	let extractedText = $state('');
+	let extractedText = $state(false);
 
 	async function convertToText(file: File, type: string | undefined) {
-		console.log('Converting to file');
 		if (!file) {
-			throw new Error('EHRM WTF');
+			throw new Error('File must be a valid file');
 		}
+
 		const formData = new FormData();
 		formData.append('file', file as File);
-
+		isLoading = true;
 		switch (type) {
 			case 'docx': {
-				console.log('THIS IS DOCX');
+				console.log('Getting Docx');
 				const response = await fetch('/api/extract/docx', { method: 'POST', body: formData });
 				const result = await response.json();
 				if (result) {
-					extractedText = result.data;
+					extractedText = true;
 					$textContent = result.data;
 				}
 
 				break;
 			}
-
 			case 'pdf': {
 				try {
-					console.log('THIS IS PDF');
-					// const response = await fetch('/api/extract/pdf', { method: 'POST', body: formData });
-					// const result = await response.json();
-					// console.log(result.data);
-					// if (result) {
-					// 	extractedText = result.data;
-					// 	$textContent = result.data;
-					// }
 					const pdfText = await getTextFromPDF(file as File);
-					extractedText = pdfText as string;
-					$textContent = pdfText as string;
+					console.log('Getting PDF');
+					extractedText = true;
+					$textContent = pdfText;
 				} catch (e) {
 					console.log('Error:', e);
-					toast.error('An Error Has Occured');
+					toast.error('Failed to get PDF');
 				}
 				break;
 			}
 			case 'png':
 			case 'jpeg': {
 				try {
-					// const response = await fetch('/api/extract/image', { method: 'POST', body: formData });
-					// const result = await response.json();
-					// console.log(result);
-					// extractedText = result.message;
-					// $textContent = result.message;
-
+					console.log('Getting PNG');
 					const result = await ocrToText(file as File);
-					console.log(result);
-					extractedText = result as string;
-					$textContent = result as string;
+					extractedText = true;
+					$textContent = result;
 				} catch (e) {
 					console.log('Error:', e);
-					toast.error('An Error Has Occured');
+					toast.error('Failed to Scan Image');
 				}
-
 				break;
 			}
 			case undefined: {
 				throw new Error('Affix Undefined');
 			}
 		}
+		isLoading = false;
 	}
 </script>
 
 <div class="flex w-full flex-1 items-start justify-center lg:items-center">
-	{#if extractedText === ''}
+	{#if isLoading}
+		<LoaderCircle class="animate-spin self-center w-[50px] h-[50px]" color="#78716c" />
+	{:else if extractedText === false}
 		<form
 			class=" flex h-[350px] w-[250px] flex-col items-center justify-center
 		gap-5 rounded-sm border-2 border-dashed border-stone-300

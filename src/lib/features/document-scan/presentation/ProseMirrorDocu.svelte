@@ -24,7 +24,21 @@
 	let view: EditorView | null = $state(null);
 	let linterPlugin = createLinterPlugin([]);
 
+	// a shitty solution for a big problem but who cares
+	$effect(() => {
+		if ($textContent) {
+			if (view == null) return;
+			reinitializeText(view as EditorView);
+		}
+	});
+
 	// when stores has changed, the plugins must be reconfigured
+	function reinitializeText(view: EditorView) {
+		const node = view.state.schema.text($textContent);
+		const tr = view.state.tr.replaceWith(0, view.state.doc.content.size, node);
+		view.dispatch(tr);
+	}
+
 	function reconfigureAllPlugins(): void {
 		if (!view) throw new Error('Editorview not defined');
 
@@ -43,7 +57,7 @@
 		}
 	});
 
-	function replaceWordCommand(words:TSuggestion) {
+	function replaceWordCommand(words: TSuggestion) {
 		return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
 			if (!dispatch) return false; // No dispatch means no transaction to apply
 
@@ -93,7 +107,7 @@
 		<div class="flex h-full w-full items-start justify-center">
 			<div
 				bind:this={editorContainer}
-				class="editor__paragraph prose prose-sm w-full flex-1 lg:prose-base xl:prose-lg text-stone-800"
+				class="editor__paragraph prose prose-sm w-full flex-1 text-stone-800 lg:prose-base xl:prose-lg"
 				id="editor"
 			></div>
 		</div>
