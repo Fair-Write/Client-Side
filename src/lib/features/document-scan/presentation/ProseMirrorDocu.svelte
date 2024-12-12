@@ -4,10 +4,10 @@
 	import { EditorState } from 'prosemirror-state';
 	import { EditorView } from 'prosemirror-view';
 	import { DOMParser } from 'prosemirror-model';
-
+	import { cn } from '$lib/utils';
 	import { textContent, textContentHTML } from '$lib/stores/textFromEditorStore';
 	import mySchema from '$lib/features/rich-text-editor/entities/Schema';
-
+	import { progressStore } from '$lib/stores/progressStore';
 	import createLinterPlugin from '$lib/features/rich-text-editor/use-case/LinterPlugin';
 	import { myKeymap } from '$lib/features/rich-text-editor/entities/keymaps';
 	import { placeholder } from '$lib/features/rich-text-editor/use-case/PlaceHolderPlugin';
@@ -19,6 +19,7 @@
 	import { replaceStore } from '$lib/stores/lintingStore';
 	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
+	import { toast } from 'svelte-sonner';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -103,11 +104,21 @@
 </script>
 
 <div class="flex flex-1 flex-col items-center bg-stone-50 xl:h-full">
-	<ScrollArea class="max-h-[400px] w-full flex-1 shadow-inner lg:max-h-[600px] xl:max-h-[800px]">
+	<ScrollArea
+		class="max-h-[400px] w-full flex-1 shadow-inner lg:max-h-[600px] xl:max-h-[800px]"
+		onclick={() => {
+			if ($progressStore > 0) {
+				toast.info('You can only edit text during the Write Step');
+			}
+		}}
+	>
 		<div class="flex h-full w-full items-start justify-center">
 			<div
 				bind:this={editorContainer}
-				class="editor__paragraph prose prose-sm w-full flex-1 text-stone-800 lg:prose-base xl:prose-lg"
+				class={cn(
+					'editor__paragraph prose prose-sm w-full flex-1 text-stone-800 lg:prose-base xl:prose-lg',
+					$progressStore > 0 && 'pointer-events-none'
+				)}
 				id="editor"
 			></div>
 		</div>
