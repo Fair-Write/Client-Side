@@ -11,6 +11,7 @@
 	import { toast } from 'svelte-sonner';
 	import { textContent } from '$lib/stores/textFromEditorStore';
 	import { getTextFromPDF } from '$lib/features/document-scan/use-case/extractPDF';
+	import { ocrToText } from '$lib/features/document-scan/use-case/imgToText';
 
 	let {
 		setFileNameDisplay,
@@ -69,27 +70,37 @@
 			}
 
 			case 'pdf': {
-				console.log('THIS IS PDF');
-				// const response = await fetch('/api/extract/pdf', { method: 'POST', body: formData });
-				// const result = await response.json();
-				// console.log(result.data);
-				// if (result) {
-				// 	extractedText = result.data;
-				// 	$textContent = result.data;
-				// }
-				const pdfText = await getTextFromPDF(file as File);
-				extractedText = pdfText as string;
-				$textContent = pdfText as string;
+				try {
+					console.log('THIS IS PDF');
+					// const response = await fetch('/api/extract/pdf', { method: 'POST', body: formData });
+					// const result = await response.json();
+					// console.log(result.data);
+					// if (result) {
+					// 	extractedText = result.data;
+					// 	$textContent = result.data;
+					// }
+					const pdfText = await getTextFromPDF(file as File);
+					extractedText = pdfText as string;
+					$textContent = pdfText as string;
+				} catch (e) {
+					console.log('Error:', e);
+					toast.error('An Error Has Occured');
+				}
 				break;
 			}
 			case 'png':
 			case 'jpeg': {
 				try {
-					const response = await fetch('/api/extract/image', { method: 'POST', body: formData });
-					const result = await response.json();
+					// const response = await fetch('/api/extract/image', { method: 'POST', body: formData });
+					// const result = await response.json();
+					// console.log(result);
+					// extractedText = result.message;
+					// $textContent = result.message;
+
+					const result = await ocrToText(file as File);
 					console.log(result);
-					extractedText = result.message;
-					$textContent = result.message;
+					extractedText = result as string;
+					$textContent = result as string;
 				} catch (e) {
 					console.log('Error:', e);
 					toast.error('An Error Has Occured');
