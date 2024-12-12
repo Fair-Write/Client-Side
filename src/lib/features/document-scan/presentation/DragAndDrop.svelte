@@ -10,6 +10,7 @@
 
 	import { toast } from 'svelte-sonner';
 	import { textContent } from '$lib/stores/textFromEditorStore';
+	import { getTextFromPDF } from '$lib/features/document-scan/use-case/extractPDF';
 
 	let {
 		setFileNameDisplay,
@@ -69,14 +70,16 @@
 
 			case 'pdf': {
 				console.log('THIS IS PDF');
-				const response = await fetch('/api/extract/pdf', { method: 'POST', body: formData });
-				const result = await response.json();
-				console.log(result.data);
-				if (result) {
-					extractedText = result.data;
-					$textContent = result.data;
-				}
-
+				// const response = await fetch('/api/extract/pdf', { method: 'POST', body: formData });
+				// const result = await response.json();
+				// console.log(result.data);
+				// if (result) {
+				// 	extractedText = result.data;
+				// 	$textContent = result.data;
+				// }
+				const pdfText = await getTextFromPDF(file as File);
+				extractedText = pdfText as string;
+				$textContent = pdfText as string;
 				break;
 			}
 			case 'png':
