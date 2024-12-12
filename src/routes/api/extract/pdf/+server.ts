@@ -1,9 +1,12 @@
-import { getDocument } from 'pdfjs-dist';
-import {
-	type DocumentInitParameters,
-	PDFDataRangeTransport,
-	type TypedArray
-} from 'pdfjs-dist/types/src/display/api';
+import * as PDFJS from 'pdfjs-dist';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/ban-ts-comment
+// @ts-expect-error
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import * as pdfWorker from 'pdfjs-dist/build/pdf.worker.mjs';
+
+// Set worker source
+PDFJS.GlobalWorkerOptions.workerSrc = import.meta.url + 'pdfjs-dist/build/pdf.worker.mjs';
 
 import { type RequestHandler } from '@sveltejs/kit';
 
@@ -21,27 +24,38 @@ export const POST: RequestHandler = async ({ request }) => {
 		});
 	}
 
-	const getPdfText = async (
-		src: DocumentInitParameters | PDFDataRangeTransport | TypedArray
-	): Promise<string> => {
-		const pdf = await getDocument(src).promise;
+	const getPageText = async (pdf: PDFJS.PDFDocument, pageNo: number) => {
+		const page = await pdf.getPage(pageNo);
+		const tokenizedText = await page.getTextContent();
 
-		const pageList = await Promise.all(
-			Array.from({ length: pdf.numPages }, (_, i) => pdf.getPage(i + 1))
-		);
-
-		const textList = await Promise.all(pageList.map((p) => p.getTextContent()));
-
-		return textList.map(({ items }) => items.map(({ str }) => str).join('')).join('');
+		return tokenizedText.items.map((token) => token.str).join('');
 	};
-	const pdfSource = file.arrayBuffer().then((ab: ArrayBuffer) => {
-		return Buffer.from(ab);
-	});
-	const results = getPdfText(await pdfSource);
-	console.log(results);
+
+	const getPDFText = async (source: ArrayBuffer): Promise<string> => {
+		// Use configuration options when loading document
+		const pdf = await PDFJS.getDocument({
+			data: new Uint8Array(source),
+			disableTextLayer: true, // Use configuration option here
+			isEvalSupported: false,
+			useSystemFonts: true
+		}).promise;
+
+		const maxPages = pdf.numPages;
+		const pageTextPromises = [];
+		for (let pageNo = 1; pageNo <= maxPages; pageNo += 1) {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-expect-error
+			pageTextPromises.push(getPageText(pdf, pageNo));
+		}
+		const pageTexts = await Promise.all(pageTextPromises);
+		return pageTexts.join(' ');
+	};
 
 	try {
-		return new Response(JSON.stringify({ data: await results }), { status: 200 });
+		const pdfBuffer = await file.arrayBuffer();
+		const results = await getPDFText(pdfBuffer);
+
+		return new Response(JSON.stringify({ data: results }), { status: 200 });
 	} catch (err) {
 		return new Response(JSON.stringify({ error: String(err) }), { status: 500 });
 	}
