@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
-	import { Input } from "$lib/components/ui/input/index.js";
-	import { Label } from "$lib/components/ui/label/index.js";
+	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { Input } from '$lib/components/ui/input';
+	import { Label } from '$lib/components/ui/label/index.js';
+
 	let { toPreferenceModule }: { toPreferenceModule: () => void } = $props();
 </script>
 
@@ -32,5 +33,25 @@
 			<span class="material-symbols-outlined s26 text-stone-500">arrow_back</span>
 			<span class="text-base group-hover:underline"> Back </span>
 		</button>
+
+		<div>
+				<span>
+			<Label for="email">Email</Label>
+			<Input type="email" id="email" placeholder="email" />
+		</span>
+
+			<span>
+			<Label for="email">Email</Label>
+			<Input type="email" id="email" placeholder="email" />
+		</span>
+
+		</div>
+
+
+		<div>
+			<Button class="h-10 w-10	 rounded-full">
+				<span class="material-symbols-outlined s26 text-stone-500">add</span></Button
+			>
+		</div>
 	</div>
 </div>

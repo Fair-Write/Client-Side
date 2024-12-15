@@ -13,7 +13,7 @@
 		glfCheckService,
 		grammarCheckService
 	} from '$lib/features/suggestion-bot/services/suggestionBotServices';
-	import PreferenceModule from '$lib/features/suggestion-bot/PreferenceModule.svelte';
+	import PreferenceModule from '$lib/features/suggestion-bot/presentation/PreferenceModule.svelte';
 
 	let api = $state<CarouselAPI>();
 	let isSuggestionsTab = $state<boolean>(true);
