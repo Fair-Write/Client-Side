@@ -6,9 +6,16 @@
 	import type { TformSchema } from '$lib/features/suggestion-bot/entities/formSchema';
 	import { cn } from '$lib/utils';
 	import * as Select from '$lib/components/ui/select/index.js';
+	import { preferenceStore } from '$lib/stores/preferenceStore';
 	let { toPreferenceModule }: { toPreferenceModule: () => void } = $props();
 
 	let preferences = $state<TformSchema[]>([{ name: 'Joe', pronoun: '' }]);
+
+	$effect(() => {
+		if (preferences) {
+			console.log("HELLO");
+		}
+	});
 </script>
 
 <div>
@@ -102,7 +109,7 @@
 				class="h-10 w-10 rounded-full"
 				variant="outline"
 				onclick={() => {
-					preferences.push({ name: '', pronoun: '' });
+					preferences= [...preferences,{ name: '', pronoun: '' }];
 				}}
 			>
 				<span class="material-symbols-outlined s26 text-stone-500">add</span></Button
