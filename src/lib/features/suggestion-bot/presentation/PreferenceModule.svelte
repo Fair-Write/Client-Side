@@ -7,14 +7,15 @@
 	import { cn } from '$lib/utils';
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { preferenceStore } from '$lib/stores/preferenceStore';
+	import { onMount } from 'svelte';
 	let { toPreferenceModule }: { toPreferenceModule: () => void } = $props();
 
 	let preferences = $state<TformSchema[]>([{ name: 'Joe', pronoun: '' }]);
-
-	$effect(() => {
-		if (preferences) {
-			console.log("HELLO");
-		}
+	// this is the shittiest implementation of a preference array in history
+	// I fucking hate this implementation
+	// why can't svelte watch mutations of an array
+	onMount(() => {
+		preferences = $preferenceStore;
 	});
 </script>
 
@@ -61,6 +62,9 @@
 						<Input
 							type="text"
 							bind:value={preference.name}
+							onchange={() => {
+								$preferenceStore = preferences;
+							}}
 							class="focus-visible:ring-blue-500"
 							id="Name"
 							placeholder="Insert your name..."
@@ -70,7 +74,13 @@
 						{#if index === 0}
 							<Label for="Pronoun">Pronouns</Label>
 						{/if}
-						<Select.Root type="single" bind:value={preference.pronoun}>
+						<Select.Root
+							type="single"
+							bind:value={preference.pronoun}
+							onValueChange={() => {
+								$preferenceStore = preferences;
+							}}
+						>
 							<Select.Trigger class="focus:ring-blue-500">
 								{#if preference.pronoun === ''}
 									Preference
@@ -109,7 +119,8 @@
 				class="h-10 w-10 rounded-full"
 				variant="outline"
 				onclick={() => {
-					preferences= [...preferences,{ name: '', pronoun: '' }];
+					preferences = [...preferences, { name: '', pronoun: '' }];
+					$preferenceStore = preferences;
 				}}
 			>
 				<span class="material-symbols-outlined s26 text-stone-500">add</span></Button
