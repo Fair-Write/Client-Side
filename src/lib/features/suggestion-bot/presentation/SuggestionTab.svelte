@@ -9,6 +9,7 @@
 	import { progressStore } from '$lib/stores/progressStore';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import { buttonVariants } from '$lib/components/ui/button';
+	
 	import {
 		glfCheckService,
 		grammarCheckService

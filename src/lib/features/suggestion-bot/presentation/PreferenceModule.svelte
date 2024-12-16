@@ -5,10 +5,10 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 	import type { TformSchema } from '$lib/features/suggestion-bot/entities/formSchema';
 	import { cn } from '$lib/utils';
-
+	import * as Select from '$lib/components/ui/select/index.js';
 	let { toPreferenceModule }: { toPreferenceModule: () => void } = $props();
 
-	let preferences = $state<TformSchema[]>([{ name: 'Joe', pronoun: 'biden' }]);
+	let preferences = $state<TformSchema[]>([{ name: 'Joe', pronoun: '' }]);
 </script>
 
 <div>
@@ -44,7 +44,7 @@
 			</button>
 		</div>
 		<!--inputs -->
-		<div class=" w-full flex flex-col items-center justify-center gap-3">
+		<div class=" flex w-full flex-col items-center justify-center gap-3">
 			{#each preferences as preference, index}
 				<div class="flex items-center justify-center gap-2">
 					<div class="flex w-full max-w-sm flex-col gap-1.5">
@@ -63,13 +63,20 @@
 						{#if index === 0}
 							<Label for="Pronoun">Pronouns</Label>
 						{/if}
-						<Input
-							type="noun"
-							class="focus-visible:ring-blue-500"
-							bind:value={preference.pronoun}
-							id="Pronoun"
-							placeholder="Insert your Pronoun..."
-						/>
+						<Select.Root type="single" bind:value={preference.pronoun}>
+							<Select.Trigger class="focus:ring-blue-500">
+								{#if preference.pronoun === ''}
+									Preference
+								{:else}
+									{preference.pronoun}
+								{/if}
+							</Select.Trigger>
+							<Select.Content>
+								<Select.Item value="male">Male</Select.Item>
+								<Select.Item value="female">Female</Select.Item>
+								<Select.Item value="neutral">Neutral</Select.Item>
+							</Select.Content>
+						</Select.Root>
 					</div>
 					<!--remove entry-->
 					<button
@@ -88,7 +95,6 @@
 			{#if preferences.length === 0}
 				<p class=" text-base text-muted-foreground">No Preferences</p>
 			{/if}
-
 		</div>
 		<!--add-->
 		<div class="flex w-full items-center justify-center">
