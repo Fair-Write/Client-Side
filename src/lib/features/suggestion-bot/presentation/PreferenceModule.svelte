@@ -1,28 +1,14 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import * as Form from '$lib/components/ui/form/index.js';
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label/index.js';
-	import { formSchema, type FormSchema } from '../entities/formSchema';
-	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
-	let {
-		toPreferenceModule,
-		data
-	}: { toPreferenceModule: () => void; data: SuperValidated<Infer<FormSchema>> } = $props();
+	import type { TformSchema } from '$lib/features/suggestion-bot/entities/formSchema';
+	import { cn } from '$lib/utils';
 
-	const form = superForm(data, {
-		validators: zodClient(formSchema),
-	});
+	let { toPreferenceModule }: { toPreferenceModule: () => void } = $props();
 
-	const { form: formData, enhance } = form;
-
-	// const addEntry = () => {
-	// 	formData.payload = [...form.data.payload, { Name: '', Pronoun: '' }];
-	// };
-
-	//
+	let preferences = $state<TformSchema[]>([{ name: 'Joe', pronoun: 'biden' }]);
 </script>
 
 <div>
@@ -46,27 +32,73 @@
 			</Tooltip.Root>
 		</Tooltip.Provider>
 	</div>
-
-	<div class="group flex flex-col items-center justify-between p-5">
+	<div class="flex flex-col items-start justify-center gap-2 p-5">
 		<!--back-->
-		<button class="flex items-center justify-start gap-2" onclick={() => toPreferenceModule()}>
-			<span class="material-symbols-outlined s26 text-stone-500">arrow_back</span>
-			<span class="text-base group-hover:underline"> Back </span>
-		</button>
+		<div class="mb-5 w-full">
+			<button
+				class="group flex items-center justify-start gap-2"
+				onclick={() => toPreferenceModule()}
+			>
+				<span class="material-symbols-outlined s26 text-stone-500">arrow_back</span>
+				<span class="text-base group-hover:underline"> Back </span>
+			</button>
+		</div>
+		<!--inputs -->
+		<div class=" w-full flex flex-col items-center justify-center gap-3">
+			{#each preferences as preference, index}
+				<div class="flex items-center justify-center gap-2">
+					<div class="flex w-full max-w-sm flex-col gap-1.5">
+						{#if index === 0}
+							<Label for="Name">Name</Label>
+						{/if}
+						<Input
+							type="text"
+							bind:value={preference.name}
+							class="focus-visible:ring-blue-500"
+							id="Name"
+							placeholder="Insert your name..."
+						/>
+					</div>
+					<div class="flex w-full max-w-sm flex-col gap-1.5">
+						{#if index === 0}
+							<Label for="Pronoun">Pronouns</Label>
+						{/if}
+						<Input
+							type="noun"
+							class="focus-visible:ring-blue-500"
+							bind:value={preference.pronoun}
+							id="Pronoun"
+							placeholder="Insert your Pronoun..."
+						/>
+					</div>
+					<!--remove entry-->
+					<button
+						class={cn('group', index === 0 && 'mt-5')}
+						onclick={() => {
+							preferences.splice(index, 1);
+						}}
+					>
+						<span class="material-symbols-outlined s26 text-stone-500 group-hover:text-red-500"
+							>cancel</span
+						>
+					</button>
+				</div>
+			{/each}
 
-		<!--form-->
+			{#if preferences.length === 0}
+				<p class=" text-base text-muted-foreground">No Preferences</p>
+			{/if}
 
-		{form}
-
-<!--		<form method="POST" use:enhance>-->
-<!--			{#each form.payload as item, index}-->
-<!--		-->
-<!--			{/each}-->
-
-<!--			<button type="submit">Submit</button>-->
-<!--		</form>-->
-		<div>
-			<Button class="h-10 w-10	 rounded-full">
+		</div>
+		<!--add-->
+		<div class="flex w-full items-center justify-center">
+			<Button
+				class="h-10 w-10 rounded-full"
+				variant="outline"
+				onclick={() => {
+					preferences.push({ name: '', pronoun: '' });
+				}}
+			>
 				<span class="material-symbols-outlined s26 text-stone-500">add</span></Button
 			>
 		</div>
