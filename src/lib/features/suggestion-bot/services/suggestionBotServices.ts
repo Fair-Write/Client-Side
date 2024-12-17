@@ -22,7 +22,7 @@ const checkUrl = () => {
 	if (localStorage.getItem('url') !== undefined) {
 		return localStorage.getItem('url') as string;
 	} else {
-		return 'http://127.0.0.1:8080';
+		return 'http`://127.0.0.1:8080';
 	}
 };
 
