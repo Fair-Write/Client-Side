@@ -3,7 +3,7 @@ import { Plugin } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { Node as ProseMirrorNode } from 'prosemirror-model';
 import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
-import { getWordIndices } from '$lib/utils';
+// import { getWordIndices } from '$lib/utils';
 
 const linter = (doc: ProseMirrorNode, lintArgs: TSuggestion[]): DecorationSet => {
 	const decorations: Decoration[] = [];
@@ -11,26 +11,29 @@ const linter = (doc: ProseMirrorNode, lintArgs: TSuggestion[]): DecorationSet =>
 	doc.descendants((node: ProseMirrorNode, pos: number) => {
 		if (node.isText) {
 			for (const lint of lintArgs) {
-				const match = getWordIndices(node.text!, lint.indexReplacement);
-				if (match !== null && node.text!.split(' ')[lint.indexReplacement] == lint.originalText) {
-					const start = match.start + 1;
-					console.log(match);
+				// const match = getWordIndices(node.text!, lint.indexReplacement);
+				// if (match !== null && node.text!.split(' ')[lint.indexReplacement] == lint.originalText) {
+				// const start = match.start + 1;
+				// console.log(match);
+				// const end = match.end + 2;
+				// console.log(start, end);
 
-					const end = match.end + 2;
-					console.log(start, end);
-					switch (lint.correctionType) {
-						case 'spelling':
-							decorations.push(Decoration.inline(start, end, { class: 'linter-error ' }));
-							break;
-						case 'grammar':
-							decorations.push(Decoration.inline(start, end, { class: 'linter-grammar' }));
-							break;
-						case 'gfl':
-							decorations.push(Decoration.inline(start, end, { class: 'linter-gfl' }));
-					}
+				const start = lint.offSet;
+				const end = lint.originalCharacterEndset;
+				console.log(start, end);
+				switch (lint.correctionType) {
+					case 'spelling':
+						decorations.push(Decoration.inline(start, end, { class: 'linter-error ' }));
+						break;
+					case 'grammar':
+						decorations.push(Decoration.inline(start, end, { class: 'linter-grammar' }));
+						break;
+					case 'gfl':
+						decorations.push(Decoration.inline(start, end, { class: 'linter-gfl' }));
 				}
 			}
 		}
+		// }
 	});
 
 	return DecorationSet.create(doc, decorations);
