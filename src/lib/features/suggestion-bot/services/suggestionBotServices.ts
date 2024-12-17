@@ -4,7 +4,8 @@ import { aiSuggestions } from '$lib/stores/lintingStore';
 import { progressStore } from '$lib/stores/progressStore';
 import { get } from 'svelte/store';
 import { GLFScore } from '$lib/stores/omegaLOL';
-import axiosInstance from '../../../../service/axios';
+// import axiosInstance from '../../../../service/axios';
+import { toast } from 'svelte-sonner';
 function isStringOrArrayOfStrings(value: string | string[]) {
 	if (typeof value === 'string') {
 		return value; // It's a string
@@ -65,25 +66,22 @@ export async function grammarCheckService(nextSlide: () => void) {
 
 	// FOR DEPLOYMENT
 	try {
-		// const post = await fetch('http://127.0.0.1:8080/grammar', {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		'Content-Type': 'application/json'
-		// 	},
-		// 	body: JSON.stringify({ prompt: get(textContent) })
-		// });
-		//
-
-		const post = axiosInstance.post(`${checkUrl()}/grammar`, {
+		const post = await fetch('https://x3lkcvjr-8080.asse.devtunnels.ms/grammar', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
 			body: JSON.stringify({ prompt: get(textContent) })
 		});
 
-		const data = await post;
-		// const data = await post.json()
+		// const post = axiosInstance.post(`https://x3lkcvjr-8080.asse.devtunnels.ms//grammar`, {
+		// 	body: JSON.stringify({ prompt: get(textContent) })
+		// });
+
+		// const data = await post;
+		const data = await post.json();
 		console.log(data);
 		if (Object.keys(data).length !== 0) {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-expect-error
 			const suggestions: Promise<TSuggestion[]> = data.corrections.map(
 				(correction: {
 					word_index: number;
@@ -112,6 +110,7 @@ export async function grammarCheckService(nextSlide: () => void) {
 			progressStore.set(50);
 		}
 	} catch (error) {
+		toast.error('Network Error');
 		console.error('Error:', error);
 	}
 }
@@ -135,26 +134,24 @@ export async function glfCheckService(nextSlide: () => void) {
 	// nextSlide();
 	// $progressStore = 100;
 	try {
-		// const post = await fetch('http://127.0.0.1:8080/gfl', {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		'Content-Type': 'application/json'
-		// 	},
-		// 	body: JSON.stringify({
-		// 		prompt: get(textContent)
-		// 	})
-		// });
-
-		const post = axiosInstance.post(`${checkUrl()}/grammar`, {
-			body: JSON.stringify({ prompt: get(textContent) })
+		const post = await fetch('https://x3lkcvjr-8080.asse.devtunnels.ms/gfl', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				prompt: get(textContent)
+			})
 		});
 
-		const data = await post;
+		// const post = axiosInstance.post(`${checkUrl()}/grammar`, {
+		// 	body: JSON.stringify({ prompt: get(textContent) })
+		// });
 
+		// const data = await post;
+		const data = await post.json();
 		console.log(data);
 		if (Object.keys(data).length !== 0) {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-expect-error
 			const suggestions: Promise<TSuggestion[]> = data.corrections.map(
 				(correction: {
 					word_index: number;
@@ -185,6 +182,8 @@ export async function glfCheckService(nextSlide: () => void) {
 			nextSlide();
 		}
 	} catch (error) {
+		toast.error('Network Error');
+
 		console.error('Error:', error);
 	}
 }
