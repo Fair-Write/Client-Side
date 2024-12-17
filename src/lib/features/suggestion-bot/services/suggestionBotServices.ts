@@ -2,9 +2,9 @@ import { textContent } from '$lib/stores/textFromEditorStore';
 import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 import { aiSuggestions } from '$lib/stores/lintingStore';
 import { progressStore } from '$lib/stores/progressStore';
-import { toast } from 'svelte-sonner';
 import { get } from 'svelte/store';
 import { GLFScore } from '$lib/stores/omegaLOL';
+import axiosInstance from '../../../../service/axios';
 function isStringOrArrayOfStrings(value: string | string[]) {
 	if (typeof value === 'string') {
 		return value; // It's a string
@@ -16,6 +16,14 @@ function isStringOrArrayOfStrings(value: string | string[]) {
 
 	return false; // It's neither a string nor an array of strings
 }
+
+const checkUrl = () => {
+	if (localStorage.getItem('url') !== undefined) {
+		return localStorage.getItem('url') as string;
+	} else {
+		return 'http://127.0.0.1:8080';
+	}
+};
 
 export async function grammarCheckService(nextSlide: () => void) {
 	// FOR TESTING
@@ -57,17 +65,25 @@ export async function grammarCheckService(nextSlide: () => void) {
 
 	// FOR DEPLOYMENT
 	try {
-		const post = await fetch('http://127.0.0.1:8080/grammar', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
+		// const post = await fetch('http://127.0.0.1:8080/grammar', {
+		// 	method: 'POST',
+		// 	headers: {
+		// 		'Content-Type': 'application/json'
+		// 	},
+		// 	body: JSON.stringify({ prompt: get(textContent) })
+		// });
+		//
+
+		const post = axiosInstance.post(`${checkUrl()}/grammar`, {
 			body: JSON.stringify({ prompt: get(textContent) })
 		});
 
-		const data = await post.json();
+		const data = await post;
+		// const data = await post.json()
 		console.log(data);
 		if (Object.keys(data).length !== 0) {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-expect-error
 			const suggestions: Promise<TSuggestion[]> = data.corrections.map(
 				(correction: {
 					word_index: number;
@@ -96,7 +112,6 @@ export async function grammarCheckService(nextSlide: () => void) {
 			progressStore.set(50);
 		}
 	} catch (error) {
-		toast.error('An Error Has Occured');
 		console.error('Error:', error);
 	}
 }
@@ -120,19 +135,26 @@ export async function glfCheckService(nextSlide: () => void) {
 	// nextSlide();
 	// $progressStore = 100;
 	try {
-		const post = await fetch('http://127.0.0.1:8080/gfl', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				prompt: get(textContent)
-			})
+		// const post = await fetch('http://127.0.0.1:8080/gfl', {
+		// 	method: 'POST',
+		// 	headers: {
+		// 		'Content-Type': 'application/json'
+		// 	},
+		// 	body: JSON.stringify({
+		// 		prompt: get(textContent)
+		// 	})
+		// });
+
+		const post = axiosInstance.post(`${checkUrl()}/grammar`, {
+			body: JSON.stringify({ prompt: get(textContent) })
 		});
 
-		const data = await post.json();
+		const data = await post;
+
 		console.log(data);
 		if (Object.keys(data).length !== 0) {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-expect-error
 			const suggestions: Promise<TSuggestion[]> = data.corrections.map(
 				(correction: {
 					word_index: number;
@@ -164,6 +186,5 @@ export async function glfCheckService(nextSlide: () => void) {
 		}
 	} catch (error) {
 		console.error('Error:', error);
-		toast.error('An Error Has Occured');
 	}
 }

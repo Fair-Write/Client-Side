@@ -10,12 +10,17 @@
 	import { onMount } from 'svelte';
 	let { toPreferenceModule }: { toPreferenceModule: () => void } = $props();
 
-	let preferences = $state<TformSchema[]>([{ name: 'Joe', pronoun: '' }]);
+	let preferences = $state<TformSchema[]>([{ name: '', pronoun: '' }]);
 	// this is the shittiest implementation of a preference array in history
 	// I fucking hate this implementation
 	// why can't svelte watch mutations of an array
 	onMount(() => {
-		preferences = $preferenceStore;
+		// gets preferences
+		if (localStorage.getItem('preferences')) {
+			preferences = JSON.parse(localStorage.getItem('preferences') as string);
+		} else {
+			preferences = $preferenceStore;
+		}
 	});
 </script>
 
@@ -64,6 +69,7 @@
 							bind:value={preference.name}
 							onchange={() => {
 								$preferenceStore = preferences;
+								localStorage.setItem('preferences', JSON.stringify($preferenceStore));
 							}}
 							class="focus-visible:ring-blue-500"
 							id="Name"
@@ -79,6 +85,7 @@
 							bind:value={preference.pronoun}
 							onValueChange={() => {
 								$preferenceStore = preferences;
+								localStorage.setItem('preferences', JSON.stringify($preferenceStore));
 							}}
 						>
 							<Select.Trigger class="focus:ring-blue-500">
@@ -100,6 +107,8 @@
 						class={cn('group', index === 0 && 'mt-5')}
 						onclick={() => {
 							preferences.splice(index, 1);
+							$preferenceStore = preferences;
+							localStorage.setItem('preferences', JSON.stringify($preferenceStore));
 						}}
 					>
 						<span class="material-symbols-outlined s26 text-stone-500 group-hover:text-red-500"
@@ -121,6 +130,8 @@
 				onclick={() => {
 					preferences = [...preferences, { name: '', pronoun: '' }];
 					$preferenceStore = preferences;
+					localStorage.setItem('preferences', JSON.stringify($preferenceStore));
+					console.log(localStorage.getItem('preferences'));
 				}}
 			>
 				<span class="material-symbols-outlined s26 text-stone-500">add</span></Button
