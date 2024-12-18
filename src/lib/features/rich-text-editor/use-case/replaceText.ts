@@ -9,7 +9,7 @@ export function replaceWordInDocument(
 	dispatch: (tr: Transaction) => void,
 	words: TSuggestion
 ): void {
-	const { replacement, originalText, indexReplacement, offSet, originalCharacterEndset } = words;
+	const { replacement, originalText, indexReplacement, offSet, endSet } = words;
 	const { doc } = editorState;
 	const transaction = editorState.tr;
 
@@ -24,8 +24,8 @@ export function replaceWordInDocument(
 			transaction.replaceWith(
 				// match.start + 1,
 				// match.end + 2,
-				offSet,
-				originalCharacterEndset,
+				offSet + 1,
+				endSet + 1,
 				editorState.schema.text(replacement)
 			);
 			// }

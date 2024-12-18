@@ -7,7 +7,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	try {
 		// 2. Convert HTML to docx
-		const docxBuffer = await htmlToDocx(htmlContent,"",  {
+		const docxBuffer = await htmlToDocx(htmlContent, "", {
 			table: { row: { cantSplit: true } },
 			footer: true,
 			pageNumber: true,

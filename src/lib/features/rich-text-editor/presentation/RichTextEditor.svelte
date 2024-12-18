@@ -25,6 +25,7 @@
 	import { cn } from '$lib/utils';
 	import { progressStore } from '$lib/stores/progressStore';
 	import { toast } from 'svelte-sonner';
+	import { signalTextEditor } from '$lib/stores/signalStore';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -37,9 +38,10 @@
 
 	// a shitty solution for a big problem but who cares
 	$effect(() => {
-		if ($textContent) {
+		if ($signalTextEditor === true) {
 			if (view == null) return;
 			reinitializeText(view as EditorView);
+			$signalTextEditor = false;
 		}
 	});
 

@@ -10,6 +10,7 @@
 	import { revisedTextStore } from '$lib/stores/revisedTextStore';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { toast } from 'svelte-sonner';
+	import { signalTextEditor } from '$lib/stores/signalStore';
 	// import { toast } from 'svelte-sonner';
 
 	let { nextSlide }: { nextSlide: () => void } = $props();
@@ -45,8 +46,9 @@
 			});
 
 			const data = await post.json();
-			console.log(data);
+			console.log(data.data.revised_text);
 			$revisedTextStore = await (data.revised_text as string);
+
 			if (Object.keys(data).length !== 0) {
 				let suggestions: Promise<TSuggestion[]> = data.corrections.map(
 					(correction: {
@@ -56,14 +58,13 @@
 						original_text: string;
 						message: string;
 						replacements: string[];
-						original_character_endset: string;
 					}) => ({
 						indexReplacement: correction.word_index,
 						originalText: correction.original_text,
 						offSet: correction.character_offset,
 						endSet: correction.character_endset,
 						replacement: isStringOrArrayOfStrings(correction.replacements),
-						correctionType: 'grammar',
+						correctionType: 'gfl',
 						message: correction.message,
 						rational: ''
 					})
@@ -80,11 +81,16 @@
 		}
 	}
 	function applyAllChanges() {
-		// $replaceStore = $aiSuggestions;
+		// $replaceStore = $aiSuggestions.map((suggestion) => {
+		// 	return suggestion;
+		// });
+
 		$textContent = $revisedTextStore;
+		$signalTextEditor = true;
+		console.log($textContent);
+
 		$aiSuggestions = [];
 	}
-
 	function ignoreMe(index: number) {
 		$aiSuggestions.splice(index, 1);
 		suggestionsReference.splice(index, 1);

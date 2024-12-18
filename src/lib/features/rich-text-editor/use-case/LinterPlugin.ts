@@ -18,8 +18,8 @@ const linter = (doc: ProseMirrorNode, lintArgs: TSuggestion[]): DecorationSet =>
 				// const end = match.end + 2;
 				// console.log(start, end);
 
-				const start = lint.offSet;
-				const end = lint.originalCharacterEndset;
+				const start = lint.offSet + 1;
+				const end = lint.endSet + 1;
 				console.log(start, end);
 				switch (lint.correctionType) {
 					case 'spelling':

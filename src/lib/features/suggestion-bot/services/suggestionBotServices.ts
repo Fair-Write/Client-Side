@@ -48,7 +48,7 @@ export async function grammarCheckService(nextSlide: () => void) {
 
 	// FOR DEPLOYMENT
 	try {
-		const post = await fetch('https://x3lkcvjr-8080.asse.devtunnels.ms/grammar', {
+		const post = await fetch('http://127.0.0.1:8080/grammar', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -68,7 +68,7 @@ export async function grammarCheckService(nextSlide: () => void) {
 					original_text: string;
 					message: string;
 					replacements: string[];
-					original_character_endset: string;
+
 				}) => ({
 					indexReplacement: correction.word_index,
 					originalText: correction.original_text,
@@ -78,7 +78,7 @@ export async function grammarCheckService(nextSlide: () => void) {
 					correctionType: 'grammar',
 					message: correction.message,
 					rational: '',
-					originalCharacterEndset: correction.original_character_endset
+
 				})
 			);
 
@@ -115,7 +115,7 @@ export async function glfCheckService(nextSlide: () => void) {
 	// nextSlide();
 	// $progressStore = 100;
 	try {
-		const post = await fetch('https://x3lkcvjr-8080.asse.devtunnels.ms/gfl', {
+		const post = await fetch('http://127.0.0.1:8080/gfl', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -132,6 +132,7 @@ export async function glfCheckService(nextSlide: () => void) {
 		// const data = await post;
 		const data = await post.json();
 		console.log(data);
+		await revisedTextStore.set(data.revised_text as string);
 		if (Object.keys(data).length !== 0) {
 			const suggestions: Promise<TSuggestion[]> = data.corrections.map(
 				(correction: {
@@ -141,7 +142,7 @@ export async function glfCheckService(nextSlide: () => void) {
 					original_text: string;
 					message: string;
 					replacements: string[] | string;
-					original_character_endset: string;
+
 				}) => ({
 					indexReplacement: correction.word_index,
 					originalText: correction.original_text,
@@ -151,7 +152,7 @@ export async function glfCheckService(nextSlide: () => void) {
 					correctionType: 'gfl',
 					message: 'Gender Fair Language',
 					rational: '',
-					originalCharacterEndset: correction.original_character_endset
+
 				})
 			);
 

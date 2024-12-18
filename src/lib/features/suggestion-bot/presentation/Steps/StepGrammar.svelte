@@ -11,6 +11,7 @@
 	import { textContent } from '$lib/stores/textFromEditorStore';
 	import { revisedTextStore } from '$lib/stores/revisedTextStore';
 	import { progressStore } from '$lib/stores/progressStore';
+	import { signalTextEditor } from '$lib/stores/signalStore';
 
 	let { nextSlide }: { nextSlide: () => Promise<void> } = $props();
 	let suggestionsReference = $state<TSuggestion[]>($aiSuggestions);
@@ -39,7 +40,7 @@
 
 		// FOR DEPLOYMENT
 		try {
-			const post = await fetch('https://x3lkcvjr-8080.asse.devtunnels.ms/grammar', {
+			const post = await fetch('http://127.0.0.1:8080/grammar', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -59,7 +60,6 @@
 						original_text: string;
 						message: string;
 						replacements: string[];
-						original_character_endset: string;
 					}) => ({
 						indexReplacement: correction.word_index,
 						originalText: correction.original_text,
@@ -68,8 +68,7 @@
 						replacement: isStringOrArrayOfStrings(correction.replacements),
 						correctionType: 'grammar',
 						message: correction.message,
-						rational: '',
-						originalCharacterEndset: correction.original_character_endset
+						rational: ''
 					})
 				);
 
@@ -89,6 +88,7 @@
 		// });
 		$textContent = $revisedTextStore;
 		console.log($textContent);
+		$signalTextEditor = true;
 
 		$aiSuggestions = [];
 	}

@@ -7,5 +7,4 @@ export type TSuggestion = {
 	correctionType: 'grammar' | 'spelling' | 'gfl';
 	message: string;
 	rationale: string;
-	originalCharacterEndset: number;
 };
