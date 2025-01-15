@@ -19,14 +19,11 @@
 		name: string,
 		type: 'jpeg' | 'png' | 'docx' | 'pdf' | undefined
 	): void {
-		fileNameDisplay.fileName = name;
-		$textTitle = name;
+		fileNameDisplay.fileName = name.replace(/\.[^/.]+$/, '');
+		$textTitle = name.replace(/\.[^/.]+$/, '');
 		fileNameDisplay.fileType = type;
 	}
 </script>
-
-<!--TODO FIX UI -->
-<!-- TODO Integrate the JPG TO Text Feature-->
 
 <div class="flex h-[100svh] min-h-0 w-full flex-col items-center bg-stone-200 lg:flex-1">
 	<div

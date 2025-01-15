@@ -5,9 +5,12 @@
 	import SuggestionCard from './SuggestionCard.svelte';
 	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
-	// import { textContent } from '$lib/stores/textFromEditorStore';
+	import { textContent } from '$lib/stores/textFromEditorStore';
 	// import { progressStore } from '$lib/stores/progressStore';
+	import { revisedTextStore } from '$lib/stores/revisedTextStore';
 	import { Skeleton } from '$lib/components/ui/skeleton';
+	import { toast } from 'svelte-sonner';
+	import { signalTextEditor } from '$lib/stores/signalStore';
 	// import { toast } from 'svelte-sonner';
 
 	let { nextSlide }: { nextSlide: () => void } = $props();
@@ -15,77 +18,82 @@
 	let isEmpty = $derived(suggestionsReference.length != 0);
 	let isLoading = $state(false);
 
-	// function isStringOrArrayOfStrings(value: string | string[]) {
-	// 	if (typeof value === 'string') {
-	// 		return value; // It's a string
-	// 	}
-	//
-	// 	if (Array.isArray(value)) {
-	// 		return value[0]; // It's an array of strings
-	// 	}
-	//
-	// 	return false; // It's neither a string nor an array of strings
-	// }
+	function isStringOrArrayOfStrings(value: string | string[]) {
+		if (typeof value === 'string') {
+			return value; // It's a string
+		}
+
+		if (Array.isArray(value)) {
+			return value[0]; // It's an array of strings
+		}
+
+		return false; // It's neither a string nor an array of strings
+	}
 
 	async function removeMe(index: number) {
 		$replaceStore = [$aiSuggestions[index]];
 		$aiSuggestions.splice(index, 1);
+		suggestionsReference.splice(index, 1);
+		// refetch every remove omega lol
+		isLoading = true;
+		try {
+			const post = await fetch('http://127.0.0.1:8080/gfl', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ prompt: $textContent })
+			});
 
-		// isLoading = true;
-		// try {
-		// 	const post = await fetch('http://127.0.0.1:8080/gfl', {
-		// 		method: 'POST',
-		// 		headers: {
-		// 			'Content-Type': 'application/json'
-		// 		},
-		// 		body: JSON.stringify({ prompt: $textContent })
-		// 	});
-		//
-		// 	const data = await post.json();
-		// 	console.log(data);
-		//
-		// 	if (Object.keys(data).length !== 0) {
-		// 		let suggestions: Promise<TSuggestion[]> = data.corrections.map(
-		// 			(correction: {
-		// 				word_index: number;
-		// 				character_offset: number;
-		// 				character_endset: number;
-		// 				original_text: string;
-		// 				message: string;
-		// 				replacements: string[];
-		// 			}) => ({
-		// 				indexReplacement: correction.word_index,
-		// 				originalText: correction.original_text,
-		// 				offSet: correction.character_offset,
-		// 				endSet: correction.character_endset,
-		// 				replacement: isStringOrArrayOfStrings(correction.replacements),
-		// 				correctionType: 'grammar',
-		// 				message: correction.message,
-		// 				rational: ''
-		// 			})
-		// 		);
-		//
-		// 		$aiSuggestions = await suggestions;
-		// 		isLoading = false;
-		// 		console.log($aiSuggestions);
-		// 		nextSlide();
-		//
-		// 	} else {
-		// 		nextSlide();
-		//
-		// 	}
-		// } catch (error) {
-		// 	toast.error('An Error Has Occured');
-		// 	console.error('Error:', error);
-		// }
+			const data = await post.json();
+			console.log(data.data.revised_text);
+			$revisedTextStore = await (data.revised_text as string);
+
+			if (Object.keys(data).length !== 0) {
+				let suggestions: Promise<TSuggestion[]> = data.corrections.map(
+					(correction: {
+						word_index: number;
+						character_offset: number;
+						character_endset: number;
+						original_text: string;
+						message: string;
+						replacements: string[];
+					}) => ({
+						indexReplacement: correction.word_index,
+						originalText: correction.original_text,
+						offSet: correction.character_offset,
+						endSet: correction.character_endset,
+						replacement: isStringOrArrayOfStrings(correction.replacements),
+						correctionType: 'gfl',
+						message: correction.message,
+						rational: ''
+					})
+				);
+
+				$aiSuggestions = await suggestions;
+				isLoading = false;
+				console.log($aiSuggestions);
+			} else {
+			}
+		} catch (error) {
+			toast.error('An Error Has Occured');
+			console.error('Error:', error);
+		}
 	}
 	function applyAllChanges() {
-		$replaceStore = $aiSuggestions;
+		// $replaceStore = $aiSuggestions.map((suggestion) => {
+		// 	return suggestion;
+		// });
+
+		$textContent = $revisedTextStore;
+		$signalTextEditor = true;
+		console.log($textContent);
+
 		$aiSuggestions = [];
 	}
-
 	function ignoreMe(index: number) {
 		$aiSuggestions.splice(index, 1);
+		suggestionsReference.splice(index, 1);
 	}
 
 	$effect(() => {

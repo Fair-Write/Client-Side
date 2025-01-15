@@ -7,89 +7,95 @@
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 	// import { textContent } from '$lib/stores/textFromEditorStore';
 	import { LoaderCircle } from 'lucide-svelte';
-	// import { toast } from 'svelte-sonner';
+	import { toast } from 'svelte-sonner';
+	import { textContent } from '$lib/stores/textFromEditorStore';
+	import { revisedTextStore } from '$lib/stores/revisedTextStore';
+	import { progressStore } from '$lib/stores/progressStore';
+	import { signalTextEditor } from '$lib/stores/signalStore';
 
 	let { nextSlide }: { nextSlide: () => Promise<void> } = $props();
 	let suggestionsReference = $state<TSuggestion[]>($aiSuggestions);
 	let isEmpty = $derived(suggestionsReference.length != 0);
 
 	let isLoading = $state(false);
-	// function isStringOrArrayOfStrings(value: string | string[]) {
-	// 	// It's a string
-	// 	if (typeof value === 'string') {
-	// 		return value;
-	// 	}
-	//
-	// 	//  && value.every((item) => typeof item === 'string')
-	// 	// It's an array of strings
-	// 	if (Array.isArray(value)) {
-	// 		return value[0];
-	// 	}
-	// 	// It's neither a string nor an array of strings
-	// 	return false;
-	// }
+	function isStringOrArrayOfStrings(value: string | string[]) {
+		// It's a string
+		if (typeof value === 'string') {
+			return value;
+		}
+
+		//  && value.every((item) => typeof item === 'string')
+		// It's an array of strings
+		if (Array.isArray(value)) {
+			return value[0];
+		}
+		// It's neither a string nor an array of strings
+		return false;
+	}
 
 	async function removeMe(index: number) {
 		$replaceStore = [$aiSuggestions[index]];
 		$aiSuggestions.splice(index, 1);
-		// JUST IN CASE
-		// isLoading = true;
-		// try {
-		// 	const post = await fetch('http://127.0.0.1:8080/grammar', {
-		// 		method: 'POST',
-		// 		headers: {
-		// 			'Content-Type': 'application/json'
-		// 		},
-		// 		body: JSON.stringify({ prompt: $textContent })
-		// 	});
-		//
-		// 	const data = await post.json();
-		// 	console.log(data);
-		//
-		// 	if (Object.keys(data).length !== 0) {
-		// 		let suggestions: Promise<TSuggestion[]> = data.corrections.map(
-		// 			(correction: {
-		// 				word_index: number;
-		// 				character_offset: number;
-		// 				character_endset: number;
-		// 				original_text: string;
-		// 				message: string;
-		// 				replacements: string[];
-		// 			}) => ({
-		// 				indexReplacement: correction.word_index,
-		// 				originalText: correction.original_text,
-		// 				offSet: correction.character_offset,
-		// 				endSet: correction.character_endset,
-		// 				replacement: isStringOrArrayOfStrings(correction.replacements),
-		// 				correctionType: 'grammar',
-		// 				message: correction.message,
-		// 				rational: ''
-		// 			})
-		// 		);
-		//
-		// 		$aiSuggestions = await suggestions;
-		// 		isLoading = false;
-		// 		console.log($aiSuggestions);
-		// 		await nextSlide();
-		//
-		// 	} else {
-		//
-		// 		await nextSlide();
-		// 	}
-		// } catch (error) {
-		// 	toast.error('An Error Has Occured');
-		// 	console.error('Error:', error);
-		// }
+		suggestionsReference.splice(index, 1);
+
+		// FOR DEPLOYMENT
+		try {
+			const post = await fetch('http://127.0.0.1:8080/grammar', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ prompt: $textContent })
+			});
+
+			const data = await post.json();
+			console.log(data);
+			$revisedTextStore = await (data.revised_text as string);
+			if (Object.keys(data).length !== 0) {
+				const suggestions: Promise<TSuggestion[]> = data.corrections.map(
+					(correction: {
+						word_index: number;
+						character_offset: number;
+						character_endset: number;
+						original_text: string;
+						message: string;
+						replacements: string[];
+					}) => ({
+						indexReplacement: correction.word_index,
+						originalText: correction.original_text,
+						offSet: correction.character_offset,
+						endSet: correction.character_endset,
+						replacement: isStringOrArrayOfStrings(correction.replacements),
+						correctionType: 'grammar',
+						message: correction.message,
+						rational: ''
+					})
+				);
+
+				aiSuggestions.set(await suggestions);
+				$progressStore = 50;
+			} else {
+				progressStore.set(50);
+			}
+		} catch (error) {
+			toast.error('Network Error');
+			console.error('Error:', error);
+		}
 	}
 	function applyAllChanges() {
-		$replaceStore = $aiSuggestions.map((suggestion) => {
-			return suggestion;
-		});
+		// $replaceStore = $aiSuggestions.map((suggestion) => {
+		// 	return suggestion;
+		// });
+		$textContent = $revisedTextStore;
+		console.log($textContent);
+		$signalTextEditor = true;
+
 		$aiSuggestions = [];
 	}
 
 	function ignoreMe(index: number) {
 		$aiSuggestions.splice(index, 1);
+		suggestionsReference.splice(index, 1);
 	}
 
 	$effect(() => {

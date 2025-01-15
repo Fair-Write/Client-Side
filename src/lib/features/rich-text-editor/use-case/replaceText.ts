@@ -9,7 +9,7 @@ export function replaceWordInDocument(
 	dispatch: (tr: Transaction) => void,
 	words: TSuggestion
 ): void {
-	const { replacement, originalText, indexReplacement } = words;
+	const { replacement, originalText, indexReplacement, offSet, endSet } = words;
 	const { doc } = editorState;
 	const transaction = editorState.tr;
 
@@ -18,15 +18,17 @@ export function replaceWordInDocument(
 	// Traverse each text node in the document
 	doc.descendants((node: Node, pos: number) => {
 		if (node.isText && node.textContent) {
-			const nodeSplit = node.text!.split(' ')[indexReplacement];
-			const match = getWordIndices(node.text as string, indexReplacement);
-			if (match !== null && nodeSplit == originalText) {
-				transaction.replaceWith(
-					match.start + 1,
-					match.end + 2,
-					editorState.schema.text(replacement)
-				);
-			}
+			// const nodeSplit = node.text!.split(' ')[indexReplacement];
+			// const match = getWordIndices(node.text as string, indexReplacement);
+			// if (match !== null && nodeSplit == originalText) {
+			transaction.replaceWith(
+				// match.start + 1,
+				// match.end + 2,
+				offSet + 1,
+				endSet + 1,
+				editorState.schema.text(replacement)
+			);
+			// }
 		}
 	});
 

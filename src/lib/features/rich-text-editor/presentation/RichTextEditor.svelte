@@ -25,6 +25,7 @@
 	import { cn } from '$lib/utils';
 	import { progressStore } from '$lib/stores/progressStore';
 	import { toast } from 'svelte-sonner';
+	import { signalTextEditor } from '$lib/stores/signalStore';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -33,6 +34,22 @@
 	function resetScroll(event: Event) {
 		const target = event.target as HTMLDivElement;
 		target.scrollLeft = 0;
+	}
+
+	// a shitty solution for a big problem but who cares
+	$effect(() => {
+		if ($signalTextEditor === true) {
+			if (view == null) return;
+			reinitializeText(view as EditorView);
+			$signalTextEditor = false;
+		}
+	});
+
+	// when stores has changed, the plugins must be reconfigured
+	function reinitializeText(view: EditorView) {
+		const node = view.state.schema.text($textContent);
+		const tr = view.state.tr.replaceWith(0, view.state.doc.content.size, node);
+		view.dispatch(tr);
 	}
 
 	// when stores has changed, the plugins must be reconfigured
@@ -124,7 +141,7 @@
 <section class="flex min-h-[100svh] flex-1 flex-col items-center bg-stone-50 xl:h-full">
 	<!-- Custom toolbar with Chadcn Svelte buttons -->
 	<div
-		class=" flex min-h-14 w-full items-center justify-between border-b border-stone-300 bg-stone-50 p-2"
+		class=" flex h-14 max-h-14 w-full items-center justify-between border-b border-stone-300 bg-stone-50 p-2"
 	>
 		<input
 			type="text"
