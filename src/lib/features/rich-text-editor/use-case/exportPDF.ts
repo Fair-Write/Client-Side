@@ -3,7 +3,7 @@ import { textTitle } from '$lib/stores/textFromEditorStore';
 export function exportStateAsPDF(state: string) {
 	let title: string = '';
 	textTitle.subscribe((value) => {
-		title = value;
+		title = value.replace(/\.[^/.]+$/, '');
 	});
 
 	const doc = new jsPDF();
