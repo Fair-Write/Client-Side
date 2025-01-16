@@ -20,69 +20,11 @@
 	let isEmpty = $derived(suggestionsReference.length != 0);
 
 	let isLoading = $state(false);
-	function isStringOrArrayOfStrings(value: string | string[]) {
-		// It's a string
-		if (typeof value === 'string') {
-			return value;
-		}
 
-		//  && value.every((item) => typeof item === 'string')
-		// It's an array of strings
-		if (Array.isArray(value)) {
-			return value[0];
-		}
-		// It's neither a string nor an array of strings
-		return false;
-	}
-
-	async function removeMe(index: number) {
+	function removeMe(index: number) {
 		$replaceStore = [$aiSuggestions[index]];
 		$aiSuggestions.splice(index, 1);
 		suggestionsReference.splice(index, 1);
-		const payload = get(textContent);
-
-		// FOR DEPLOYMENT
-		try {
-			const post = await fetch('http://127.0.0.1:8080/grammar', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ prompt: payload })
-			});
-
-			const data = await post.json();
-			$revisedTextStore = await (data.revised_text as string);
-			if (Object.keys(data).length !== 0) {
-				const suggestions: Promise<TSuggestion[]> = data.corrections.map(
-					(correction: {
-						word_index: number;
-						character_offset: number;
-						character_endset: number;
-						original_text: string;
-						message: string;
-						replacements: string[];
-					}) => ({
-						indexReplacement: correction.word_index,
-						originalText: correction.original_text,
-						offSet: correction.character_offset,
-						endSet: correction.character_endset,
-						replacement: isStringOrArrayOfStrings(correction.replacements),
-						correctionType: 'grammar',
-						message: correction.message,
-						rational: ''
-					})
-				);
-
-				aiSuggestions.set(await suggestions);
-				$progressStore = 50;
-			} else {
-				progressStore.set(50);
-			}
-		} catch (error) {
-			toast.error('Network Error');
-			console.error('Error:', error);
-		}
 	}
 	function applyAllChanges() {
 		// $replaceStore = $aiSuggestions.map((suggestion) => {
