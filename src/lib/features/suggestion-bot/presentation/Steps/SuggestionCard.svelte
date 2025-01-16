@@ -9,6 +9,7 @@
 	import { toast } from 'svelte-sonner';
 	import { get } from 'svelte/store';
 	import { textContent } from '$lib/stores/textFromEditorStore';
+	import { foobar } from '../../use-case/test';
 	function isStringOrArrayOfStrings(value: string | string[]) {
 		// It's a string
 		if (typeof value === 'string') {
@@ -39,53 +40,66 @@
 
 	async function jempoyMoves(bruh: string) {
 		if (bruh == 'grammar') {
-			console.log('BOBBO' + $textContent);
+			console.log('BOBO ' + foobar());
+
+			aiSuggestions.set([
+				{
+					message: 'Change to plural',
+					originalText: 'firefighter',
+					replacement: 'SHIT',
+					correctionType: 'grammar',
+					rationale: 'lorem ipsum somethign something',
+					offSet: 23,
+					endSet: 34,
+					indexReplacement: 5
+				}
+			]);
 
 			// FOR DEPLOYMENT
-			try {
-				const post = await fetch('http://127.0.0.1:8080/grammar', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({ prompt: $textContent })
-				});
+			// try {
+			// 	const post = await fetch('http://127.0.0.1:8080/grammar', {
+			// 		method: 'POST',
+			// 		headers: {
+			// 			'Content-Type': 'application/json'
+			// 		},
+			// 		body: JSON.stringify({ prompt: $textContent })
+			// 	});
 
-				const data = await post.json();
-				$revisedTextStore = await (data.revised_text as string);
-				console.log('FETCHING ' + $textContent);
-				console.log(data);
+			// 	const data = await post.json();
+			// 	$revisedTextStore = await (data.revised_text as string);
+			// 	console.log('FETCHING ' + $textContent);
+			// 	console.log(data);
 
-				if (Object.keys(data).length !== 0) {
-					const suggestions: Promise<TSuggestion[]> = data.corrections.map(
-						(correction: {
-							word_index: number;
-							character_offset: number;
-							character_endset: number;
-							original_text: string;
-							message: string;
-							replacements: string[];
-						}) => ({
-							indexReplacement: correction.word_index,
-							originalText: correction.original_text,
-							offSet: correction.character_offset,
-							endSet: correction.character_endset,
-							replacement: isStringOrArrayOfStrings(correction.replacements),
-							correctionType: 'grammar',
-							message: correction.message,
-							rational: ''
-						})
-					);
+			// 	if (Object.keys(data).length !== 0) {
+			// 		const suggestions: Promise<TSuggestion[]> = data.corrections.map(
+			// 			(correction: {
+			// 				word_index: number;
+			// 				character_offset: number;
+			// 				character_endset: number;
+			// 				original_text: string;
+			// 				message: string;
+			// 				replacements: string[];
+			// 			}) => ({
+			// 				indexReplacement: correction.word_index,
+			// 				originalText: correction.original_text,
+			// 				offSet: correction.character_offset,
+			// 				endSet: correction.character_endset,
+			// 				replacement: isStringOrArrayOfStrings(correction.replacements),
+			// 				correctionType: 'grammar',
+			// 				message: correction.message,
+			// 				rational: ''
+			// 			})
+			// 		);
 
-					aiSuggestions.set(await suggestions);
-					$progressStore = 50;
-				} else {
-					progressStore.set(50);
-				}
-			} catch (error) {
-				toast.error('Network Error');
-				console.error('Error:', error);
-			}
+			// 		aiSuggestions.set(await suggestions);
+			// 		$progressStore = 50;
+			// 	} else {
+			// 		progressStore.set(50);
+			// 	}
+			// } catch (error) {
+			// 	toast.error('Network Error');
+			// 	console.error('Error:', error);
+			// }
 		}
 	}
 </script>
@@ -138,9 +152,9 @@
 					suggestion.correctionType === 'gfl' &&
 						'border-violet-500 bg-gradient-to-t from-purple-700 to-violet-300 p-[1px] transition-all ease-in-out hover:border-violet-700 hover:from-violet-700 hover:to-violet-200'
 				)}
-				onclick={() => {
-					removeMe(index);
-					jempoyMoves(suggestion.correctionType);
+				onclick={async () => {
+					await removeMe(index);
+					await jempoyMoves(suggestion.correctionType);
 				}}
 			>
 				<span
