@@ -46,7 +46,7 @@
 				>
 			</Card.Title>
 		</Card.Header>
-		<Card.Content class="px-2 pt-2 pb-0">
+		<Card.Content class="px-2 pb-0 pt-2">
 			<p class="text-sm">
 				<span class="font-bold text-red-500">Original:&nbsp;</span>
 				{suggestion.originalText}
@@ -54,7 +54,6 @@
 			<p class="my-3 text-sm">
 				<span class="font-bold text-blue-500">Revision:&nbsp;</span>{suggestion.replacement}
 			</p>
-
 		</Card.Content>
 		<Card.Footer class="flex flex-col items-center justify-start gap-2 p-3 py-2">
 			<button

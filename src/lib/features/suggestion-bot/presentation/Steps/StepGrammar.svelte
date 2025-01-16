@@ -3,6 +3,8 @@
 	import { Button } from '$lib/components/ui/button';
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
 	import SuggestionCard from './SuggestionCard.svelte';
+	import { get } from 'svelte/store';
+
 	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 	// import { textContent } from '$lib/stores/textFromEditorStore';
@@ -37,6 +39,7 @@
 		$replaceStore = [$aiSuggestions[index]];
 		$aiSuggestions.splice(index, 1);
 		suggestionsReference.splice(index, 1);
+		const payload = get(textContent);
 
 		// FOR DEPLOYMENT
 		try {
@@ -45,11 +48,10 @@
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ prompt: $textContent })
+				body: JSON.stringify({ prompt: payload })
 			});
 
 			const data = await post.json();
-			console.log(data);
 			$revisedTextStore = await (data.revised_text as string);
 			if (Object.keys(data).length !== 0) {
 				const suggestions: Promise<TSuggestion[]> = data.corrections.map(
