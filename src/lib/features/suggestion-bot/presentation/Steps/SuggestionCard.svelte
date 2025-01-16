@@ -3,6 +3,26 @@
 	import { Button } from '$lib/components/ui/button';
 	import { cn } from '$lib/utils';
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
+	import { revisedTextStore } from '$lib/stores/revisedTextStore';
+	import { aiSuggestions } from '$lib/stores/lintingStore';
+	import { progressStore } from '$lib/stores/progressStore';
+	import { toast } from 'svelte-sonner';
+	import { get } from 'svelte/store';
+	import { textContent } from '$lib/stores/textFromEditorStore';
+	function isStringOrArrayOfStrings(value: string | string[]) {
+		// It's a string
+		if (typeof value === 'string') {
+			return value;
+		}
+
+		//  && value.every((item) => typeof item === 'string')
+		// It's an array of strings
+		if (Array.isArray(value)) {
+			return value[0];
+		}
+		// It's neither a string nor an array of strings
+		return false;
+	}
 
 	let isCompact = $state<boolean>(false);
 	let {
@@ -16,6 +36,58 @@
 		index: number;
 		ignoreMe: (index: number) => void;
 	} = $props();
+
+	async function jempoyMoves(bruh: string) {
+		if (bruh == 'grammar') {
+			console.log('BOBBO' + $textContent);
+
+			// FOR DEPLOYMENT
+			try {
+				const post = await fetch('http://127.0.0.1:8080/grammar', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ prompt: $textContent })
+				});
+
+				const data = await post.json();
+				$revisedTextStore = await (data.revised_text as string);
+				console.log('FETCHING ' + $textContent);
+				console.log(data);
+
+				if (Object.keys(data).length !== 0) {
+					const suggestions: Promise<TSuggestion[]> = data.corrections.map(
+						(correction: {
+							word_index: number;
+							character_offset: number;
+							character_endset: number;
+							original_text: string;
+							message: string;
+							replacements: string[];
+						}) => ({
+							indexReplacement: correction.word_index,
+							originalText: correction.original_text,
+							offSet: correction.character_offset,
+							endSet: correction.character_endset,
+							replacement: isStringOrArrayOfStrings(correction.replacements),
+							correctionType: 'grammar',
+							message: correction.message,
+							rational: ''
+						})
+					);
+
+					aiSuggestions.set(await suggestions);
+					$progressStore = 50;
+				} else {
+					progressStore.set(50);
+				}
+			} catch (error) {
+				toast.error('Network Error');
+				console.error('Error:', error);
+			}
+		}
+	}
 </script>
 
 <Card.Root class="my-3">
@@ -46,7 +118,7 @@
 				>
 			</Card.Title>
 		</Card.Header>
-		<Card.Content class="px-2 pt-2 pb-0">
+		<Card.Content class="px-2 pb-0 pt-2">
 			<p class="text-sm">
 				<span class="font-bold text-red-500">Original:&nbsp;</span>
 				{suggestion.originalText}
@@ -54,7 +126,6 @@
 			<p class="my-3 text-sm">
 				<span class="font-bold text-blue-500">Revision:&nbsp;</span>{suggestion.replacement}
 			</p>
-
 		</Card.Content>
 		<Card.Footer class="flex flex-col items-center justify-start gap-2 p-3 py-2">
 			<button
@@ -67,7 +138,10 @@
 					suggestion.correctionType === 'gfl' &&
 						'border-violet-500 bg-gradient-to-t from-purple-700 to-violet-300 p-[1px] transition-all ease-in-out hover:border-violet-700 hover:from-violet-700 hover:to-violet-200'
 				)}
-				onclick={() => removeMe(index)}
+				onclick={() => {
+					removeMe(index);
+					jempoyMoves(suggestion.correctionType);
+				}}
 			>
 				<span
 					class={cn(
