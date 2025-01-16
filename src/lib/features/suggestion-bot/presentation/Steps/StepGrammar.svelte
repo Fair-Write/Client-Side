@@ -21,6 +21,7 @@
 
 	let isLoading = $state(false);
 
+
 	function removeMe(index: number) {
 		$replaceStore = [$aiSuggestions[index]];
 		$aiSuggestions.splice(index, 1);
