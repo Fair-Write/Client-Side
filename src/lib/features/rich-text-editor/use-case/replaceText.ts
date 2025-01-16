@@ -6,6 +6,9 @@ import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggesti
 // todo: rework this what you have to do is find the node that contains the exact word
 import { getWordIndices } from '$lib/utils';
 import { textContent } from '$lib/stores/textFromEditorStore';
+
+import { get } from 'svelte/store';
+
 export function replaceWordInDocument(
 	editorState: EditorState,
 	dispatch: (tr: Transaction) => void,
@@ -39,8 +42,10 @@ export function replaceWordInDocument(
 	// Apply the transaction if there were changes
 	if (transaction.docChanged) {
 		dispatch(transaction);
-		console.log("BAR" + transaction.doc.textContent);
-
+		console.log("REPLACE" + transaction.doc.textContent);
 		textContent.set(transaction.doc.textContent)
+		console.log("After" + get(textContent));
+
+
 	}
 }
