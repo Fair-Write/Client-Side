@@ -18,18 +18,6 @@
 	let isEmpty = $derived(suggestionsReference.length != 0);
 	let isLoading = $state(false);
 
-	function isStringOrArrayOfStrings(value: string | string[]) {
-		if (typeof value === 'string') {
-			return value; // It's a string
-		}
-
-		if (Array.isArray(value)) {
-			return value[0]; // It's an array of strings
-		}
-
-		return false; // It's neither a string nor an array of strings
-	}
-
 	async function removeMe(index: number) {
 		$replaceStore = [$aiSuggestions[index]];
 		$aiSuggestions.splice(index, 1);
