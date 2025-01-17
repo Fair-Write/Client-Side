@@ -100,6 +100,7 @@
 				toast.error('Network Error');
 				console.error('Error:', error);
 			}
+    
 		} else if (bruh == 'gfl') {
 			try {
 				const post = await fetch('http://127.0.0.1:8080/gfl', {

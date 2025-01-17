@@ -26,6 +26,7 @@
 		$aiSuggestions.splice(index, 1);
 		suggestionsReference.splice(index, 1);
 	}
+                      
 	function applyAllChanges() {
 		// $replaceStore = $aiSuggestions.map((suggestion) => {
 		// 	return suggestion;
