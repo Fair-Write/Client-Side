@@ -41,15 +41,14 @@
 	}
 
 	function reconfigureAllPlugins(): void {
-		if (!view) throw new Error('Editorview not defined');
+		if (view != null) {
+			linterPlugin = createLinterPlugin($aiSuggestions);
+			const state = view.state.reconfigure({
+				plugins: [linterPlugin, keymap(baseKeymap), myKeymap, placeholder('Type your text here')]
+			});
 
-		linterPlugin = createLinterPlugin($aiSuggestions);
-
-		const state = view.state.reconfigure({
-			plugins: [linterPlugin, keymap(baseKeymap), myKeymap, placeholder('Type your text here')]
-		});
-
-		view.updateState(state);
+			view.updateState(state);
+		}
 	}
 
 	$effect(() => {

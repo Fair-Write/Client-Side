@@ -100,6 +100,50 @@
 				toast.error('Network Error');
 				console.error('Error:', error);
 			}
+    
+		} else if (bruh == 'gfl') {
+			try {
+				const post = await fetch('http://127.0.0.1:8080/gfl', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ prompt: $textContent })
+				});
+
+				const data = await post.json();
+				console.log(data.data.revised_text);
+				$revisedTextStore = await (data.revised_text as string);
+
+				if (Object.keys(data).length !== 0) {
+					let suggestions: Promise<TSuggestion[]> = data.corrections.map(
+						(correction: {
+							word_index: number;
+							character_offset: number;
+							character_endset: number;
+							original_text: string;
+							message: string;
+							replacements: string[];
+						}) => ({
+							indexReplacement: correction.word_index,
+							originalText: correction.original_text,
+							offSet: correction.character_offset,
+							endSet: correction.character_endset,
+							replacement: isStringOrArrayOfStrings(correction.replacements),
+							correctionType: 'gfl',
+							message: correction.message,
+							rational: ''
+						})
+					);
+
+					$aiSuggestions = await suggestions;
+					console.log($aiSuggestions);
+				} else {
+				}
+			} catch (error) {
+				toast.error('An Error Has Occured');
+				console.error('Error:', error);
+			}
 		}
 	}
 </script>

@@ -54,26 +54,25 @@
 
 	// when stores has changed, the plugins must be reconfigured
 	function reconfigureAllPlugins(): void {
-		if (!view) throw new Error('Editorview not defined');
+		if (view != null) {
+			linterPlugin = createLinterPlugin($aiSuggestions);
+			const state = view.state.reconfigure({
+				plugins: [
+					linterPlugin,
+					history(),
+					keymap(baseKeymap),
+					myKeymap,
+					placeholder('Type your text here')
+				]
+			});
 
-		linterPlugin = createLinterPlugin($aiSuggestions);
-
-		const state = view.state.reconfigure({
-			plugins: [
-				linterPlugin,
-				history(),
-				keymap(baseKeymap),
-				myKeymap,
-				placeholder('Type your text here')
-			]
-		});
-
-		view.updateState(state);
+			view.updateState(state);
+		}
 	}
 
 	$effect(() => {
 		if (aiSuggestions) {
-			if (view != null) reconfigureAllPlugins();
+			reconfigureAllPlugins();
 		}
 	});
 
@@ -103,6 +102,7 @@
 
 			$replaceStore = [];
 			resetHistory();
+			reconfigureAllPlugins();
 		}
 	});
 

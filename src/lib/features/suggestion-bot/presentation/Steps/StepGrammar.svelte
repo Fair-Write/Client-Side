@@ -21,14 +21,12 @@
 
 	let isLoading = $state(false);
 
-
-
 	function removeMe(index: number) {
 		$replaceStore = [$aiSuggestions[index]];
 		$aiSuggestions.splice(index, 1);
 		suggestionsReference.splice(index, 1);
-    
 	}
+                      
 	function applyAllChanges() {
 		// $replaceStore = $aiSuggestions.map((suggestion) => {
 		// 	return suggestion;
@@ -43,10 +41,14 @@
 	function ignoreMe(index: number) {
 		$aiSuggestions.splice(index, 1);
 		suggestionsReference.splice(index, 1);
+		// THIS IS FUCKING STUPID! WHY DO YOU HAVE TO REINSTANTIATE
+		$aiSuggestions = [...$aiSuggestions];
 	}
 
 	$effect(() => {
 		if ($aiSuggestions) {
+			console.log('BAR');
+
 			suggestionsReference = $aiSuggestions;
 		}
 	});
