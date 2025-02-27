@@ -20,6 +20,7 @@
 	} from 'lucide-svelte';
 
 	let { view, mySchema }: { view: EditorView; mySchema: Schema } = $props();
+	let currentFontSize = $state('16px'); // Default font size
 
 	function setFontSize(size: string) {
 		if (!view) return;
@@ -32,8 +33,26 @@
 		if (node.type === mySchema.nodes.paragraph || node.type === mySchema.nodes.heading) {
 			const attrs = { ...node.attrs, fontSize: size };
 			setBlockType(node.type, attrs)(state, dispatch);
+			currentFontSize = size; // Update the current font size
 		}
 	}
+
+	// Function to update the current font size based on the selection
+	function updateCurrentFontSize() {
+		if (!view) return;
+
+		const { state } = view;
+		const { $from: selectionFrom } = state.selection;
+		const node = selectionFrom.node(selectionFrom.depth);
+
+		if (node.type === mySchema.nodes.paragraph || node.type === mySchema.nodes.heading) {
+			currentFontSize = node.attrs.fontSize || '16px';
+		}
+	}
+
+	// Add an event listener to update the current font size whenever the selection changes
+	view.dom.addEventListener('mouseup', updateCurrentFontSize);
+	view.dom.addEventListener('keyup', updateCurrentFontSize);
 
 	function toggleHeading(level: number) {
 		if (!view) return;
@@ -77,6 +96,8 @@
 </script>
 
 <div class="hidden items-center justify-center gap-3 lg:flex">
+	<!-- Display current font size -->
+
 	<!-- Heading -->
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger>
@@ -96,7 +117,8 @@
 	<!-- Font Size -->
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger>
-			<Button variant="secondary" class="rounded-md">Font Size <ChevronDown /></Button>
+			<Button variant="secondary" class="rounded-md">Size: {currentFontSize} <ChevronDown /></Button
+			>
 		</DropdownMenu.Trigger>
 		<DropdownMenu.Content>
 			<DropdownMenu.Group>
