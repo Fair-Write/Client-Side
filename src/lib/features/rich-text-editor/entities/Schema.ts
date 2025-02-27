@@ -9,7 +9,11 @@ const mySchema = new Schema({
 			group: 'inline'
 		},
 		paragraph: {
-			attrs: { align: { default: 'left' }, fontSize: { default: '16px' } },
+			attrs: {
+				align: { default: 'left' },
+				fontSize: { default: '16px' },
+				fontFamily: { default: 'Arial' }
+			},
 			content: 'inline*',
 			group: 'block',
 			parseDOM: [
@@ -18,7 +22,8 @@ const mySchema = new Schema({
 					getAttrs(dom) {
 						return {
 							align: dom.style.textAlign || 'left',
-							fontSize: dom.style.fontSize || '16px'
+							fontSize: dom.style.fontSize || '16px',
+							fontFamily: dom.style.fontFamily || 'Arial'
 						};
 					}
 				}
@@ -26,13 +31,20 @@ const mySchema = new Schema({
 			toDOM(node) {
 				return [
 					'p',
-					{ style: `text-align: ${node.attrs.align}; font-size: ${node.attrs.fontSize};` },
+					{
+						style: `text-align: ${node.attrs.align}; font-size: ${node.attrs.fontSize}; font-family: ${node.attrs.fontFamily};`
+					},
 					0
 				];
 			}
 		},
 		heading: {
-			attrs: { level: { default: 1 }, align: { default: 'left' }, fontSize: { default: '24px' } },
+			attrs: {
+				level: { default: 1 },
+				align: { default: 'left' },
+				fontSize: { default: '24px' },
+				fontFamily: { default: 'Arial' }
+			},
 			content: 'inline*',
 			group: 'block',
 			defining: true,
@@ -43,7 +55,8 @@ const mySchema = new Schema({
 						return {
 							level: 1,
 							align: dom.style.textAlign || 'left',
-							fontSize: dom.style.fontSize || '24px'
+							fontSize: dom.style.fontSize || '24px',
+							fontFamily: dom.style.fontFamily || 'Arial'
 						};
 					}
 				},
@@ -53,7 +66,8 @@ const mySchema = new Schema({
 						return {
 							level: 2,
 							align: dom.style.textAlign || 'left',
-							fontSize: dom.style.fontSize || '20px'
+							fontSize: dom.style.fontSize || '20px',
+							fontFamily: dom.style.fontFamily || 'Arial'
 						};
 					}
 				},
@@ -63,7 +77,8 @@ const mySchema = new Schema({
 						return {
 							level: 3,
 							align: dom.style.textAlign || 'left',
-							fontSize: dom.style.fontSize || '18px'
+							fontSize: dom.style.fontSize || '18px',
+							fontFamily: dom.style.fontFamily || 'Arial'
 						};
 					}
 				}
@@ -71,7 +86,9 @@ const mySchema = new Schema({
 			toDOM(node) {
 				return [
 					'h' + node.attrs.level,
-					{ style: `text-align: ${node.attrs.align}; font-size: ${node.attrs.fontSize};` },
+					{
+						style: `text-align: ${node.attrs.align}; font-size: ${node.attrs.fontSize}; font-family: ${node.attrs.fontFamily};`
+					},
 					0
 				];
 			}

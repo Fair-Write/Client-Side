@@ -21,20 +21,39 @@
 
 	let { view, mySchema }: { view: EditorView; mySchema: Schema } = $props();
 	let currentFontSize = $state('16px'); // Default font size
-
+	let currentFontFamily = $state('Arial'); // Default font family
 	function setFontSize(size: string) {
 		if (!view) return;
 		console.log('setFontSize', size);
 
 		const { state, dispatch } = view;
-		const { $from: selectionFrom } = state.selection;
-		const node = selectionFrom.node(selectionFrom.depth);
+		const { from, to } = state.selection;
 
-		if (node.type === mySchema.nodes.paragraph || node.type === mySchema.nodes.heading) {
-			const attrs = { ...node.attrs, fontSize: size };
-			setBlockType(node.type, attrs)(state, dispatch);
-			currentFontSize = size; // Update the current font size
-		}
+		state.doc.nodesBetween(from, to, (node, pos) => {
+			if (node.type === mySchema.nodes.paragraph || node.type === mySchema.nodes.heading) {
+				const attrs = { ...node.attrs, fontSize: size };
+				setBlockType(node.type, attrs)(state, dispatch);
+			}
+		});
+
+		currentFontSize = size; // Update the current font size
+	}
+
+	function setFontFamily(fontFamily: string) {
+		if (!view) return;
+		console.log('setFontFamily', fontFamily);
+
+		const { state, dispatch } = view;
+		const { from, to } = state.selection;
+
+		state.doc.nodesBetween(from, to, (node, pos) => {
+			if (node.type === mySchema.nodes.paragraph || node.type === mySchema.nodes.heading) {
+				const attrs = { ...node.attrs, fontFamily: fontFamily };
+				setBlockType(node.type, attrs)(state, dispatch);
+			}
+		});
+
+		currentFontFamily = fontFamily; // Update the current font family
 	}
 
 	// Function to update the current font size based on the selection
@@ -47,6 +66,7 @@
 
 		if (node.type === mySchema.nodes.paragraph || node.type === mySchema.nodes.heading) {
 			currentFontSize = node.attrs.fontSize || '16px';
+			currentFontFamily = node.attrs.fontFamily || 'Arial';
 		}
 	}
 
@@ -135,6 +155,30 @@
 				<DropdownMenu.Item onclick={() => setFontSize('28pt')}>28</DropdownMenu.Item>
 				<DropdownMenu.Item onclick={() => setFontSize('32pt')}>32</DropdownMenu.Item>
 				<DropdownMenu.Item onclick={() => setFontSize('36pt')}>36</DropdownMenu.Item>
+			</DropdownMenu.Group>
+		</DropdownMenu.Content>
+	</DropdownMenu.Root>
+
+	<!-- Font Family -->
+	<DropdownMenu.Root>
+		<DropdownMenu.Trigger>
+			<Button variant="secondary" class="rounded-md"
+				>Font: {currentFontFamily} <ChevronDown /></Button
+			>
+		</DropdownMenu.Trigger>
+		<DropdownMenu.Content>
+			<DropdownMenu.Group>
+				<DropdownMenu.Label>Font Families</DropdownMenu.Label>
+				<DropdownMenu.Separator />
+				<DropdownMenu.Item onclick={() => setFontFamily('Arial')}>Arial</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontFamily('Times New Roman')}
+					>Times New Roman</DropdownMenu.Item
+				>
+				<DropdownMenu.Item onclick={() => setFontFamily('Courier New')}
+					>Courier New</DropdownMenu.Item
+				>
+				<DropdownMenu.Item onclick={() => setFontFamily('Georgia')}>Georgia</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontFamily('Verdana')}>Verdana</DropdownMenu.Item>
 			</DropdownMenu.Group>
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>
