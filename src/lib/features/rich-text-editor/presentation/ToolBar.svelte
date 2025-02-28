@@ -20,6 +20,59 @@
 	} from 'lucide-svelte';
 
 	let { view, mySchema }: { view: EditorView; mySchema: Schema } = $props();
+	let currentFontSize = $state('16px'); // Default font size
+	let currentFontFamily = $state('Arial'); // Default font family
+	function setFontSize(size: string) {
+		if (!view) return;
+		console.log('setFontSize', size);
+
+		const { state, dispatch } = view;
+		const { from, to } = state.selection;
+
+		state.doc.nodesBetween(from, to, (node, pos) => {
+			if (node.type === mySchema.nodes.paragraph || node.type === mySchema.nodes.heading) {
+				const attrs = { ...node.attrs, fontSize: size };
+				setBlockType(node.type, attrs)(state, dispatch);
+			}
+		});
+
+		currentFontSize = size; // Update the current font size
+	}
+
+	function setFontFamily(fontFamily: string) {
+		if (!view) return;
+		console.log('setFontFamily', fontFamily);
+
+		const { state, dispatch } = view;
+		const { from, to } = state.selection;
+
+		state.doc.nodesBetween(from, to, (node, pos) => {
+			if (node.type === mySchema.nodes.paragraph || node.type === mySchema.nodes.heading) {
+				const attrs = { ...node.attrs, fontFamily: fontFamily };
+				setBlockType(node.type, attrs)(state, dispatch);
+			}
+		});
+
+		currentFontFamily = fontFamily; // Update the current font family
+	}
+
+	// Function to update the current font size based on the selection
+	function updateCurrentFontSize() {
+		if (!view) return;
+
+		const { state } = view;
+		const { $from: selectionFrom } = state.selection;
+		const node = selectionFrom.node(selectionFrom.depth);
+
+		if (node.type === mySchema.nodes.paragraph || node.type === mySchema.nodes.heading) {
+			currentFontSize = node.attrs.fontSize || '16px';
+			currentFontFamily = node.attrs.fontFamily || 'Arial';
+		}
+	}
+
+	// Add an event listener to update the current font size whenever the selection changes
+	view.dom.addEventListener('mouseup', updateCurrentFontSize);
+	view.dom.addEventListener('keyup', updateCurrentFontSize);
 
 	function toggleHeading(level: number) {
 		if (!view) return;
@@ -52,8 +105,8 @@
 	function setTextAlign(align: string) {
 		if (!view) return;
 		const { state, dispatch } = view;
-		const { $from: selectioFrom } = state.selection;
-		const node = selectioFrom.node(selectioFrom.depth);
+		const { $from: selectionFrom } = state.selection;
+		const node = selectionFrom.node(selectionFrom.depth);
 
 		if (node.type === mySchema.nodes.paragraph || node.type === mySchema.nodes.heading) {
 			const attrs = { ...node.attrs, align };
@@ -62,14 +115,13 @@
 	}
 </script>
 
-<div class="lg:flex items-center justify-center gap-3 hidden">
+<div class="hidden items-center justify-center gap-3 lg:flex">
+	<!-- Display current font size -->
+
 	<!-- Heading -->
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger>
-			<Button variant="secondary" class=" rounded-md"
-				>H
-				<ChevronDown />
-			</Button>
+			<Button variant="secondary" class="rounded-md">H <ChevronDown /></Button>
 		</DropdownMenu.Trigger>
 		<DropdownMenu.Content>
 			<DropdownMenu.Group>
@@ -81,13 +133,62 @@
 			</DropdownMenu.Group>
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>
+
+	<!-- Font Size -->
+	<DropdownMenu.Root>
+		<DropdownMenu.Trigger>
+			<Button variant="secondary" class="rounded-md">Size: {currentFontSize} <ChevronDown /></Button
+			>
+		</DropdownMenu.Trigger>
+		<DropdownMenu.Content>
+			<DropdownMenu.Group>
+				<DropdownMenu.Label>Font Sizes</DropdownMenu.Label>
+				<DropdownMenu.Separator />
+				<DropdownMenu.Item onclick={() => setFontSize('8pt')}>8</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontSize('10pt')}>10</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontSize('12pt')}>12</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontSize('14pt')}>14</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontSize('16pt')}>16</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontSize('18pt')}>18</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontSize('20pt')}>20</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontSize('24pt')}>24</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontSize('28pt')}>28</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontSize('32pt')}>32</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontSize('36pt')}>36</DropdownMenu.Item>
+			</DropdownMenu.Group>
+		</DropdownMenu.Content>
+	</DropdownMenu.Root>
+
+	<!-- Font Family -->
+	<DropdownMenu.Root>
+		<DropdownMenu.Trigger>
+			<Button variant="secondary" class="rounded-md"
+				>Font: {currentFontFamily} <ChevronDown /></Button
+			>
+		</DropdownMenu.Trigger>
+		<DropdownMenu.Content>
+			<DropdownMenu.Group>
+				<DropdownMenu.Label>Font Families</DropdownMenu.Label>
+				<DropdownMenu.Separator />
+				<DropdownMenu.Item onclick={() => setFontFamily('Arial')}>Arial</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontFamily('Times New Roman')}
+					>Times New Roman</DropdownMenu.Item
+				>
+				<DropdownMenu.Item onclick={() => setFontFamily('Courier New')}
+					>Courier New</DropdownMenu.Item
+				>
+				<DropdownMenu.Item onclick={() => setFontFamily('Georgia')}>Georgia</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontFamily('Verdana')}>Verdana</DropdownMenu.Item>
+			</DropdownMenu.Group>
+		</DropdownMenu.Content>
+	</DropdownMenu.Root>
+
 	<!-- Styles -->
 	<div class="border-x border-solid border-stone-300 px-1">
 		<Tooltip.Provider>
 			<Tooltip.Root>
 				<Tooltip.Trigger>
-					<Button size="icon" class="h-8 w-8 " variant="ghost" onclick={toggleBold}><Bold /></Button
-					>
+					<Button size="icon" class="h-8 w-8" variant="ghost" onclick={toggleBold}><Bold /></Button>
 				</Tooltip.Trigger>
 				<Tooltip.Content>
 					<p class="text-sm text-muted-foreground">Bold</p>
@@ -121,6 +222,7 @@
 			</Tooltip.Root>
 		</Tooltip.Provider>
 	</div>
+
 	<!-- alignment -->
 	<div class="border-r border-solid border-stone-300 px-1">
 		<!-- Justify -->
@@ -155,7 +257,6 @@
 		</Tooltip.Provider>
 
 		<!-- Align Right -->
-
 		<Tooltip.Provider>
 			<Tooltip.Root>
 				<Tooltip.Trigger>
@@ -169,8 +270,9 @@
 			</Tooltip.Root>
 		</Tooltip.Provider>
 	</div>
+
 	<!-- history -->
-	<div class="">
+	<div>
 		<!-- Undo -->
 		<Tooltip.Provider>
 			<Tooltip.Root>
