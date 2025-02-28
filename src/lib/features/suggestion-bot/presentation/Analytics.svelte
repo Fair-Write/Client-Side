@@ -4,16 +4,30 @@
 	import Gauge from '$lib/features/suggestion-bot/presentation/Steps/Gauge.svelte';
 	import ExportButton from '$lib/features/suggestion-bot/presentation/Utils/ExportButton.svelte';
 	import { GLFScore } from '$lib/stores/omegaLOL';
+	import { textContent } from '$lib/stores/textFromEditorStore';
 
 	let { backToTheStart }: { backToTheStart: () => void } = $props();
+
+	function getTheDifferential(wrong: number, total: number) {
+		if (total == 0) {
+			return 0;
+		}
+
+		return wrong / total;
+	}
+
+	let difference = $derived.by(() => {
+		return getTheDifferential($GLFScore, $textContent.length);
+	});
+
 	let doubled = $derived.by(() => {
-		if ($GLFScore === 0) {
+		if (difference == 0) {
 			return 100;
-		} else if ($GLFScore >= 1 && $GLFScore <= 3) {
+		} else if (difference > 0 && difference <= 0.2) {
 			return 80;
-		} else if ($GLFScore > 2 && $GLFScore <= 5) {
+		} else if (difference > 0.2 && difference <= 0.5) {
 			return 50;
-		} else if ($GLFScore > 5 && $GLFScore <= 10) {
+		} else if (difference > 0.5 && difference <= 1) {
 			return 20;
 		} else {
 			return 0;
