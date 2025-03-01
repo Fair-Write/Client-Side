@@ -32,7 +32,7 @@ const mySchema = new Schema({
 				return [
 					'p',
 					{
-						style: `text-align: ${node.attrs.align}; font-size: ${node.attrs.fontSize}; font-family: ${node.attrs.fontFamily};`
+						style: `text-align: ${node.attrs.align}; font-size: ${node.attrs.fontSize}; font-family: ${node.attrs.fontFamily}; `
 					},
 					0
 				];
@@ -87,7 +87,7 @@ const mySchema = new Schema({
 				return [
 					'h' + node.attrs.level,
 					{
-						style: `text-align: ${node.attrs.align}; font-size: ${node.attrs.fontSize}; font-family: ${node.attrs.fontFamily};`
+						style: `text-align: ${node.attrs.align}; font-size: ${node.attrs.fontSize}; font-family: ${node.attrs.fontFamily}; font-weight:bold;`
 					},
 					0
 				];

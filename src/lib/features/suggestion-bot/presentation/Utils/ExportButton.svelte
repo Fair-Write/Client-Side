@@ -49,9 +49,15 @@
 					downloadDocx();
 				}}><p class="font-semibold">DOCX</p></DropdownMenu.Item
 			>
-			<DropdownMenu.Item class="w-full" onclick={() => exportStateAsPDF($textContentHTML)}
-				><p class="w-full font-semibold">PDF</p></DropdownMenu.Item
-			>
+			<DropdownMenu.Item
+				class="w-full"
+				onclick={() => {
+					console.log($textContentHTML);
+
+					exportStateAsPDF($textContentHTML);
+				}}
+				><p class="w-full font-semibold">PDF</p>
+			</DropdownMenu.Item>
 		</DropdownMenu.Group>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>

@@ -141,7 +141,8 @@
 		</svg>
 
 		<p class="text-center text-base">
-			{$GLFScore} out of {$textContent.length} word/s in the document were found as non-gender fair
+			{$GLFScore} out of {$textContent.split(' ').length} word/s in the document were found as non-gender
+			fair
 		</p>
 	</Card.Content>
 </Card.Root>

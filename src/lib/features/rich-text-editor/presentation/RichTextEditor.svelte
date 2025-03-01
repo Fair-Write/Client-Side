@@ -3,7 +3,7 @@
 
 	import { EditorState } from 'prosemirror-state';
 	import { EditorView } from 'prosemirror-view';
-	import { DOMParser } from 'prosemirror-model';
+	import { DOMParser, DOMSerializer } from 'prosemirror-model';
 	import { history, closeHistory } from 'prosemirror-history';
 
 	import { textContent, textContentHTML, textTitle } from '$lib/stores/textFromEditorStore';
@@ -127,7 +127,10 @@
 				const newState = view!.state.apply(transaction);
 				view!.updateState(newState);
 				$textContent = newState.doc.textContent.toString();
-				$textContentHTML = newState.doc.textContent;
+				const fragment = DOMSerializer.fromSchema(mySchema).serializeFragment(newState.doc.content);
+				const div = document.createElement('div');
+				div.appendChild(fragment);
+				$textContentHTML = div.innerHTML;
 			}
 		});
 		reconfigureAllPlugins();

@@ -6,6 +6,9 @@
 @tailwind utilities;
 
 @layer base {
+	img {
+		@apply inline-block;
+	}
 	:root {
 		--background: 0 0% 100%;
 		--foreground: 20 14.3% 4.1%;
@@ -111,7 +114,7 @@ body {
 	background-color: #a78bfa;
 	border-bottom: solid;
 	border-bottom-width: 2px;
-	border-bottom-color:#6d28d9;
+	border-bottom-color: #6d28d9;
 }
 .editor__paragraph .placeholder::before {
 	pointer-events: none;
