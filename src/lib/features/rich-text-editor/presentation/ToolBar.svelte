@@ -174,11 +174,7 @@
 				<DropdownMenu.Item onclick={() => setFontFamily('Times New Roman')}
 					>Times New Roman</DropdownMenu.Item
 				>
-				<DropdownMenu.Item onclick={() => setFontFamily('Courier New')}
-					>Courier New</DropdownMenu.Item
-				>
-				<DropdownMenu.Item onclick={() => setFontFamily('Georgia')}>Georgia</DropdownMenu.Item>
-				<DropdownMenu.Item onclick={() => setFontFamily('Verdana')}>Verdana</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontFamily('courier')}>Courier</DropdownMenu.Item>
 			</DropdownMenu.Group>
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>
