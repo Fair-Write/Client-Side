@@ -40,7 +40,7 @@
 
 	async function jempoyMoves(bruh: string) {
 		if (bruh == 'grammar') {
-			console.log('BOBO ' + foobar());
+			console.log(foobar());
 
 			// aiSuggestions.set([
 			// 	{
@@ -57,7 +57,7 @@
 
 			// FOR DEPLOYMENT
 			try {
-				const post = await fetch('http://127.0.0.1:8080/grammar', {
+				const post = await fetch('https://x3lkcvjr-80.asse.devtunnels.ms/grammar', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
@@ -100,10 +100,9 @@
 				toast.error('Network Error');
 				console.error('Error:', error);
 			}
-    
 		} else if (bruh == 'gfl') {
 			try {
-				const post = await fetch('http://127.0.0.1:8080/gfl', {
+				const post = await fetch('https://x3lkcvjr-80.asse.devtunnels.ms/gfl', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
