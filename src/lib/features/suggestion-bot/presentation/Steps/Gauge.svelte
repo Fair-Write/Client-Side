@@ -11,17 +11,21 @@
 	const dashArray = $derived(`${arc} ${circumference}`);
 	const transform = $derived(`rotate(140, ${radius}, ${radius})`);
 
-	const percentNormalized = $derived(Math.min(Math.max(percent, 0), 100));
+	const percentNormalized = $derived(Math.floor((1 - percent) * 100));
 	const offset = $derived(arc - (percentNormalized / 100) * arc);
 
 	const percentType = $derived.by(() => {
-		if (percent <= 45 && percent >= 0) {
+		console.log('percent', percent);
+
+		console.log('percent normalized', percentNormalized);
+
+		if (percentNormalized <= 45 && percentNormalized >= 0) {
 			return 'poor';
-		} else if (percent >= 50 && percent <= 70) {
+		} else if (percentNormalized >= 50 && percentNormalized <= 70) {
 			return 'average';
-		} else if (percent >= 80 && percent <= 89) {
+		} else if (percentNormalized >= 80 && percentNormalized <= 89) {
 			return 'good';
-		} else if (percent >= 90 && percent <= 100) {
+		} else if (percentNormalized >= 90 && percentNormalized <= 100) {
 			return 'excellent';
 		}
 	});
@@ -95,7 +99,7 @@
 				dominant-baseline="middle"
 				text-anchor="middle"
 			>
-				{percent}%</text
+				{percentNormalized}%</text
 			>
 
 			<text

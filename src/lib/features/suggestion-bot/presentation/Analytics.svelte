@@ -17,26 +17,26 @@
 	}
 
 	let difference = $derived.by(() => {
-		return getTheDifferential($GLFScore, $textContent.length);
+		return getTheDifferential($GLFScore, $textContent.split(' ').length);
 	});
 
-	let doubled = $derived.by(() => {
-		if (difference == 0) {
-			return 100;
-		} else if (difference > 0 && difference <= 0.2) {
-			return 80;
-		} else if (difference > 0.2 && difference <= 0.5) {
-			return 50;
-		} else if (difference > 0.5 && difference <= 1) {
-			return 20;
-		} else {
-			return 0;
-		}
-	});
+	// let doubled = $derived.by(() => {
+	// 	if (difference == 0) {
+	// 		return 100;
+	// 	} else if (difference > 0 && difference <= 0.2) {
+	// 		return 80;
+	// 	} else if (difference > 0.2 && difference <= 0.5) {
+	// 		return 50;
+	// 	} else if (difference > 0.5 && difference <= 1) {
+	// 		return 20;
+	// 	} else {
+	// 		return 0;
+	// 	}
+	// });
 </script>
 
 <div class="flex w-full flex-col items-center justify-stretch gap-2 pl-4">
-	<Gauge radius={100} percent={doubled}></Gauge>
+	<Gauge radius={100} percent={difference}></Gauge>
 
 	<Card.Root>
 		<Card.Header>

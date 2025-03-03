@@ -106,9 +106,12 @@ export async function glfCheckService(nextSlide: () => void) {
 				rationale: 'lorem ipsum somethign something'
 			}
 		]);
+
+		GLFScore.set(60);
 	}, 500);
 	nextSlide();
 	progressStore.set(100);
+
 	// For Deployment
 	// try {
 	// 	const post = await fetch('http://127.0.0.1:8080/gfl', {
