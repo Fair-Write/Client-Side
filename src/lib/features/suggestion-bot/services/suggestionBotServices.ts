@@ -7,7 +7,8 @@ import { GLFScore } from '$lib/stores/omegaLOL';
 import { revisedTextStore } from '$lib/stores/revisedTextStore';
 // import axiosInstance from '../../../../service/axios';
 import { toast } from 'svelte-sonner';
-
+import { preferenceStore } from '$lib/stores/preferenceStore';
+import { get } from 'svelte/store';
 // this may be the culprit
 function isStringOrArrayOfStrings(value: string | string[]) {
 	if (Array.isArray(value)) {
@@ -45,6 +46,7 @@ export async function grammarCheckService(nextSlide: () => void) {
 	// nextSlide();
 
 	// FOR DEPLOYMENT
+
 	try {
 		const post = await fetch('https://x3lkcvjr-80.asse.devtunnels.ms/grammar', {
 			method: 'POST',
@@ -112,6 +114,14 @@ export async function glfCheckService(nextSlide: () => void) {
 	// nextSlide();
 	// progressStore.set(100);
 
+	const preference = get(preferenceStore).reduce(
+		(acc: { [key: string]: string }, element: { name: string; pronoun: string }) => {
+			acc[element.name] = element.pronoun;
+			return acc;
+		},
+		{}
+	);
+
 	// For Deployment
 	try {
 		const post = await fetch('https://x3lkcvjr-80.asse.devtunnels.ms/gfl', {
@@ -120,7 +130,8 @@ export async function glfCheckService(nextSlide: () => void) {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				prompt: get(textContent)
+				prompt: get(textContent),
+				pronoun_map: preference
 			})
 		});
 		const data = await post.json();
