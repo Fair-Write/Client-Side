@@ -98,7 +98,7 @@
 							<Select.Content>
 								<Select.Item value="male">Male</Select.Item>
 								<Select.Item value="female">Female</Select.Item>
-								<Select.Item value="neutral">Neutral</Select.Item>
+								<Select.Item value="gender_fair">Neutral</Select.Item>
 							</Select.Content>
 						</Select.Root>
 					</div>
