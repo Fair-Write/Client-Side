@@ -8,7 +8,7 @@ import { revisedTextStore } from '$lib/stores/revisedTextStore';
 // import axiosInstance from '../../../../service/axios';
 import { toast } from 'svelte-sonner';
 import { preferenceStore } from '$lib/stores/preferenceStore';
-import { get } from 'svelte/store';
+
 // this may be the culprit
 function isStringOrArrayOfStrings(value: string | string[]) {
 	if (Array.isArray(value)) {
@@ -114,14 +114,25 @@ export async function glfCheckService(nextSlide: () => void) {
 	// nextSlide();
 	// progressStore.set(100);
 
-	const preference = get(preferenceStore).reduce(
-		(acc: { [key: string]: string }, element: { name: string; pronoun: string }) => {
-			acc[element.name] = element.pronoun;
-			return acc;
-		},
-		{}
-	);
-
+	// JSON.parse(localStorage.getItem('preferences') as string)
+	const preferenceList = () => {
+		if (get(preferenceStore).length === 0) {
+			return `{"Alex": "gender_fair","John": "male","Jane": "female"}`;
+		} else {
+			const preferences = JSON.parse(localStorage.getItem('preferences') as string) as {
+				name: string;
+				pronoun: string;
+			}[];
+			const preferenceMap = preferences.reduce(
+				(acc: { [key: string]: string }, element: { name: string; pronoun: string }) => {
+					acc[element.name] = element.pronoun;
+					return acc;
+				},
+				{}
+			);
+			return preferenceMap;
+		}
+	};
 	// For Deployment
 	try {
 		const post = await fetch('https://x3lkcvjr-80.asse.devtunnels.ms/gfl', {
@@ -131,12 +142,13 @@ export async function glfCheckService(nextSlide: () => void) {
 			},
 			body: JSON.stringify({
 				prompt: get(textContent),
-				pronoun_map: preference
+				pronoun_map: preferenceList()
 			})
 		});
+
 		const data = await post.json();
-		console.log(data);
 		await revisedTextStore.set(data.revised_text as string);
+
 		if (Object.keys(data).length !== 0) {
 			const suggestions: Promise<TSuggestion[]> = data.corrections.map(
 				(correction: {

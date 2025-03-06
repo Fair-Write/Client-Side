@@ -25,13 +25,15 @@
 		// refetch every remove omega lol
 	}
 	function applyAllChanges() {
-		// $replaceStore = $aiSuggestions.map((suggestion) => {
-		// 	return suggestion;
-		// });
+		$replaceStore = $aiSuggestions
+			.sort((a, b) => b.offSet - a.offSet) // Sort by offSet in ascending order
+			.map((suggestion) => {
+				return suggestion;
+			});
 
-		$textContent = $revisedTextStore;
-		$signalTextEditor = true;
-		console.log($textContent);
+		// $textContent = $revisedTextStore;
+		// $signalTextEditor = true;
+		// console.log($textContent);
 
 		$aiSuggestions = [];
 	}
