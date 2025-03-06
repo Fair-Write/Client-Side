@@ -117,7 +117,7 @@ export async function glfCheckService(nextSlide: () => void) {
 	// JSON.parse(localStorage.getItem('preferences') as string)
 	const preferenceList = () => {
 		if (get(preferenceStore).length === 0) {
-			return `{"Alex": "gender_fair","John": "male","Jane": "female"}`;
+			return `{"Nyala": "gender_fair"}`;
 		} else {
 			const preferences = JSON.parse(localStorage.getItem('preferences') as string) as {
 				name: string;
