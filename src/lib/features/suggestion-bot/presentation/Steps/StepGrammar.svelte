@@ -26,14 +26,14 @@
 		$aiSuggestions.splice(index, 1);
 		suggestionsReference.splice(index, 1);
 	}
-                      
+
 	function applyAllChanges() {
-		// $replaceStore = $aiSuggestions.map((suggestion) => {
-		// 	return suggestion;
-		// });
-		$textContent = $revisedTextStore;
-		console.log($textContent);
-		$signalTextEditor = true;
+		$replaceStore = $aiSuggestions.reverse().map((suggestion) => {
+			return suggestion;
+		});
+		// $textContent = $revisedTextStore;
+		// console.log($textContent);
+		// $signalTextEditor = true;
 
 		$aiSuggestions = [];
 	}

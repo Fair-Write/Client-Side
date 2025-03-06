@@ -18,6 +18,9 @@
 		// gets preferences
 		if (localStorage.getItem('preferences')) {
 			preferences = JSON.parse(localStorage.getItem('preferences') as string);
+			$preferenceStore = JSON.parse(localStorage.getItem('preferences') as string);
+			console.log('preferences', preferences);
+			console.log('preferenceStore', $preferenceStore);
 		} else {
 			preferences = $preferenceStore;
 		}

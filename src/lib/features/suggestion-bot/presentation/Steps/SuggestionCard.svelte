@@ -10,6 +10,7 @@
 	import { get } from 'svelte/store';
 	import { textContent } from '$lib/stores/textFromEditorStore';
 	import { foobar } from '../../use-case/test';
+	import { preferenceStore } from '$lib/stores/preferenceStore';
 	function isStringOrArrayOfStrings(value: string | string[]) {
 		// It's a string
 		if (typeof value === 'string') {
@@ -101,13 +102,32 @@
 				console.error('Error:', error);
 			}
 		} else if (bruh == 'gfl') {
+			const preferenceList = () => {
+				if ($preferenceStore.length === 0) {
+					return `{"Nyala": "gender_fair"}`;
+				} else {
+					const preferences = JSON.parse(localStorage.getItem('preferences') as string) as {
+						name: string;
+						pronoun: string;
+					}[];
+					const preferenceMap = preferences.reduce(
+						(acc: { [key: string]: string }, element: { name: string; pronoun: string }) => {
+							acc[element.name] = element.pronoun;
+							return acc;
+						},
+						{}
+					);
+					return preferenceMap;
+				}
+			};
+
 			try {
 				const post = await fetch('https://x3lkcvjr-80.asse.devtunnels.ms/gfl', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify({ prompt: $textContent })
+					body: JSON.stringify({ prompt: $textContent, pronoun_map: preferenceList() })
 				});
 
 				const data = await post.json();
