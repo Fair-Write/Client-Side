@@ -48,7 +48,7 @@ export async function grammarCheckService(nextSlide: () => void) {
 	// FOR DEPLOYMENT
 
 	try {
-		const post = await fetch('https://x3lkcvjr-80.asse.devtunnels.ms/grammar', {
+		const post = await fetch('http://127.0.0.1/grammar', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -135,7 +135,7 @@ export async function glfCheckService(nextSlide: () => void) {
 	};
 	// For Deployment
 	try {
-		const post = await fetch('https://x3lkcvjr-80.asse.devtunnels.ms/gfl', {
+		const post = await fetch('http://127.0.0.1:80/gfl', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -173,6 +173,10 @@ export async function glfCheckService(nextSlide: () => void) {
 			aiSuggestions.set(await suggestions);
 			nextSlide();
 			progressStore.set(100);
+
+			console.log(data.revised_text);
+			console.log(data, 'hello');
+
 		} else {
 			progressStore.set(100);
 			nextSlide();

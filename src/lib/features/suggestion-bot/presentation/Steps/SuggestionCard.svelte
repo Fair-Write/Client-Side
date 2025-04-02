@@ -58,7 +58,7 @@
 
 			// FOR DEPLOYMENT
 			try {
-				const post = await fetch('https://x3lkcvjr-80.asse.devtunnels.ms/grammar', {
+				const post = await fetch('http://127.0.0.1:80/grammar', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
@@ -122,7 +122,7 @@
 			};
 
 			try {
-				const post = await fetch('https://x3lkcvjr-80.asse.devtunnels.ms/gfl', {
+				const post = await fetch('http://127.0.0.1:80/gfl', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
@@ -131,7 +131,7 @@
 				});
 
 				const data = await post.json();
-				console.log(data.data.revised_text);
+
 				$revisedTextStore = await (data.revised_text as string);
 
 				if (Object.keys(data).length !== 0) {
