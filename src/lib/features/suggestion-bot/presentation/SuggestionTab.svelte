@@ -9,7 +9,7 @@
 	import { progressStore } from '$lib/stores/progressStore';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import { buttonVariants } from '$lib/components/ui/button';
-	
+
 	import {
 		glfCheckService,
 		grammarCheckService
@@ -28,6 +28,14 @@
 	}
 
 	async function grammarPayload() {
+		await grammarCheckService(nextSlide);
+	}
+
+	async function goBackToGrammar() {
+		if (api) {
+			api.scrollTo(1);
+			$progressStore = 0;
+		}
 		await grammarCheckService(nextSlide);
 	}
 	// might export this as a service instead
@@ -80,7 +88,7 @@
 						><StepWrite nextSlide={grammarPayload}></StepWrite></Carousel.Item
 					>
 					<Carousel.Item class=""><StepGrammar nextSlide={glfPayload}></StepGrammar></Carousel.Item>
-					<Carousel.Item><StepGLF {nextSlide}></StepGLF></Carousel.Item>
+					<Carousel.Item><StepGLF {goBackToGrammar} {nextSlide}></StepGLF></Carousel.Item>
 					<Carousel.Item class="px-5"><Analytics {backToTheStart}></Analytics></Carousel.Item>
 				</Carousel.Content>
 			</Carousel.Root>
