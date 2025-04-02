@@ -18,6 +18,20 @@
 
 	let api = $state<CarouselAPI>();
 	let isSuggestionsTab = $state<boolean>(true);
+	let tabIndex = $derived.by(() => {
+		if (!isSuggestionsTab) {
+			if (!api) return 0;
+			return api.selectedScrollSnap();
+		}
+		return 0;
+	});
+
+	$effect(() => {
+		if (isSuggestionsTab) {
+			api?.scrollTo(tabIndex);
+		}
+	});
+
 	function nextSlide() {
 		if (api) {
 			api.scrollNext();
