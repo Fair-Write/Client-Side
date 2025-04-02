@@ -176,7 +176,6 @@ export async function glfCheckService(nextSlide: () => void) {
 
 			console.log(data.revised_text);
 			console.log(data, 'hello');
-
 		} else {
 			progressStore.set(100);
 			nextSlide();
