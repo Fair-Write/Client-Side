@@ -39,7 +39,10 @@
 		ignoreMe: (index: number) => void;
 	} = $props();
 
+	let isLoading = $state<boolean>(false);
+
 	async function jempoyMoves(bruh: string) {
+		isLoading = true;
 		if (bruh == 'grammar') {
 			console.log(foobar());
 
@@ -100,6 +103,8 @@
 			} catch (error) {
 				toast.error('Network Error');
 				console.error('Error:', error);
+			} finally {
+				isLoading = false;
 			}
 		} else if (bruh == 'gfl') {
 			const preferenceList = () => {
@@ -162,6 +167,8 @@
 			} catch (error) {
 				toast.error('An Error Has Occured');
 				console.error('Error:', error);
+			} finally {
+				isLoading = false;
 			}
 		}
 	}
@@ -206,6 +213,7 @@
 		</Card.Content>
 		<Card.Footer class="flex flex-col items-center justify-start gap-2 p-3 py-2">
 			<button
+				disabled={isLoading}
 				class={cn(
 					'flex w-full items-center justify-center rounded-[9px] border border-solid p-[1px]',
 					suggestion.correctionType === 'grammar' &&

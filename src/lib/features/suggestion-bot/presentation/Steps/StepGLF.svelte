@@ -13,7 +13,8 @@
 	import { signalTextEditor } from '$lib/stores/signalStore';
 	// import { toast } from 'svelte-sonner';
 
-	let { nextSlide }: { nextSlide: () => void } = $props();
+	let { nextSlide, goBackToGrammar }: { nextSlide: () => void; goBackToGrammar: () => void } =
+		$props();
 	let suggestionsReference = $state<TSuggestion[]>($aiSuggestions);
 	let isEmpty = $derived(suggestionsReference.length != 0);
 	let isLoading = $state(false);
@@ -78,6 +79,14 @@
 				onclick={() => {
 					applyAllChanges();
 				}}>Apply All Changes</Button
+			>
+			<Button
+				class="mt-2 w-full"
+				variant="outline"
+				disabled={!isEmpty || isLoading}
+				onclick={() => {
+					applyAllChanges();
+				}}>Check Grammar Again</Button
 			>
 		</Card.Content>
 
