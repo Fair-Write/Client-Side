@@ -18,13 +18,7 @@
 
 	let api = $state<CarouselAPI>();
 	let isSuggestionsTab = $state<boolean>(true);
-	let tabIndex = $derived.by(() => {
-		if (!isSuggestionsTab) {
-			if (!api) return 0;
-			return api.selectedScrollSnap();
-		}
-		return 0;
-	});
+	let tabIndex = $state<number>(0);
 
 	$effect(() => {
 		if (isSuggestionsTab) {
@@ -35,6 +29,7 @@
 	function nextSlide() {
 		if (api) {
 			api.scrollNext();
+			tabIndex = api.selectedScrollSnap();
 		}
 	}
 	function toPreferenceModule() {
