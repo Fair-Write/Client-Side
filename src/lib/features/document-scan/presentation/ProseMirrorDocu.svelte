@@ -3,7 +3,7 @@
 
 	import { EditorState } from 'prosemirror-state';
 	import { EditorView } from 'prosemirror-view';
-	import { DOMParser } from 'prosemirror-model';
+	import { DOMParser, DOMSerializer } from 'prosemirror-model';
 	import { cn } from '$lib/utils';
 	import { textContent, textContentHTML } from '$lib/stores/textFromEditorStore';
 	import mySchema from '$lib/features/rich-text-editor/entities/Schema';
@@ -36,6 +36,9 @@
 	// when stores has changed, the plugins must be reconfigured
 	function reinitializeText(view: EditorView) {
 		const node = view.state.schema.text($textContent);
+		const parser = new DOMParser(mySchema, []);
+		// i need to parse this
+		const contentDOM = parser.parse();
 		const tr = view.state.tr.replaceWith(0, view.state.doc.content.size, node);
 		view.dispatch(tr);
 	}
@@ -91,7 +94,12 @@
 				const newState = view!.state.apply(transaction);
 				view!.updateState(newState);
 				$textContent = newState.doc.textContent.toString();
-				$textContentHTML = newState.doc.textContent;
+
+				const fragment = DOMSerializer.fromSchema(mySchema).serializeFragment(newState.doc.content);
+				const div = document.createElement('div');
+				div.appendChild(fragment);
+
+				$textContentHTML = div.innerHTML;
 			}
 		});
 		reconfigureAllPlugins();
