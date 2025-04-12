@@ -20,8 +20,13 @@ export async function getTextFromPDF(file: File | null) {
 	const getPageText = async (pdf: PDFJS.PDFDocument, pageNo: number) => {
 		const page = await pdf.getPage(pageNo);
 		const tokenizedText = await page.getTextContent();
+		console.log('TEXT', tokenizedText);
 
-		return tokenizedText.items.map((token) => token.str).join('');
+		return tokenizedText.items
+			.map((token) => {
+				return `<p>${token.str}</p>`;
+			})
+			.join('');
 	};
 
 	const getPDFText = async (source: ArrayBuffer): Promise<string> => {
@@ -49,6 +54,6 @@ export async function getTextFromPDF(file: File | null) {
 
 		return await getPDFText(pdfBuffer);
 	} catch (err) {
-	throw new Error(`Could not get PDF text from PDF: ${err}`);
+		throw new Error(`Could not get PDF text from PDF: ${err}`);
 	}
 }
