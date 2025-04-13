@@ -6,6 +6,7 @@
 	import { undo, redo } from 'prosemirror-history';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
+	import { wrapInList } from 'prosemirror-schema-list';
 
 	import {
 		AlignCenter,
@@ -14,6 +15,7 @@
 		Bold,
 		ChevronDown,
 		Italic,
+		List,
 		Pilcrow,
 		Redo2,
 		Undo2
@@ -112,6 +114,31 @@
 			const attrs = { ...node.attrs, align };
 			setBlockType(node.type, attrs)(state, dispatch);
 		}
+	}
+	function toggleBulletList() {
+		if (!view) return false;
+		return wrapInList(mySchema.nodes.bullet_list)(view.state, view.dispatch, view);
+	}
+
+	function isInbulletList() {
+		if (!view) return false;
+		const { state } = view;
+		const { from, to } = state.selection;
+		let isInList = false;
+
+		state.doc.nodesBetween(from, to, (node) => {
+			if (node.type === mySchema.nodes.bullet_list) {
+				isInList = true;
+				return false;
+			}
+		});
+
+		return isInList;
+	}
+
+	function canApplyBulletList() {
+		if (!view) return false;
+		return wrapInList(mySchema.nodes.bullet_list)(view.state);
 	}
 </script>
 
@@ -267,6 +294,25 @@
 		</Tooltip.Provider>
 	</div>
 
+	<!-- bullet -->
+
+	<Tooltip.Provider>
+		<Tooltip.Root>
+			<Tooltip.Trigger>
+				<Button
+					size="icon"
+					variant="ghost"
+					disabled={!canApplyBulletList()}
+					onclick={() => toggleBulletList()}
+				>
+					<List></List>
+				</Button>
+			</Tooltip.Trigger>
+			<Tooltip.Content>
+				<p>Undo</p>
+			</Tooltip.Content>
+		</Tooltip.Root>
+	</Tooltip.Provider>
 	<!-- history -->
 	<div>
 		<!-- Undo -->
