@@ -92,6 +92,21 @@ const mySchema = new Schema({
 					0
 				];
 			}
+		},
+		bullet_list: {
+			group: 'block',
+			content: 'list_item+',
+			parseDOM: [{ tag: 'ul' }],
+			toDOM() {
+				return ['ul', 0];
+			}
+		},
+		list_item: {
+			content: 'paragraph block*',
+			parseDOM: [{ tag: 'li' }],
+			toDOM() {
+				return ['li', 0];
+			}
 		}
 	},
 	marks: {
