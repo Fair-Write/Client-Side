@@ -12,7 +12,7 @@
 	import ToolBar from './ToolBar.svelte';
 	// import ExportButton from './ExportButton.svelte';
 	import createLinterPlugin from '../use-case/LinterPlugin';
-	import { myKeymap } from '$lib/features/rich-text-editor/entities/keymaps';
+	import { extendedKeyMap, myKeymap } from '$lib/features/rich-text-editor/entities/keymaps';
 	import { placeholder } from '$lib/features/rich-text-editor/use-case/PlaceHolderPlugin';
 	import { keymap } from 'prosemirror-keymap';
 	import { baseKeymap } from 'prosemirror-commands';
@@ -26,6 +26,7 @@
 	import { progressStore } from '$lib/stores/progressStore';
 	import { toast } from 'svelte-sonner';
 	import { signalTextEditor } from '$lib/stores/signalStore';
+	import { buildInputRules } from '$lib/features/document-scan/use-case/inputRules';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -60,9 +61,11 @@
 				plugins: [
 					linterPlugin,
 					history(),
+					extendedKeyMap,
 					keymap(baseKeymap),
 					myKeymap,
-					placeholder('Type your text here')
+					placeholder('Type your text here'),
+					buildInputRules(mySchema)
 				]
 			});
 
@@ -114,10 +117,12 @@
 			),
 			plugins: [
 				history(),
+				extendedKeyMap,
 				keymap(baseKeymap),
 				myKeymap,
 				placeholder('Type your text here'),
-				linterPlugin
+				linterPlugin,
+				buildInputRules(mySchema)
 			]
 		});
 

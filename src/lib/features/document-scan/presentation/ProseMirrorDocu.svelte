@@ -9,7 +9,7 @@
 	import mySchema from '$lib/features/rich-text-editor/entities/Schema';
 	import { progressStore } from '$lib/stores/progressStore';
 	import createLinterPlugin from '$lib/features/rich-text-editor/use-case/LinterPlugin';
-	import { myKeymap } from '$lib/features/rich-text-editor/entities/keymaps';
+	import { extendedKeyMap, myKeymap } from '$lib/features/rich-text-editor/entities/keymaps';
 	import { placeholder } from '$lib/features/rich-text-editor/use-case/PlaceHolderPlugin';
 	import { keymap } from 'prosemirror-keymap';
 	import { baseKeymap } from 'prosemirror-commands';
@@ -20,6 +20,7 @@
 	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 	import { toast } from 'svelte-sonner';
+	import { buildInputRules } from '../use-case/inputRules';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -36,9 +37,7 @@
 	// when stores has changed, the plugins must be reconfigured
 	function reinitializeText(view: EditorView) {
 		const node = view.state.schema.text($textContent);
-		const parser = new DOMParser(mySchema, []);
-		// i need to parse this
-		const contentDOM = parser.parse();
+
 		const tr = view.state.tr.replaceWith(0, view.state.doc.content.size, node);
 		view.dispatch(tr);
 	}
@@ -47,7 +46,14 @@
 		if (view != null) {
 			linterPlugin = createLinterPlugin($aiSuggestions);
 			const state = view.state.reconfigure({
-				plugins: [linterPlugin, keymap(baseKeymap), myKeymap, placeholder('Type your text here')]
+				plugins: [
+					linterPlugin,
+					extendedKeyMap,
+					keymap(baseKeymap),
+					myKeymap,
+					placeholder('Type your text here'),
+					buildInputRules(mySchema)
+				]
 			});
 
 			view.updateState(state);
@@ -85,7 +91,14 @@
 			doc: DOMParser.fromSchema(mySchema).parse(
 				document.createRange().createContextualFragment($textContent)
 			),
-			plugins: [keymap(baseKeymap), myKeymap, placeholder('Type your text here'), linterPlugin]
+			plugins: [
+				keymap(baseKeymap),
+				extendedKeyMap,
+				myKeymap,
+				placeholder('Type your text here'),
+				linterPlugin,
+				buildInputRules(mySchema)
+			]
 		});
 
 		view = new EditorView(editorContainer, {

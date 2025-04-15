@@ -1,6 +1,6 @@
 import { Schema } from 'prosemirror-model';
-
-const mySchema = new Schema({
+import { addListNodes } from 'prosemirror-schema-list';
+const leSchema = new Schema({
 	nodes: {
 		doc: {
 			content: 'block+'
@@ -92,21 +92,6 @@ const mySchema = new Schema({
 					0
 				];
 			}
-		},
-		bullet_list: {
-			group: 'block',
-			content: 'list_item+',
-			parseDOM: [{ tag: 'ul' }],
-			toDOM() {
-				return ['ul', 0];
-			}
-		},
-		list_item: {
-			content: 'paragraph block*',
-			parseDOM: [{ tag: 'li' }],
-			toDOM() {
-				return ['li', 0];
-			}
 		}
 	},
 	marks: {
@@ -153,6 +138,11 @@ const mySchema = new Schema({
 			}
 		}
 	}
+});
+
+const mySchema = new Schema({
+	nodes: addListNodes(leSchema.spec.nodes, 'paragraph block*', 'block'),
+	marks: leSchema.spec.marks
 });
 
 export default mySchema;
