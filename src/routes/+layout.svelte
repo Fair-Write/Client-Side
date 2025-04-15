@@ -9,9 +9,6 @@
 	let trigger = $state(false);
 	let route = $state('');
 	let changeRoute = $state(false);
-	// this is stupid this could've been easier if i just
-	// used the confirm webapi of the browser then
-	// we would not have been in this situation
 	beforeNavigate(({ to, cancel }) => {
 		if (changeRoute) {
 			goto(route);
@@ -37,10 +34,10 @@
 <AlertDialog.Root open={trigger}>
 	<AlertDialog.Content>
 		<AlertDialog.Header>
-			<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+			<AlertDialog.Title>Confirm Navigation: Unsaved Changes Will Be Lost</AlertDialog.Title>
 			<AlertDialog.Description>
-				This action cannot be undone. This will permanently delete your account and remove your data
-				from our servers.
+				You are about to navigate away from this page. Any unsaved changes will be lost, and your
+				current document will be reset. Are you sure you want to proceed?
 			</AlertDialog.Description>
 		</AlertDialog.Header>
 		<AlertDialog.Footer>
