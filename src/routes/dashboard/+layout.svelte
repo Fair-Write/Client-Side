@@ -2,10 +2,11 @@
 	import { cn } from '$lib/utils';
 	import { page } from '$app/stores';
 	import SuggestionTab from '$lib/features/suggestion-bot/presentation/SuggestionTab.svelte';
+	import * as Dialog from '$lib/components/ui/dialog';
 </script>
 
 <div class="flex flex-1 bg-stone-100">
-	<div class="flex lg:w-64 flex-col justify-between gap-2 border-r border-solid border-stone-300">
+	<div class="flex flex-col justify-between gap-2 border-r border-solid border-stone-300 lg:w-64">
 		<!-- wrapper -->
 
 		<div class="flex flex-col gap-1 *:px-2">
@@ -43,6 +44,7 @@
 
 					<span class="hidden lg:inline">Editor</span>
 				</a>
+
 				<a
 					href="/dashboard/scan"
 					class={cn(
@@ -67,28 +69,48 @@
 			</nav>
 		</div>
 
-		<!-- info -->
-		<a
-			href="/dashboard/info"
-			class="flex items-center justify-center lg:justify-start  gap-2 border-t border-stone-300 p-2 text-xl"
-		>
-			<!--stupid icon-->
-			<span
-				class=" flex items-center justify-center rounded-[9px] border border-solid border-stone-500 bg-gradient-to-t from-neutral-700 to-stone-300 p-[1px]"
-			>
-				<span
-					class="material-symbols-outlined s26 rounded-[8px] bg-gradient-to-t from-neutral-700 to-stone-500 p-1 text-stone-50"
+		<Dialog.Root>
+			<Dialog.Trigger>
+				<div
+					class="flex items-center justify-center gap-2 border-t border-stone-300 p-2 text-xl lg:justify-start"
 				>
-					info</span
-				></span
-			>
+					<!--stupid icon-->
+					<span
+						class=" flex items-center justify-center rounded-[9px] border border-solid border-stone-500 bg-gradient-to-t from-neutral-700 to-stone-300 p-[1px]"
+					>
+						<span
+							class="material-symbols-outlined s26 rounded-[8px] bg-gradient-to-t from-neutral-700 to-stone-500 p-1 text-stone-50"
+						>
+							info</span
+						></span
+					>
 
-			<span class="hidden lg:inline">Info</span></a
-		>
+					<span class="hidden lg:inline">Info</span>
+				</div>
+			</Dialog.Trigger>
+			<Dialog.Content>
+				<Dialog.Header>
+					<Dialog.Title>What's Fair Write?</Dialog.Title>
+					<Dialog.Description>
+						&nbsp; Fair Write, a web-based text editing application integrated with gender-fair
+						language capabilities. Fair Write provides suggestions and corrections to help users
+						avoid biased or gender-exclusive terms in their writing. Whether drafting professional
+						documents, academic papers, or casual content,
+						<br />
+						<br />
+						&nbsp; Its integrated features include intelligent grammar checking, inclusive vocabulary
+						alternatives, and style recommendations aligned with current gender-sensitive language standards.
+						Fair Write is an essential tool for individuals and organizations striving for more conscious
+						and inclusive communication.
+					</Dialog.Description>
+				</Dialog.Header>
+			</Dialog.Content>
+		</Dialog.Root>
+
+		<!-- info -->
 	</div>
-	<main class=" flex flex-1 basis-0 shrink-0 flex-col lg:flex-row  bg-stone-200">
+	<main class=" flex flex-1 shrink-0 basis-0 flex-col bg-stone-200 lg:flex-row">
 		<slot></slot>
 		<SuggestionTab></SuggestionTab>
 	</main>
 </div>
-
