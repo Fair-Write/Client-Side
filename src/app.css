@@ -160,3 +160,7 @@ span.s36 {
 	font-size: 18px;
 	font-variation-settings: 'OPSZ' 18;
 }
+
+.ProseMirror p {
+	margin: 0; /* or any other value like margin: 1em 0; */
+}
