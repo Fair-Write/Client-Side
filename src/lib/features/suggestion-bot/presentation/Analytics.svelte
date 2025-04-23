@@ -47,13 +47,18 @@
 		<Card.Content class="text-base text-blue-500">
 			<ul class="list-outside list-disc px-3">
 				<li class="hover:underline">
-					<a target="_blank" href="https://www.google.com" rel="noopener noreferrer"
-						>How we detect gender fair language</a
+					<a
+						target="_blank"
+						href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2016.00025/full"
+						rel="noopener noreferrer"
+						>How we gender fair language can reduce gender stereotyping and discrimination</a
 					>
 				</li>
 				<li class="mt-2 hover:underline">
-					<a target="_blank" href="https://www.google.com" rel="noopener noreferrer"
-						>What is gender fair language</a
+					<a
+						target="_blank"
+						href="https://pcieerd.dost.gov.ph/images/gad_corner/Gender-fair-language-a-primer.pdf"
+						rel="noopener noreferrer">What is gender fair language</a
 					>
 				</li>
 			</ul>

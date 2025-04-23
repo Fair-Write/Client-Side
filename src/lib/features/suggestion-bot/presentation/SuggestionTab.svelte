@@ -21,6 +21,15 @@
 	let tabIndex = $state<number>(0);
 
 	$effect(() => {
+		if ($progressStore === 0) {
+			if (api) {
+				api.scrollTo(0);
+				$progressStore = 0;
+			}
+		}
+	});
+
+	$effect(() => {
 		if (isSuggestionsTab) {
 			api?.scrollTo(tabIndex);
 		}
