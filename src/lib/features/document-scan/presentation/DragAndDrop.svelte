@@ -119,8 +119,8 @@
 		gap-5 rounded-sm border-2 border-dashed border-stone-300
 		bg-stone-50 p-5 lg:h-[450px] lg:w-[450px]"
 			ondrop={async (e) => {
+				e.preventDefault();
 				fileDocument = convertDragToFile(e);
-
 				setFileNameDisplay(fileName, fileSuffix);
 				await convertToText(fileDocument, fileSuffix);
 			}}
