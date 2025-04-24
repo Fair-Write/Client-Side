@@ -6,6 +6,7 @@
 	import { textContent, textContentHTML, textTitle } from '$lib/stores/textFromEditorStore';
 	import { progressStore } from '$lib/stores/progressStore';
 	import { GLFScore } from '$lib/stores/omegaLOL';
+	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
 
 	beforeNavigate(({ cancel }) => {
 		if ($textContent == '') return;
@@ -18,6 +19,8 @@
 			$textTitle = 'Untitled_1';
 			$progressStore = 0;
 			$GLFScore = 0;
+			$aiSuggestions = [];
+			$replaceStore = [];
 			return;
 		}
 	});

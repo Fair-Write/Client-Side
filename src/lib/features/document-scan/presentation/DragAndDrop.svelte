@@ -9,9 +9,12 @@
 	import ProseMirrorDocu from '$lib/features/document-scan/presentation/ProseMirrorDocu.svelte';
 
 	import { toast } from 'svelte-sonner';
-	import { textContent } from '$lib/stores/textFromEditorStore';
+	import { textContent, textContentHTML, textTitle } from '$lib/stores/textFromEditorStore';
 	import { getTextFromPDF } from '$lib/features/document-scan/use-case/extractPDF';
 	import { ocrToText } from '$lib/features/document-scan/use-case/imgToText';
+	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
+	import { GLFScore } from '$lib/stores/omegaLOL';
+	import { progressStore } from '$lib/stores/progressStore';
 
 	let {
 		setFileNameDisplay,
@@ -119,6 +122,14 @@
 		gap-5 rounded-sm border-2 border-dashed border-stone-300
 		bg-stone-50 p-5 lg:h-[450px] lg:w-[450px]"
 			ondrop={async (e) => {
+				$textContent = '';
+				$textContentHTML = '';
+				$textTitle = 'Untitled_1';
+				$progressStore = 0;
+				$GLFScore = 0;
+				$aiSuggestions = [];
+				$replaceStore = [];
+
 				e.preventDefault();
 				fileDocument = convertDragToFile(e);
 				setFileNameDisplay(fileName, fileSuffix);
@@ -143,6 +154,14 @@
 			</label>
 			<input
 				onchange={async (e) => {
+					$textContent = '';
+					$textContentHTML = '';
+					$textTitle = 'Untitled_1';
+					$progressStore = 0;
+					$GLFScore = 0;
+					$aiSuggestions = [];
+					$replaceStore = [];
+
 					fileDocument = convertInputToFile(e);
 					setFileNameDisplay(fileName, fileSuffix);
 					await convertToText(fileDocument, fileSuffix);

@@ -3,7 +3,10 @@
 	import type { IFileNameDisplay } from '$lib/features/document-scan/entities/FileType';
 	import FileNameDisplay from '$lib/features/document-scan/presentation/FileNameDisplay.svelte';
 	import { convertInputToFile } from '../use-case/extractDocument';
-	import { textTitle } from '$lib/stores/textFromEditorStore';
+	import { textContent, textContentHTML, textTitle } from '$lib/stores/textFromEditorStore';
+	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
+	import { GLFScore } from '$lib/stores/omegaLOL';
+	import { progressStore } from '$lib/stores/progressStore';
 
 	let fileNameDisplay: IFileNameDisplay = $state({
 		fileName: undefined,
@@ -45,8 +48,16 @@
 						>Select Another File
 					</span>
 				</label>
+
 				<input
 					onchange={(e) => {
+						$textContent = '';
+						$textContentHTML = '';
+						$textTitle = 'Untitled_1';
+						$progressStore = 0;
+						$GLFScore = 0;
+						$aiSuggestions = [];
+						$replaceStore = [];
 						fileDocument = convertInputToFile(e);
 						signal = true;
 					}}

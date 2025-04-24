@@ -15,6 +15,9 @@
 		grammarCheckService
 	} from '$lib/features/suggestion-bot/services/suggestionBotServices';
 	import PreferenceModule from '$lib/features/suggestion-bot/presentation/PreferenceModule.svelte';
+	import { textContent, textContentHTML, textTitle } from '$lib/stores/textFromEditorStore';
+	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
+	import { GLFScore } from '$lib/stores/omegaLOL';
 
 	let api = $state<CarouselAPI>();
 	let isSuggestionsTab = $state<boolean>(true);
@@ -65,6 +68,13 @@
 		if (api) {
 			api.scrollTo(0);
 			$progressStore = 0;
+			$textContent = '';
+			$textContentHTML = '';
+			$textTitle = 'Untitled_1';
+			$progressStore = 0;
+			$GLFScore = 0;
+			$aiSuggestions = [];
+			$replaceStore = [];
 		}
 	}
 </script>
