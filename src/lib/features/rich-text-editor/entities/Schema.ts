@@ -140,8 +140,19 @@ const leSchema = new Schema({
 	}
 });
 
-const mySchema = new Schema({
+const mySchema2 = new Schema({
 	nodes: addListNodes(leSchema.spec.nodes, 'paragraph block*', 'block'),
+	marks: leSchema.spec.marks
+});
+
+const mySchema3 = mySchema2.spec.nodes.update('bullet_list', {
+	...mySchema2.spec.nodes.get('bullet_list'),
+	toDOM() {
+		return ['ul', { style: 'list-style-type: disc; padding-left: 20px;' }, 0];
+	}
+});
+const mySchema = new Schema({
+	nodes: mySchema3,
 	marks: leSchema.spec.marks
 });
 

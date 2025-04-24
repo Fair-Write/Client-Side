@@ -6,7 +6,7 @@ export function exportStateAsPDF(state: string) {
 		title = value.replace(/\.[^/.]+$/, '');
 	});
 	const test = `
-	<div class="bg-red-500 text-left text-base font-sans *:min-h-[2em]">
+	<div class="text-left text-base font-sans *:min-h-[2em]">
 	${state}
 	</div>`;
 	const doc = new jsPDF();
