@@ -29,20 +29,20 @@
 	// this shit was the problem
 
 	// // a shitty solution for a big problem but who cares
-	// $effect(() => {
-	// 	if ($textContent) {
-	// 		if (view == null) return;
-	// 		reinitializeText(view as EditorView);
-	// 	}
-	// });
+	$effect(() => {
+		if ($textContent) {
+			if (view == null) return;
+			reinitializeText(view as EditorView);
+		}
+	});
 
-	// // when stores has changed, the plugins must be reconfigured
-	// function reinitializeText(view: EditorView) {
-	// 	const node = view.state.schema.text($textContent);
+	// when stores has changed, the plugins must be reconfigured
+	function reinitializeText(view: EditorView) {
+		const node = view.state.schema.text($textContent);
 
-	// 	const tr = view.state.tr.replaceWith(0, view.state.doc.content.size, node);
-	// 	view.dispatch(tr);
-	// }
+		const tr = view.state.tr.replaceWith(0, view.state.doc.content.size, node);
+		view.dispatch(tr);
+	}
 
 	function reconfigureAllPlugins(): void {
 		if (view != null) {

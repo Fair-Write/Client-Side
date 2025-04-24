@@ -83,9 +83,8 @@
 			<Button
 				class="mt-2 w-full"
 				variant="outline"
-				disabled={!isEmpty || isLoading}
 				onclick={() => {
-					applyAllChanges();
+					goBackToGrammar();
 				}}>Check Grammar Again</Button
 			>
 		</Card.Content>
