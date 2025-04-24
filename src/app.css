@@ -164,3 +164,7 @@ span.s36 {
 .ProseMirror p {
 	margin: 0; /* or any other value like margin: 1em 0; */
 }
+
+.ProseMirror ul li::marker {
+	color: black;
+}
