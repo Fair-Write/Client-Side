@@ -5,6 +5,7 @@
 	import { beforeNavigate } from '$app/navigation';
 	import { textContent, textContentHTML, textTitle } from '$lib/stores/textFromEditorStore';
 	import { progressStore } from '$lib/stores/progressStore';
+	import { GLFScore } from '$lib/stores/omegaLOL';
 
 	beforeNavigate(({ cancel }) => {
 		if ($textContent == '') return;
@@ -16,6 +17,7 @@
 			$textContentHTML = '';
 			$textTitle = 'Untitled_1';
 			$progressStore = 0;
+			$GLFScore = 0;
 			return;
 		}
 	});
