@@ -27,10 +27,10 @@
 	});
 </script>
 
-<div>
+<div class="h-full w-full">
 	<!--	heading-->
 	<div
-		class="flex h-14 w-full items-center justify-between gap-2 border-b border-solid border-stone-300 bg-stone-50 p-5"
+		class="flex h-14 w-full items-center justify-between gap-2 border-b border-solid border-stone-300 bg-stone-50 p-3"
 	>
 		<div class="flex items-center justify-start gap-2">
 			<span class="material-symbols-outlined s36 text-stone-500">psychology</span>
@@ -42,13 +42,16 @@
 				<Tooltip.Trigger>
 					<span class="material-symbols-outlined s26 text-stone-500">info</span>
 				</Tooltip.Trigger>
-				<Tooltip.Content>
-					<p>blah blah blah blah</p>
+				<Tooltip.Content class="w-64">
+					<p>
+						If you have people with preferred pronouns, list down their names here and the AI will
+						adjust accordingly.
+					</p>
 				</Tooltip.Content>
 			</Tooltip.Root>
 		</Tooltip.Provider>
 	</div>
-	<div class="flex flex-col items-start justify-center gap-2 p-5">
+	<div class="flex flex-col items-start justify-center gap-2 p-3">
 		<!--back-->
 		<div class="mb-5 w-full">
 			<button

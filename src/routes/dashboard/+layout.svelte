@@ -6,7 +6,7 @@
 </script>
 
 <div class="flex flex-1 bg-stone-100">
-	<div class="flex flex-col justify-between gap-2 border-r border-solid border-stone-300 lg:w-64">
+	<div class="flex flex-col justify-between gap-2 border-r border-solid border-stone-300 lg:w-48">
 		<!-- wrapper -->
 
 		<div class="flex flex-col gap-1 *:px-2">

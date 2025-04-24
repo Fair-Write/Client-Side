@@ -69,7 +69,7 @@
 	}
 </script>
 
-<section class=" h-full min-h-0 border-l border-stone-300 bg-stone-100 lg:w-80">
+<section class=" h-full border-l border-stone-300 bg-stone-100 sm:w-full md:w-64 2xl:w-80">
 	{#if isSuggestionsTab}
 		<!-- Grammar & GLF Suggestion Module -->
 		<div
@@ -97,7 +97,7 @@
 			<StepInfographic></StepInfographic>
 
 			<Carousel.Root
-				class="w-[300px]"
+				class="w-[250px] 2xl:w-[300px]"
 				setApi={(emblaApi) => (api = emblaApi)}
 				opts={{ dragFree: true, watchDrag: false }}
 			>

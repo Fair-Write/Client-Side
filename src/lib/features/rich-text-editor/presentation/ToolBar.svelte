@@ -211,7 +211,7 @@
 		<Tooltip.Provider>
 			<Tooltip.Root>
 				<Tooltip.Trigger>
-					<Button size="icon" class="h-8 w-8" variant="ghost" onclick={toggleBold}><Bold /></Button>
+					<Button size="icon" class="h-6 w-6" variant="ghost" onclick={toggleBold}><Bold /></Button>
 				</Tooltip.Trigger>
 				<Tooltip.Content>
 					<p class="text-sm text-muted-foreground">Bold</p>
@@ -222,7 +222,7 @@
 		<Tooltip.Provider>
 			<Tooltip.Root>
 				<Tooltip.Trigger>
-					<Button size="icon" class="h-8 w-8" variant="ghost" onclick={toggleItalic}
+					<Button size="icon" class="h-6 w-6" variant="ghost" onclick={toggleItalic}
 						><Italic /></Button
 					>
 				</Tooltip.Trigger>
@@ -235,7 +235,7 @@
 		<Tooltip.Provider>
 			<Tooltip.Root>
 				<Tooltip.Trigger>
-					<Button size="icon" class="h-8 w-8" variant="ghost" onclick={toggleParagraph}
+					<Button size="icon" class="h-6 w-6" variant="ghost" onclick={toggleParagraph}
 						><Pilcrow /></Button
 					>
 				</Tooltip.Trigger>
@@ -254,7 +254,7 @@
 				<Tooltip.Trigger>
 					<Button
 						size="icon"
-						class="m-0 h-8 w-8"
+						class="m-0 h-6 w-6"
 						variant="ghost"
 						onclick={() => setTextAlign('left')}><AlignLeft /></Button
 					>
@@ -269,7 +269,7 @@
 		<Tooltip.Provider>
 			<Tooltip.Root>
 				<Tooltip.Trigger>
-					<Button size="icon" class="h-8 w-8" variant="ghost" onclick={() => setTextAlign('center')}
+					<Button size="icon" class="h-6 w-6" variant="ghost" onclick={() => setTextAlign('center')}
 						><AlignCenter /></Button
 					>
 				</Tooltip.Trigger>
@@ -283,7 +283,7 @@
 		<Tooltip.Provider>
 			<Tooltip.Root>
 				<Tooltip.Trigger>
-					<Button size="icon" class="h-8 w-8" variant="ghost" onclick={() => setTextAlign('right')}
+					<Button size="icon" class="h-6 w-6" variant="ghost" onclick={() => setTextAlign('right')}
 						><AlignRight /></Button
 					>
 				</Tooltip.Trigger>
@@ -335,7 +335,7 @@
 				<Tooltip.Trigger>
 					<Button
 						size="icon"
-						class="h-8 w-8"
+						class="h-6 w-6"
 						variant="ghost"
 						onclick={() => redo(view.state, view.dispatch)}><Redo2 /></Button
 					>

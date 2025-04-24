@@ -10,6 +10,9 @@ import { toast } from 'svelte-sonner';
 import { preferenceStore } from '$lib/stores/preferenceStore';
 
 // this may be the culprit
+
+const url = import.meta.env.VITE_BACKEND_URL || 'NOTHING';
+
 function isStringOrArrayOfStrings(value: string | string[]) {
 	if (Array.isArray(value)) {
 		// If it's an array, use the first element
@@ -48,7 +51,7 @@ export async function grammarCheckService(nextSlide: () => void) {
 	// FOR DEPLOYMENT
 
 	try {
-		const post = await fetch('https://x3lkcvjr-80.asse.devtunnels.ms/grammar', {
+		const post = await fetch(`${url}grammar`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -135,7 +138,7 @@ export async function glfCheckService(nextSlide: () => void) {
 	};
 	// For Deployment
 	try {
-		const post = await fetch('https://x3lkcvjr-80.asse.devtunnels.ms/gfl', {
+		const post = await fetch(`${url}gfl`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

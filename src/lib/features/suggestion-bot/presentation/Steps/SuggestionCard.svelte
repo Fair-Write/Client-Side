@@ -11,6 +11,7 @@
 	import { textContent } from '$lib/stores/textFromEditorStore';
 	import { foobar } from '../../use-case/test';
 	import { preferenceStore } from '$lib/stores/preferenceStore';
+	import { PUBLIC_BACKEND_URL } from '$env/static/public';
 	function isStringOrArrayOfStrings(value: string | string[]) {
 		// It's a string
 		if (typeof value === 'string') {
@@ -61,7 +62,7 @@
 
 			// FOR DEPLOYMENT
 			try {
-				const post = await fetch('https://x3lkcvjr-80.asse.devtunnels.ms/grammar', {
+				const post = await fetch(`${PUBLIC_BACKEND_URL}grammar`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
@@ -127,7 +128,7 @@
 			};
 
 			try {
-				const post = await fetch('https://x3lkcvjr-80.asse.devtunnels.ms/gfl', {
+				const post = await fetch(`${PUBLIC_BACKEND_URL}gfl`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
