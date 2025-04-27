@@ -31,6 +31,7 @@ function isStringOrArrayOfStrings(value: string | string[]) {
 // };
 
 export async function grammarCheckService(nextSlide: () => void) {
+	console.log(url);
 	// FOR TESTING
 	// aiSuggestions.set([
 	// 	{
@@ -97,6 +98,8 @@ export async function grammarCheckService(nextSlide: () => void) {
 }
 
 export async function glfCheckService(nextSlide: () => void) {
+	console.log(url);
+
 	// For Testing
 	// setTimeout(() => {
 	// 	aiSuggestions.set([
