@@ -112,7 +112,9 @@
 				if ($preferenceStore.length === 0) {
 					return `{"Nyala": "gender_fair"}`;
 				} else {
-					const preferences = JSON.parse(localStorage.getItem('preferences') as string) as {
+					const preferences = JSON.parse(
+						localStorage.getItem('preferences') || `{"Nyala": "gender_fair"}`
+					) as {
 						name: string;
 						pronoun: string;
 					}[];
@@ -164,6 +166,7 @@
 					$aiSuggestions = await suggestions;
 					console.log($aiSuggestions);
 				} else {
+					$aiSuggestions = [];
 				}
 			} catch (error) {
 				toast.error('An Error Has Occured');

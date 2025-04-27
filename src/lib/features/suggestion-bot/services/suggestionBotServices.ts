@@ -99,7 +99,7 @@ export async function grammarCheckService(nextSlide: () => void) {
 
 export async function glfCheckService(nextSlide: () => void) {
 	console.log(url);
-
+	localStorage.getItem('preferences');
 	// For Testing
 	// setTimeout(() => {
 	// 	aiSuggestions.set([
@@ -125,7 +125,9 @@ export async function glfCheckService(nextSlide: () => void) {
 		if (get(preferenceStore).length === 0) {
 			return `{"Nyala": "gender_fair"}`;
 		} else {
-			const preferences = JSON.parse(localStorage.getItem('preferences') as string) as {
+			const preferences = JSON.parse(
+				localStorage.getItem('preferences') || `{"Nyala": "gender_fair"}`
+			) as {
 				name: string;
 				pronoun: string;
 			}[];
