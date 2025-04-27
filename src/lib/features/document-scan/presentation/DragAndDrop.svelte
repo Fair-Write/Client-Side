@@ -9,10 +9,12 @@
 	import ProseMirrorDocu from '$lib/features/document-scan/presentation/ProseMirrorDocu.svelte';
 
 	import { toast } from 'svelte-sonner';
-	import { textContent } from '$lib/stores/textFromEditorStore';
+	import { textContent, textContentHTML, textTitle } from '$lib/stores/textFromEditorStore';
 	import { getTextFromPDF } from '$lib/features/document-scan/use-case/extractPDF';
 	import { ocrToText } from '$lib/features/document-scan/use-case/imgToText';
-
+	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
+	import { GLFScore } from '$lib/stores/omegaLOL';
+	import { progressStore } from '$lib/stores/progressStore';
 
 	let {
 		setFileNameDisplay,
@@ -113,15 +115,23 @@
 
 <div class="flex w-full flex-1 items-start justify-center lg:items-center">
 	{#if isLoading}
-		<LoaderCircle class="animate-spin self-center w-[50px] h-[50px]" color="#78716c" />
+		<LoaderCircle class="h-[50px] w-[50px] animate-spin self-center" color="#78716c" />
 	{:else if extractedText === false}
 		<form
 			class=" flex h-[350px] w-[250px] flex-col items-center justify-center
 		gap-5 rounded-sm border-2 border-dashed border-stone-300
 		bg-stone-50 p-5 lg:h-[450px] lg:w-[450px]"
 			ondrop={async (e) => {
-				fileDocument = convertDragToFile(e);
+				$textContent = '';
+				$textContentHTML = '';
+				$textTitle = 'Untitled_1';
+				$progressStore = 0;
+				$GLFScore = 0;
+				$aiSuggestions = [];
+				$replaceStore = [];
 
+				e.preventDefault();
+				fileDocument = convertDragToFile(e);
 				setFileNameDisplay(fileName, fileSuffix);
 				await convertToText(fileDocument, fileSuffix);
 			}}
@@ -130,9 +140,10 @@
 			<FolderOpen class="h-24 w-24 text-stone-500 lg:h-[150px] lg:w-[150px]"></FolderOpen>
 			<h3 class="text-center text-lg text-stone-500">Drag your PDF/DOCX/JPG File Here <br /> OR</h3>
 			<label
-				class="flex items-center justify-center gap-2 rounded-full border border-solid
-			border-sky-700 bg-blue-500 bg-gradient-to-b from-sky-300 to-sky-600 px-5 py-2
-			text-blue-50 shadow-lg hover:cursor-pointer"
+				class=":ease-in-out flex items-center justify-center gap-2 rounded-full border
+			border-solid border-sky-700 bg-blue-500 bg-gradient-to-b from-sky-300 to-sky-600 px-5
+			py-2 text-blue-50 shadow-lg duration-100 hover:cursor-pointer hover:hue-rotate-[-90deg] hover:transition-all
+			hover:duration-100 hover:ease-in-out active:scale-95 active:transform"
 				for="File_Drop"
 			>
 				<CloudUpload class="h-8 w-8"></CloudUpload>
@@ -143,6 +154,14 @@
 			</label>
 			<input
 				onchange={async (e) => {
+					$textContent = '';
+					$textContentHTML = '';
+					$textTitle = 'Untitled_1';
+					$progressStore = 0;
+					$GLFScore = 0;
+					$aiSuggestions = [];
+					$replaceStore = [];
+
 					fileDocument = convertInputToFile(e);
 					setFileNameDisplay(fileName, fileSuffix);
 					await convertToText(fileDocument, fileSuffix);

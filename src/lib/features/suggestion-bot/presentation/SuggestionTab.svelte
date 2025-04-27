@@ -9,18 +9,39 @@
 	import { progressStore } from '$lib/stores/progressStore';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import { buttonVariants } from '$lib/components/ui/button';
-	
+
 	import {
 		glfCheckService,
 		grammarCheckService
 	} from '$lib/features/suggestion-bot/services/suggestionBotServices';
 	import PreferenceModule from '$lib/features/suggestion-bot/presentation/PreferenceModule.svelte';
+	import { textContent, textContentHTML, textTitle } from '$lib/stores/textFromEditorStore';
+	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
+	import { GLFScore } from '$lib/stores/omegaLOL';
 
 	let api = $state<CarouselAPI>();
 	let isSuggestionsTab = $state<boolean>(true);
+	let tabIndex = $state<number>(0);
+
+	$effect(() => {
+		if ($progressStore === 0) {
+			if (api) {
+				api.scrollTo(0);
+				$progressStore = 0;
+			}
+		}
+	});
+
+	$effect(() => {
+		if (isSuggestionsTab) {
+			api?.scrollTo(tabIndex);
+		}
+	});
+
 	function nextSlide() {
 		if (api) {
 			api.scrollNext();
+			tabIndex = api.selectedScrollSnap();
 		}
 	}
 	function toPreferenceModule() {
@@ -28,6 +49,14 @@
 	}
 
 	async function grammarPayload() {
+		await grammarCheckService(nextSlide);
+	}
+
+	async function goBackToGrammar() {
+		if (api) {
+			api.scrollTo(1);
+			$progressStore = 0;
+		}
 		await grammarCheckService(nextSlide);
 	}
 	// might export this as a service instead
@@ -39,11 +68,18 @@
 		if (api) {
 			api.scrollTo(0);
 			$progressStore = 0;
+			$textContent = '';
+			$textContentHTML = '';
+			$textTitle = 'Untitled_1';
+			$progressStore = 0;
+			$GLFScore = 0;
+			$aiSuggestions = [];
+			$replaceStore = [];
 		}
 	}
 </script>
 
-<section class=" h-full min-h-0 border-l border-stone-300 bg-stone-100 lg:w-80">
+<section class=" h-full border-l border-stone-300 bg-stone-100 sm:w-full md:w-64 2xl:w-80">
 	{#if isSuggestionsTab}
 		<!-- Grammar & GLF Suggestion Module -->
 		<div
@@ -71,7 +107,7 @@
 			<StepInfographic></StepInfographic>
 
 			<Carousel.Root
-				class="w-[300px]"
+				class="w-[250px] 2xl:w-[300px]"
 				setApi={(emblaApi) => (api = emblaApi)}
 				opts={{ dragFree: true, watchDrag: false }}
 			>
@@ -80,7 +116,7 @@
 						><StepWrite nextSlide={grammarPayload}></StepWrite></Carousel.Item
 					>
 					<Carousel.Item class=""><StepGrammar nextSlide={glfPayload}></StepGrammar></Carousel.Item>
-					<Carousel.Item><StepGLF {nextSlide}></StepGLF></Carousel.Item>
+					<Carousel.Item><StepGLF {goBackToGrammar} {nextSlide}></StepGLF></Carousel.Item>
 					<Carousel.Item class="px-5"><Analytics {backToTheStart}></Analytics></Carousel.Item>
 				</Carousel.Content>
 			</Carousel.Root>

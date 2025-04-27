@@ -5,9 +5,13 @@ export function exportStateAsPDF(state: string) {
 	textTitle.subscribe((value) => {
 		title = value.replace(/\.[^/.]+$/, '');
 	});
-
+	const test = `
+	<div class="text-left text-base font-sans *:min-h-[2em]">
+	${state}
+	</div>`;
 	const doc = new jsPDF();
-	doc.html(state, {
+
+	doc.html(test, {
 		callback: function (doc) {
 			doc.save(title);
 		},

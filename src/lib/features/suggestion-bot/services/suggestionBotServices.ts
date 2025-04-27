@@ -7,8 +7,12 @@ import { GLFScore } from '$lib/stores/omegaLOL';
 import { revisedTextStore } from '$lib/stores/revisedTextStore';
 // import axiosInstance from '../../../../service/axios';
 import { toast } from 'svelte-sonner';
+import { preferenceStore } from '$lib/stores/preferenceStore';
 
 // this may be the culprit
+
+const url = import.meta.env.VITE_BACKEND_URL || 'NOTHING';
+
 function isStringOrArrayOfStrings(value: string | string[]) {
 	if (Array.isArray(value)) {
 		// If it's an array, use the first element
@@ -45,8 +49,9 @@ export async function grammarCheckService(nextSlide: () => void) {
 	// nextSlide();
 
 	// FOR DEPLOYMENT
+
 	try {
-		const post = await fetch('http://127.0.0.1:8080/grammar', {
+		const post = await fetch(`${url}grammar`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -106,24 +111,47 @@ export async function glfCheckService(nextSlide: () => void) {
 	// 			rationale: 'lorem ipsum somethign something'
 	// 		}
 	// 	]);
+
+	// 	GLFScore.set(60);
 	// }, 500);
 	// nextSlide();
 	// progressStore.set(100);
 
+	// JSON.parse(localStorage.getItem('preferences') as string)
+	const preferenceList = () => {
+		if (get(preferenceStore).length === 0) {
+			return `{"Nyala": "gender_fair"}`;
+		} else {
+			const preferences = JSON.parse(localStorage.getItem('preferences') as string) as {
+				name: string;
+				pronoun: string;
+			}[];
+			const preferenceMap = preferences.reduce(
+				(acc: { [key: string]: string }, element: { name: string; pronoun: string }) => {
+					acc[element.name] = element.pronoun;
+					return acc;
+				},
+				{}
+			);
+			return preferenceMap;
+		}
+	};
+	// For Deployment
 	try {
-		const post = await fetch('http://127.0.0.1:8080/gfl', {
+		const post = await fetch(`${url}gfl`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				prompt: get(textContent)
+				prompt: get(textContent),
+				pronoun_map: preferenceList()
 			})
 		});
 
 		const data = await post.json();
-		console.log(data);
 		await revisedTextStore.set(data.revised_text as string);
+
 		if (Object.keys(data).length !== 0) {
 			const suggestions: Promise<TSuggestion[]> = data.corrections.map(
 				(correction: {
@@ -144,19 +172,19 @@ export async function glfCheckService(nextSlide: () => void) {
 					rational: ''
 				})
 			);
-
 			GLFScore.set((await suggestions).length);
-
 			aiSuggestions.set(await suggestions);
 			nextSlide();
 			progressStore.set(100);
+
+			console.log(data.revised_text);
+			console.log(data, 'hello');
 		} else {
 			progressStore.set(100);
 			nextSlide();
 		}
 	} catch (error) {
 		toast.error('Network Error');
-
 		console.error('Error:', error);
 	}
 }

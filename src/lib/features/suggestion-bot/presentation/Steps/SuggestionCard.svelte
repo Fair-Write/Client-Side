@@ -10,6 +10,8 @@
 	import { get } from 'svelte/store';
 	import { textContent } from '$lib/stores/textFromEditorStore';
 	import { foobar } from '../../use-case/test';
+	import { preferenceStore } from '$lib/stores/preferenceStore';
+	import { PUBLIC_BACKEND_URL } from '$env/static/public';
 	function isStringOrArrayOfStrings(value: string | string[]) {
 		// It's a string
 		if (typeof value === 'string') {
@@ -38,9 +40,12 @@
 		ignoreMe: (index: number) => void;
 	} = $props();
 
+	let isLoading = $state<boolean>(false);
+
 	async function jempoyMoves(bruh: string) {
+		isLoading = true;
 		if (bruh == 'grammar') {
-			console.log('BOBO ' + foobar());
+			console.log(foobar());
 
 			// aiSuggestions.set([
 			// 	{
@@ -57,7 +62,7 @@
 
 			// FOR DEPLOYMENT
 			try {
-				const post = await fetch('http://127.0.0.1:8080/grammar', {
+				const post = await fetch(`${PUBLIC_BACKEND_URL}grammar`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
@@ -99,20 +104,40 @@
 			} catch (error) {
 				toast.error('Network Error');
 				console.error('Error:', error);
+			} finally {
+				isLoading = false;
 			}
-    
 		} else if (bruh == 'gfl') {
+			const preferenceList = () => {
+				if ($preferenceStore.length === 0) {
+					return `{"Nyala": "gender_fair"}`;
+				} else {
+					const preferences = JSON.parse(localStorage.getItem('preferences') as string) as {
+						name: string;
+						pronoun: string;
+					}[];
+					const preferenceMap = preferences.reduce(
+						(acc: { [key: string]: string }, element: { name: string; pronoun: string }) => {
+							acc[element.name] = element.pronoun;
+							return acc;
+						},
+						{}
+					);
+					return preferenceMap;
+				}
+			};
+
 			try {
-				const post = await fetch('http://127.0.0.1:8080/gfl', {
+				const post = await fetch(`${PUBLIC_BACKEND_URL}gfl`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify({ prompt: $textContent })
+					body: JSON.stringify({ prompt: $textContent, pronoun_map: preferenceList() })
 				});
 
 				const data = await post.json();
-				console.log(data.data.revised_text);
+
 				$revisedTextStore = await (data.revised_text as string);
 
 				if (Object.keys(data).length !== 0) {
@@ -143,6 +168,8 @@
 			} catch (error) {
 				toast.error('An Error Has Occured');
 				console.error('Error:', error);
+			} finally {
+				isLoading = false;
 			}
 		}
 	}
@@ -187,6 +214,7 @@
 		</Card.Content>
 		<Card.Footer class="flex flex-col items-center justify-start gap-2 p-3 py-2">
 			<button
+				disabled={isLoading}
 				class={cn(
 					'flex w-full items-center justify-center rounded-[9px] border border-solid p-[1px]',
 					suggestion.correctionType === 'grammar' &&

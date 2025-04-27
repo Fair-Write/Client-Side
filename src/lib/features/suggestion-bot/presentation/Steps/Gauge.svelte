@@ -2,6 +2,7 @@
 	import { cn } from '$lib/utils';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { GLFScore } from '$lib/stores/omegaLOL';
+	import { textContent } from '$lib/stores/textFromEditorStore';
 	let { radius, percent }: { radius: number; percent: number } = $props();
 	const strokeWidth = $derived(radius * 0.3);
 	const innerRadius = $derived(radius - strokeWidth / 2);
@@ -10,17 +11,21 @@
 	const dashArray = $derived(`${arc} ${circumference}`);
 	const transform = $derived(`rotate(140, ${radius}, ${radius})`);
 
-	const percentNormalized = $derived(Math.min(Math.max(percent, 0), 100));
+	const percentNormalized = $derived(Math.floor((1 - percent) * 100));
 	const offset = $derived(arc - (percentNormalized / 100) * arc);
 
 	const percentType = $derived.by(() => {
-		if (percent <= 45 && percent >= 0) {
+		console.log('percent', percent);
+
+		console.log('percent normalized', percentNormalized);
+
+		if (percentNormalized <= 45 && percentNormalized >= 0) {
 			return 'poor';
-		} else if (percent >= 50 && percent <= 70) {
+		} else if (percentNormalized >= 50 && percentNormalized <= 70) {
 			return 'average';
-		} else if (percent >= 80 && percent <= 89) {
+		} else if (percentNormalized >= 80 && percentNormalized <= 89) {
 			return 'good';
-		} else if (percent >= 90 && percent <= 100) {
+		} else if (percentNormalized >= 90 && percentNormalized <= 100) {
 			return 'excellent';
 		}
 	});
@@ -28,11 +33,11 @@
 
 <Card.Root class="w-full">
 	<Card.Header class="p-3">
-		<Card.Title class="border-b border-dashed border-stone-500  text-center pb-2 text-xl font-bold "
-		>Gender Fair Analysis</Card.Title
+		<Card.Title class="border-b border-dashed border-stone-500  pb-2 text-center text-xl font-bold "
+			>Gender Fair Analysis</Card.Title
 		>
 	</Card.Header>
-	<Card.Content class="flex flex-col gap-2 items-center justify-center">
+	<Card.Content class="flex flex-col items-center justify-center gap-2">
 		<svg height={radius * 2} width={radius * 2}>
 			<defs>
 				<linearGradient id="grad_excellent" x1="0" y1="0" x2="1" y2="1">
@@ -83,33 +88,33 @@
 
 			<text
 				class={cn(
-			'text-5xl font-bold',
-			percentType === 'poor' && 'fill-red-500',
-			percentType === 'average' && 'fill-amber-500',
-			percentType === 'good' && 'fill-blue-500',
-			percentType === 'excellent' && 'fill-purple-500'
-		)}
+					'text-5xl font-bold',
+					percentType === 'poor' && 'fill-red-500',
+					percentType === 'average' && 'fill-amber-500',
+					percentType === 'good' && 'fill-blue-500',
+					percentType === 'excellent' && 'fill-purple-500'
+				)}
 				x="50%"
 				y="50%"
 				dominant-baseline="middle"
 				text-anchor="middle"
 			>
-				{percent}%</text
+				{percentNormalized}%</text
 			>
 
 			<text
 				class={cn(
-			'text-2xl font-bold capitalize',
-			percentType === 'poor' && 'fill-red-500',
-			percentType === 'average' && 'fill-amber-500',
-			percentType === 'good' && 'fill-blue-500',
-			percentType === 'excellent' && 'fill-purple-500'
-		)}
+					'text-2xl font-bold capitalize',
+					percentType === 'poor' && 'fill-red-500',
+					percentType === 'average' && 'fill-amber-500',
+					percentType === 'good' && 'fill-blue-500',
+					percentType === 'excellent' && 'fill-purple-500'
+				)}
 				x="50%"
 				y="80%"
 				dominant-baseline="middle"
 				text-anchor="middle"
-			>{percentType}
+				>{percentType}
 			</text>
 
 			<circle
@@ -139,10 +144,9 @@
 			/>
 		</svg>
 
-		<p class="text-center text-base">{$GLFScore} word/s were found as non-gender fair</p>
+		<p class="text-center text-base">
+			{$GLFScore} out of {$textContent.split(' ').length} word/s in the document were found as non-gender
+			fair
+		</p>
 	</Card.Content>
 </Card.Root>
-
-
-
-

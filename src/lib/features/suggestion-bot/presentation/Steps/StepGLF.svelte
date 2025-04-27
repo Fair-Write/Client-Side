@@ -13,7 +13,8 @@
 	import { signalTextEditor } from '$lib/stores/signalStore';
 	// import { toast } from 'svelte-sonner';
 
-	let { nextSlide }: { nextSlide: () => void } = $props();
+	let { nextSlide, goBackToGrammar }: { nextSlide: () => void; goBackToGrammar: () => void } =
+		$props();
 	let suggestionsReference = $state<TSuggestion[]>($aiSuggestions);
 	let isEmpty = $derived(suggestionsReference.length != 0);
 	let isLoading = $state(false);
@@ -25,13 +26,15 @@
 		// refetch every remove omega lol
 	}
 	function applyAllChanges() {
-		// $replaceStore = $aiSuggestions.map((suggestion) => {
-		// 	return suggestion;
-		// });
+		$replaceStore = $aiSuggestions
+			.sort((a, b) => b.offSet - a.offSet) // Sort by offSet in ascending order
+			.map((suggestion) => {
+				return suggestion;
+			});
 
-		$textContent = $revisedTextStore;
-		$signalTextEditor = true;
-		console.log($textContent);
+		// $textContent = $revisedTextStore;
+		// $signalTextEditor = true;
+		// console.log($textContent);
 
 		$aiSuggestions = [];
 	}
@@ -76,6 +79,13 @@
 				onclick={() => {
 					applyAllChanges();
 				}}>Apply All Changes</Button
+			>
+			<Button
+				class="mt-2 w-full"
+				variant="outline"
+				onclick={() => {
+					goBackToGrammar();
+				}}>Check Grammar Again</Button
 			>
 		</Card.Content>
 

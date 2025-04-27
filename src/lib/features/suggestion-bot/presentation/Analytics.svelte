@@ -4,25 +4,39 @@
 	import Gauge from '$lib/features/suggestion-bot/presentation/Steps/Gauge.svelte';
 	import ExportButton from '$lib/features/suggestion-bot/presentation/Utils/ExportButton.svelte';
 	import { GLFScore } from '$lib/stores/omegaLOL';
+	import { textContent } from '$lib/stores/textFromEditorStore';
 
 	let { backToTheStart }: { backToTheStart: () => void } = $props();
-	let doubled = $derived.by(() => {
-		if ($GLFScore === 0) {
-			return 100;
-		} else if ($GLFScore >= 1 && $GLFScore <= 3) {
-			return 80;
-		} else if ($GLFScore > 2 && $GLFScore <= 5) {
-			return 50;
-		} else if ($GLFScore > 5 && $GLFScore <= 10) {
-			return 20;
-		} else {
+
+	function getTheDifferential(wrong: number, total: number) {
+		if (total == 0) {
 			return 0;
 		}
+
+		return wrong / total;
+	}
+
+	let difference = $derived.by(() => {
+		return getTheDifferential($GLFScore, $textContent.split(' ').length);
 	});
+
+	// let doubled = $derived.by(() => {
+	// 	if (difference == 0) {
+	// 		return 100;
+	// 	} else if (difference > 0 && difference <= 0.2) {
+	// 		return 80;
+	// 	} else if (difference > 0.2 && difference <= 0.5) {
+	// 		return 50;
+	// 	} else if (difference > 0.5 && difference <= 1) {
+	// 		return 20;
+	// 	} else {
+	// 		return 0;
+	// 	}
+	// });
 </script>
 
 <div class="flex w-full flex-col items-center justify-stretch gap-2 pl-4">
-	<Gauge radius={100} percent={doubled}></Gauge>
+	<Gauge radius={100} percent={difference}></Gauge>
 
 	<Card.Root>
 		<Card.Header>
@@ -33,13 +47,18 @@
 		<Card.Content class="text-base text-blue-500">
 			<ul class="list-outside list-disc px-3">
 				<li class="hover:underline">
-					<a target="_blank" href="https://www.google.com" rel="noopener noreferrer"
-						>How we detect gender fair language</a
+					<a
+						target="_blank"
+						href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2016.00025/full"
+						rel="noopener noreferrer"
+						>How we gender fair language can reduce gender stereotyping and discrimination</a
 					>
 				</li>
 				<li class="mt-2 hover:underline">
-					<a target="_blank" href="https://www.google.com" rel="noopener noreferrer"
-						>What is gender fair language</a
+					<a
+						target="_blank"
+						href="https://pcieerd.dost.gov.ph/images/gad_corner/Gender-fair-language-a-primer.pdf"
+						rel="noopener noreferrer">What is gender fair language</a
 					>
 				</li>
 			</ul>
