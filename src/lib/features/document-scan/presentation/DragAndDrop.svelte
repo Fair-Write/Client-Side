@@ -2,6 +2,7 @@
 	import { CloudUpload, FolderOpen, LoaderCircle } from 'lucide-svelte';
 	import { dragOverHandler } from '../use-case/dragAndDropEvents';
 	import { getSuffix } from '$lib/features/document-scan/use-case/utilts';
+	import { signalTextEditor } from '$lib/stores/signalStore';
 	import {
 		convertDragToFile,
 		convertInputToFile
@@ -76,6 +77,7 @@
 				if (result) {
 					extractedText = true;
 					$textContent = result.data;
+					$signalTextEditor = true;
 				}
 
 				break;
@@ -86,6 +88,7 @@
 					console.log('Getting PDF');
 					extractedText = true;
 					$textContent = pdfText;
+					$signalTextEditor = true;
 				} catch (e) {
 					console.log('Error:', e);
 					toast.error('Failed to get PDF');
@@ -99,6 +102,7 @@
 					const result = await ocrToText(file as File);
 					extractedText = true;
 					$textContent = result;
+					$signalTextEditor = true;
 				} catch (e) {
 					console.log('Error:', e);
 					toast.error('Failed to Scan Image');

@@ -21,6 +21,7 @@
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 	import { toast } from 'svelte-sonner';
 	import { buildInputRules } from '../use-case/inputRules';
+	import { signalTextEditor } from '$lib/stores/signalStore';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -30,9 +31,10 @@
 
 	// // a shitty solution for a big problem but who cares
 	$effect(() => {
-		if ($textContent) {
+		if ($signalTextEditor) {
 			if (view == null) return;
 			reinitializeText(view as EditorView);
+			$signalTextEditor = false;
 		}
 	});
 
