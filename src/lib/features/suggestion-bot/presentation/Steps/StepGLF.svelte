@@ -19,7 +19,8 @@
 	let isEmpty = $derived(suggestionsReference.length != 0);
 	let isLoading = $state(false);
 
-	async function removeMe(index: number) {
+	function removeMe(index: number) {
+		console.log('test' + $aiSuggestions[index]);
 		$replaceStore = [$aiSuggestions[index]];
 		$aiSuggestions.splice(index, 1);
 		suggestionsReference.splice(index, 1);
@@ -41,6 +42,8 @@
 	function ignoreMe(index: number) {
 		$aiSuggestions.splice(index, 1);
 		suggestionsReference.splice(index, 1);
+		// THIS IS FUCKING STUPID! WHY DO YOU HAVE TO REINSTANTIATE
+		$aiSuggestions = [...$aiSuggestions];
 	}
 
 	$effect(() => {
@@ -49,6 +52,8 @@
 		}
 	});
 </script>
+
+$aiSuggestions[index]
 
 <ScrollArea class="h-[700px] w-full px-3">
 	<Card.Root class="w-full ">
