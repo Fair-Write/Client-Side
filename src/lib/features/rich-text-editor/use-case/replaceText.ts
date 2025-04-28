@@ -49,7 +49,10 @@ export function replaceWordInDocument(
 
 		if (formattingSegments.length > 0) {
 			// Delete the original text
-			transaction.delete(offSet + nodesBefore.length + pos - 1, endSet + nodesBefore.length + pos);
+			transaction.delete(
+				offSet + nodesBefore.length + pos - 1,
+				endSet + nodesBefore.length + pos - 1
+			);
 
 			// If we only have one segment, it's simple
 			if (formattingSegments.length === 1) {
