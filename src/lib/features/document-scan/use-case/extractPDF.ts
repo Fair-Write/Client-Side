@@ -29,7 +29,7 @@ function filterTokenizedText(items: PDFJS.TextItem[]) {
 		.map((item) => {
 			// this solution is ass
 			if (item.str === '') return;
-			return `${item.str}\n`;
+			return `<p>${item.str}</p>`;
 		})
 		.join('');
 }
