@@ -22,22 +22,11 @@ const computeHighlightDecorations = (
 				const start = lint.offSet + 1; // Adjust offset for ProseMirror position
 				const end = lint.endSet + 1;
 
-				const nodesBefore: { type: string; pos: number }[] = [];
-				doc.nodesBetween(0, start, (node, pos) => {
-					if (node.isBlock && pos < start) {
-						nodesBefore.push({
-							type: node.type.name,
-							pos: pos
-						});
-					}
-					return true;
-				});
-				console.log('nodes before', nodesBefore.length);
 				if (start < plainOffset + textLen && end > plainOffset) {
 					const localFrom = Math.max(start - plainOffset, 0);
 					const localTo = Math.min(end - plainOffset, textLen);
-					const startPos = pos + localFrom + nodesBefore.length - 1;
-					const endPos = pos + localTo + nodesBefore.length - 1;
+					const startPos = pos + localFrom;
+					const endPos = pos + localTo;
 
 					if (startPos < endPos) {
 						// Create the appropriate decoration

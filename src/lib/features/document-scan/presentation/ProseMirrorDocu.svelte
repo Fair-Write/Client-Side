@@ -120,17 +120,28 @@
 			dispatchTransaction(transaction) {
 				const newState = view!.state.apply(transaction);
 				view!.updateState(newState);
-				$textContent = newState.doc.textContent.toString();
 
+				// Extract text with spaces between nodes
+				let textWithSpaces = '';
+				newState.doc.forEach((node) => {
+					if (textWithSpaces.length > 0) {
+						textWithSpaces += ' '; // Add space between nodes
+					}
+					if (node.textContent) {
+						textWithSpaces += node.textContent;
+					}
+				});
+				$textContent = textWithSpaces;
+
+				// HTML serialization (keep this unchanged)
 				const fragment = DOMSerializer.fromSchema(mySchema).serializeFragment(newState.doc.content);
 				const div = document.createElement('div');
 				div.appendChild(fragment);
-
 				$textContentHTML = div.innerHTML;
 			}
 		});
-		reconfigureAllPlugins();
 
+		reconfigureAllPlugins();
 		return () => {
 			view?.destroy();
 		};
