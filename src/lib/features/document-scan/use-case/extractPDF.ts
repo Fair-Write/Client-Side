@@ -9,29 +9,42 @@ import * as pdfWorker from 'pdfjs-dist/build/pdf.worker.mjs';
 PDFJS.GlobalWorkerOptions.workerSrc = import.meta.url + 'pdfjs-dist/build/pdf.worker.mjs';
 
 function filterTokenizedText(items: PDFJS.TextItem[]) {
-	// To future lue
-	// the current problem right now is we can't render indents properly
-	// to answer this we can either check if the item.str == ""
-	// this means that it is an indent and we can return an indent as such
-	// we have to wrap each line of text with p tag
-	// the problem is that pdfjs is not perfect
-	// you'll have to adjust the prosemirror css because p tags have too much
-	// space.
+	const lines: { y: number; text: string }[] = [];
 
-	// good luck
+	const cleanText = (str: string) => {
+		// Remove emoji-like characters and unreadable artifacts
+		return str
+			.replace(/[\u{1F600}-\u{1F64F}]/gu, '') // Emoticons
+			.replace(/[\u{1F300}-\u{1F5FF}]/gu, '') // Misc Symbols and Pictographs
+			.replace(/[\u{1F680}-\u{1F6FF}]/gu, '') // Transport and Map
+			.replace(/[\u{2600}-\u{26FF}]/gu, '') // Misc symbols
+			.replace(/[\u{2700}-\u{27BF}]/gu, '') // Dingbats
+			.replace(/[�]/g, '') // Specific weird artifacts you encountered
+			.replace(/\s+/g, ' ') // Normalize multiple spaces
+			.trim();
+	};
 
-	items.map((item) => {
-		if (item) {
-			console.log(item);
+	items.forEach((item) => {
+		const rawText = item.str;
+		const cleaned = cleanText(rawText);
+
+		if (!cleaned) return; // Skip if now empty after cleaning
+
+		const y = item.transform[5] as number;
+
+		const line = lines.find((l) => Math.abs(l.y - y) < 2);
+
+		if (line) {
+			line.text += ' ' + cleaned;
+		} else {
+			lines.push({ y, text: cleaned });
 		}
 	});
-	return items
-		.map((item) => {
-			// this solution is ass
-			if (item.str === '' || item.str === '\n') return;
-			return `<p>${item.str}</p>`;
-		})
-		.join('');
+
+	return lines
+		.sort((a, b) => b.y - a.y) // Top to bottom
+		.map((line) => line.text)
+		.join('\n');
 }
 
 const getPageText = async (pdf: PDFJS.PDFDocument, pageNo: number) => {
