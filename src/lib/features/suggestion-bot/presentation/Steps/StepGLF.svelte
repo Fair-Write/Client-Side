@@ -53,8 +53,6 @@
 	});
 </script>
 
-$aiSuggestions[index]
-
 <ScrollArea class="h-[700px] w-full px-3">
 	<Card.Root class="w-full ">
 		<Card.Header>
