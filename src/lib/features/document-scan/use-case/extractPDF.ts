@@ -43,7 +43,7 @@ function filterTokenizedText(items: PDFJS.TextItem[]) {
 
 	return lines
 		.sort((a, b) => b.y - a.y) // Top to bottom
-		.map((line) => line.text)
+		.map((line) => `<p>${line.text}</p>`)
 		.join('\n');
 }
 

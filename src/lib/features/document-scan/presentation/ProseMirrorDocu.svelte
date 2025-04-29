@@ -40,9 +40,19 @@
 
 	// when stores has changed, the plugins must be reconfigured
 	function reinitializeText(view: EditorView) {
-		const node = view.state.schema.text($textContent);
+		// Use your existing $textContent variable
+		const htmlString = $textContent;
+		const domParser = new window.DOMParser();
+		const dom = domParser.parseFromString(htmlString, 'text/html');
 
-		const tr = view.state.tr.replaceWith(0, view.state.doc.content.size, node);
+		// Use ProseMirror's DOM parser with your schema
+		const prosemirrorParser = DOMParser.fromSchema(view.state.schema);
+
+		// Parse the HTML content into ProseMirror nodes
+		const fragment = prosemirrorParser.parse(dom.body);
+
+		// Replace the entire document content with the new nodes
+		const tr = view.state.tr.replaceWith(0, view.state.doc.content.size, fragment);
 		view.dispatch(tr);
 	}
 
