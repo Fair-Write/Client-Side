@@ -123,7 +123,7 @@ export async function glfCheckService(nextSlide: () => void) {
 	// JSON.parse(localStorage.getItem('preferences') as string)
 	const preferenceList = () => {
 		if (get(preferenceStore).length === 0) {
-			return `{"Nyala": "gender_fair"}`;
+			return { Nyala: 'gender_fair' };
 		} else {
 			const preferences = JSON.parse(
 				localStorage.getItem('preferences') || `{"Nyala": "gender_fair"}`
@@ -131,6 +131,7 @@ export async function glfCheckService(nextSlide: () => void) {
 				name: string;
 				pronoun: string;
 			}[];
+
 			const preferenceMap = preferences.reduce(
 				(acc: { [key: string]: string }, element: { name: string; pronoun: string }) => {
 					acc[element.name] = element.pronoun;
@@ -138,9 +139,16 @@ export async function glfCheckService(nextSlide: () => void) {
 				},
 				{}
 			);
+
+			if (Object.keys(preferenceMap).includes('') || preferenceMap[''] == '')
+				return { Nyala: 'gender_fair' };
+
 			return preferenceMap;
 		}
 	};
+
+	console.log('preference', preferenceList());
+
 	// For Deployment
 	try {
 		const post = await fetch(`${url}gfl`, {
@@ -155,6 +163,7 @@ export async function glfCheckService(nextSlide: () => void) {
 		});
 
 		const data = await post.json();
+
 		await revisedTextStore.set(data.revised_text as string);
 
 		if (Object.keys(data).length !== 0) {
