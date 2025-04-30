@@ -122,6 +122,7 @@ export async function glfCheckService(nextSlide: () => void) {
 
 	// JSON.parse(localStorage.getItem('preferences') as string)
 	const preferenceList = () => {
+		// if any preference is empty roll back to this one
 		if (get(preferenceStore).length === 0) {
 			return { Nyala: 'gender_fair' };
 		} else {
@@ -140,6 +141,7 @@ export async function glfCheckService(nextSlide: () => void) {
 				{}
 			);
 
+			// if any preference is an empty string roll back to this one
 			if (Object.keys(preferenceMap).includes('') || preferenceMap[''] == '')
 				return { Nyala: 'gender_fair' };
 
