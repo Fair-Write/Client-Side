@@ -165,6 +165,7 @@ export async function glfCheckService(nextSlide: () => void) {
 		});
 
 		const data = await post.json();
+		console.log('data', data);
 
 		await revisedTextStore.set(data.revised_text as string);
 
