@@ -19,9 +19,10 @@
 	let isEmpty = $derived(suggestionsReference.length != 0);
 	let isLoading = $state(false);
 
-	function removeMe(index: number) {
-		console.log('test' + $aiSuggestions[index]);
-		$replaceStore = [$aiSuggestions[index]];
+	function removeMe(index: number, correctionString: string) {
+		let suggestion = { ...$aiSuggestions[index] };
+		suggestion.chosenReplacement = correctionString;
+		$replaceStore = [suggestion];
 		$aiSuggestions.splice(index, 1);
 		suggestionsReference.splice(index, 1);
 		// refetch every remove omega lol
@@ -30,7 +31,10 @@
 		$replaceStore = $aiSuggestions
 			.sort((a, b) => b.offSet - a.offSet) // Sort by offSet in ascending order
 			.map((suggestion) => {
-				return suggestion;
+				let sug = { ...suggestion };
+				sug.chosenReplacement = suggestion.replacements[0];
+
+				return sug;
 			});
 
 		// $textContent = $revisedTextStore;

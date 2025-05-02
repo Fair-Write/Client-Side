@@ -3,7 +3,8 @@ export type TSuggestion = {
 	originalText: string;
 	offSet: number;
 	endSet: number;
-	replacement: string;
+	replacements: string[];
+	chosenReplacement: string;
 	correctionType: 'grammar' | 'spelling' | 'gfl';
 	message: string;
 	rationale: string;
