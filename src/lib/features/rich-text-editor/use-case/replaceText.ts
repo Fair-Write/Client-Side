@@ -16,7 +16,7 @@ export function replaceWordInDocument(
 	dispatch: (tr: Transaction) => void,
 	words: TSuggestion
 ): void {
-	const { chosenReplacement, offSet, endSet } = words;
+	const { replacement, offSet, endSet } = words;
 	const { doc, schema } = editorState;
 	const transaction = editorState.tr;
 
@@ -56,32 +56,27 @@ export function replaceWordInDocument(
 
 			// If we only have one segment, it's simple
 			if (formattingSegments.length === 1) {
-				const textNode = schema.text(chosenReplacement, formattingSegments[0].marks);
+				const textNode = schema.text(replacement, formattingSegments[0].marks);
 				transaction.insert(offSet + nodesBefore.length + pos - 1, textNode);
 			} else {
-				// Multiple formatting segments - distribute the chosenReplacement text proportionally
+				// Multiple formatting segments - distribute the replacement text proportionally
 				const totalOriginalLength = endSet - offSet;
 				let insertPos = offSet + 1;
-				let chosenReplacementPos = 0;
+				let replacementPos = 0;
 
 				formattingSegments.forEach((segment, index) => {
-					// Calculate what portion of the chosenReplacement text should get this formatting
+					// Calculate what portion of the replacement text should get this formatting
 					const portion = segment.length / totalOriginalLength;
-					let segmentLength = Math.round(chosenReplacement.length * portion);
+					let segmentLength = Math.round(replacement.length * portion);
 
 					// For the last segment, use all remaining text to avoid rounding issues
 					if (index === formattingSegments.length - 1) {
-						segmentLength = chosenReplacement.length - chosenReplacementPos;
+						segmentLength = replacement.length - replacementPos;
 					}
 
 					if (segmentLength > 0) {
 						// Get the text for this segment
-
-						const segmentText = chosenReplacement.slice(
-							chosenReplacementPos,
-							chosenReplacementPos + segmentLength
-						);
-
+						const segmentText = replacement.slice(replacementPos, replacementPos + segmentLength);
 
 						// Create a text node with the original formatting
 						const textNode = schema.text(segmentText, segment.marks);
@@ -91,8 +86,7 @@ export function replaceWordInDocument(
 
 						// Update positions
 						insertPos += segmentText.length;
-						chosenReplacementPos += segmentLength;
-
+						replacementPos += segmentLength;
 					}
 				});
 			}

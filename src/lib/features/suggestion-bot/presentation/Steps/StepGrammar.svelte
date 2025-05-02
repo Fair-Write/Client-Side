@@ -21,20 +21,15 @@
 
 	let isLoading = $state(false);
 
-	function removeMe(index: number, correctionString: string) {
-		let suggestion = { ...$aiSuggestions[index] };
-		suggestion.chosenReplacement = correctionString;
-		$replaceStore = [suggestion];
+	function removeMe(index: number) {
+		$replaceStore = [$aiSuggestions[index]];
 		$aiSuggestions.splice(index, 1);
 		suggestionsReference.splice(index, 1);
 	}
 
 	function applyAllChanges() {
 		$replaceStore = $aiSuggestions.reverse().map((suggestion) => {
-			let sug = { ...suggestion };
-			sug.chosenReplacement = suggestion.replacements[0];
-
-			return sug;
+			return suggestion;
 		});
 		// $textContent = $revisedTextStore;
 		// console.log($textContent);
@@ -52,6 +47,8 @@
 
 	$effect(() => {
 		if ($aiSuggestions) {
+			console.log('BAR');
+
 			suggestionsReference = $aiSuggestions;
 		}
 	});
