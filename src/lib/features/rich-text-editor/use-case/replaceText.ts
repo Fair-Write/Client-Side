@@ -76,10 +76,12 @@ export function replaceWordInDocument(
 
 					if (segmentLength > 0) {
 						// Get the text for this segment
+
 						const segmentText = chosenReplacement.slice(
 							chosenReplacementPos,
 							chosenReplacementPos + segmentLength
 						);
+
 
 						// Create a text node with the original formatting
 						const textNode = schema.text(segmentText, segment.marks);
@@ -90,6 +92,7 @@ export function replaceWordInDocument(
 						// Update positions
 						insertPos += segmentText.length;
 						chosenReplacementPos += segmentLength;
+
 					}
 				});
 			}
