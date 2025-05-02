@@ -160,16 +160,6 @@
 				class="flex items-center justify-between border-b border-dashed border-stone-500 pb-2 text-base "
 			>
 				<div class="flex items-center justify-center gap-2">
-					<div
-						class={cn(
-							'h-[10px] w-[10px] rounded-full',
-							suggestion.correctionType === 'grammar' && 'bg-blue-500',
-							suggestion.correctionType === 'spelling' && 'bg-red-500',
-							suggestion.correctionType === 'gfl' && 'bg-violet-500'
-						)}
-					>
-						&nbsp;
-					</div>
 					{suggestion.message}
 				</div>
 
@@ -189,39 +179,40 @@
 			<p class="my-3 text-sm">
 				<span class="font-bold text-blue-500">Revision:&nbsp;</span>
 			</p>
-
-			{#each suggestion.replacements as item}
-				<button
-					disabled={isLoading}
-					class={cn(
-						'flex w-full items-center justify-center rounded-[9px] border border-solid p-[1px]',
-						suggestion.correctionType === 'grammar' &&
-							'border-blue-500 bg-gradient-to-t from-indigo-700 to-blue-300 p-[1px] transition-all ease-in-out hover:border-sky-500 hover:from-blue-500 hover:to-sky-200',
-						suggestion.correctionType === 'spelling' &&
-							'border-red-500 bg-gradient-to-t from-rose-700 to-red-300 p-[1px] transition-all ease-in-out hover:border-red-700 hover:from-red-700 hover:to-red-200',
-						suggestion.correctionType === 'gfl' &&
-							'border-violet-500 bg-gradient-to-t from-purple-700 to-violet-300 p-[1px] transition-all ease-in-out hover:border-violet-700 hover:from-violet-700 hover:to-violet-200'
-					)}
-					onclick={async () => {
-						await removeMe(index, item);
-						await jempoyMoves(suggestion.correctionType);
-					}}
-				>
-					<span
+			<div class="flex w-full flex-col gap-1">
+				{#each suggestion.replacements as item}
+					<button
+						disabled={isLoading}
 						class={cn(
-							'w-full rounded-[8px] bg-gradient-to-t p-1 text-base font-bold transition-all ease-in-out',
+							'flex w-full items-center justify-center rounded-[9px] border border-solid p-[1px]',
 							suggestion.correctionType === 'grammar' &&
-								'from-indigo-700 to-blue-500  text-blue-50 hover:bg-sky-300 hover:from-blue-500 hover:text-sky-100 ',
+								'border-blue-500 bg-gradient-to-t from-indigo-700 to-blue-300 p-[1px] transition-all ease-in-out hover:border-sky-500 hover:from-blue-500 hover:to-sky-200',
 							suggestion.correctionType === 'spelling' &&
-								'w-full from-rose-700 to-red-500  text-red-50 hover:bg-red-200 hover:from-red-500 hover:to-red-400  hover:text-red-50',
+								'border-red-500 bg-gradient-to-t from-rose-700 to-red-300 p-[1px] transition-all ease-in-out hover:border-red-700 hover:from-red-700 hover:to-red-200',
 							suggestion.correctionType === 'gfl' &&
-								'w-full from-purple-700 to-violet-500  text-violet-50 hover:bg-violet-200 hover:from-violet-500 hover:to-violet-400  hover:text-violet-50'
+								'border-violet-500 bg-gradient-to-t from-purple-700 to-violet-300 p-[1px] transition-all ease-in-out hover:border-violet-700 hover:from-violet-700 hover:to-violet-200'
 						)}
+						onclick={async () => {
+							await removeMe(index, item);
+							await jempoyMoves(suggestion.correctionType);
+						}}
 					>
-						{item}
-					</span>
-				</button>
-			{/each}
+						<span
+							class={cn(
+								'w-full rounded-[8px] bg-gradient-to-t p-1 text-base font-bold transition-all ease-in-out',
+								suggestion.correctionType === 'grammar' &&
+									'from-indigo-700 to-blue-500  text-blue-50 hover:bg-sky-300 hover:from-blue-500 hover:text-sky-100 ',
+								suggestion.correctionType === 'spelling' &&
+									'w-full from-rose-700 to-red-500  text-red-50 hover:bg-red-200 hover:from-red-500 hover:to-red-400  hover:text-red-50',
+								suggestion.correctionType === 'gfl' &&
+									'w-full from-purple-700 to-violet-500  text-violet-50 hover:bg-violet-200 hover:from-violet-500 hover:to-violet-400  hover:text-violet-50'
+							)}
+						>
+							{item}
+						</span>
+					</button>
+				{/each}
+			</div>
 		</Card.Content>
 		<Card.Footer class="flex flex-col items-center justify-start gap-2 p-3 py-2">
 			<Button
