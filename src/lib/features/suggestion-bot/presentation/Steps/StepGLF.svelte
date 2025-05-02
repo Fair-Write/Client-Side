@@ -19,9 +19,10 @@
 	let isEmpty = $derived(suggestionsReference.length != 0);
 	let isLoading = $state(false);
 
-	function removeMe(index: number) {
-		console.log('test' + $aiSuggestions[index]);
-		$replaceStore = [$aiSuggestions[index]];
+	function removeMe(index: number, correctionString: string) {
+		let suggestion = { ...$aiSuggestions[index] };
+		suggestion.chosenReplacement = correctionString;
+		$replaceStore = [suggestion];
 		$aiSuggestions.splice(index, 1);
 		suggestionsReference.splice(index, 1);
 		// refetch every remove omega lol

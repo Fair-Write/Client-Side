@@ -133,8 +133,8 @@
 							replacements: [...correction.replacements],
 							correctionType: 'gfl',
 							chosenReplacement: '',
-							message: correction.message,
-							rational: ''
+							message: 'Gender Fair Language',
+							rational: 'Gender Fair Language'
 						})
 					);
 
