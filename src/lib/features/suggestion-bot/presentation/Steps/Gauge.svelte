@@ -14,21 +14,24 @@
 	const percentNormalized = $derived(Math.floor((1 - percent) * 100));
 	const offset = $derived(arc - (percentNormalized / 100) * arc);
 
-	const percentType = $derived.by(() => {
-		console.log('percent', percent);
+	/** 
+	@deprecated 
+	**/
+	// const percentType = $derived.by(() => {
+	// 	console.log('percent', percent);
 
-		console.log('percent normalized', percentNormalized);
+	// 	console.log('percent normalized', percentNormalized);
 
-		if (percentNormalized <= 45 && percentNormalized >= 0) {
-			return 'poor';
-		} else if (percentNormalized >= 50 && percentNormalized <= 70) {
-			return 'average';
-		} else if (percentNormalized >= 80 && percentNormalized <= 89) {
-			return 'good';
-		} else if (percentNormalized >= 90 && percentNormalized <= 100) {
-			return 'excellent';
-		}
-	});
+	// 	if (percentNormalized <= 45 && percentNormalized >= 0) {
+	// 		return 'poor';
+	// 	} else if (percentNormalized >= 50 && percentNormalized <= 70) {
+	// 		return 'average';
+	// 	} else if (percentNormalized >= 80 && percentNormalized <= 89) {
+	// 		return 'good';
+	// 	} else if (percentNormalized >= 90 && percentNormalized <= 100) {
+	// 		return 'excellent';
+	// 	}
+	// });
 </script>
 
 <Card.Root class="w-full">
@@ -46,7 +49,7 @@
 					<stop offset="100%" stop-color="#5b21b6" stop-opacity="1"></stop>
 				</linearGradient>
 
-				<linearGradient id="grad_good" x1="0" y1="0" x2="1" y2="1">
+				<!-- <linearGradient id="grad_good" x1="0" y1="0" x2="1" y2="1">
 					<stop offset="25%" stop-color="#3b82f6" stop-opacity="1"></stop>
 					<stop offset="70%" stop-color="#2563eb" stop-opacity="1"></stop>
 					<stop offset="100%" stop-color="#4338ca" stop-opacity="1"></stop>
@@ -62,7 +65,7 @@
 					<stop offset="50%" stop-color="#fee2e2 " stop-opacity="0.1"></stop>
 					<stop offset="90%" stop-color="#ef4444" stop-opacity="1"></stop>
 					<stop offset="100%" stop-color="#b91c1c" stop-opacity="1"></stop>
-				</linearGradient>
+				</linearGradient> -->
 
 				<filter id="strong-inner">
 					<feFlood flood-color="#d6d3d1" />
@@ -85,7 +88,7 @@
 					<feComposite operator="atop" in2="SourceGraphic" />
 				</filter>
 			</defs>
-
+			<!-- 
 			<text
 				class={cn(
 					'text-5xl font-bold',
@@ -100,21 +103,24 @@
 				text-anchor="middle"
 			>
 				{percentNormalized}%</text
-			>
-
+			> -->
 			<text
-				class={cn(
-					'text-2xl font-bold capitalize',
-					percentType === 'poor' && 'fill-red-500',
-					percentType === 'average' && 'fill-amber-500',
-					percentType === 'good' && 'fill-blue-500',
-					percentType === 'excellent' && 'fill-purple-500'
-				)}
+				class={cn('text-4xl font-bold', 'fill-purple-500')}
 				x="50%"
-				y="80%"
+				y="50%"
 				dominant-baseline="middle"
 				text-anchor="middle"
-				>{percentType}
+			>
+				{$GLFScore}/{$textContent.split(' ').length}
+			</text>
+			<text
+				class={cn('text-xl font-bold capitalize', 'fill-purple-500')}
+				x="50%"
+				y="82%"
+				dominant-baseline="middle"
+				text-anchor="middle"
+			>
+				Total Score
 			</text>
 
 			<circle
@@ -129,13 +135,27 @@
 				filter="url(#strong-inner)"
 			/>
 
-			<circle
+			<!-- <circle
 				class="gauge_percent"
 				cx={radius}
 				cy={radius}
 				fill="transparent"
 				r={innerRadius}
 				stroke={`url(#grad_${percentType})`}
+				style={"transition: 'stroke-dasharray 0.3s'"}
+				stroke-width={strokeWidth}
+				stroke-dashoffset={offset}
+				stroke-dasharray={dashArray}
+				{transform}
+			/> -->
+
+			<circle
+				class="gauge_percent"
+				cx={radius}
+				cy={radius}
+				fill="transparent"
+				r={innerRadius}
+				stroke={`url(#grad_excellent)`}
 				style={"transition: 'stroke-dasharray 0.3s'"}
 				stroke-width={strokeWidth}
 				stroke-dashoffset={offset}
