@@ -163,7 +163,7 @@
 
 		<div>
 			<p class="text-sm text-muted-foreground">
-				Word Count: {$textContent == '' ? 0 : $textContent.trim().split(/\s+/).length}
+				Word Count: {$textContent.trim().split(/\s+/).length}
 			</p>
 		</div>
 	</div>

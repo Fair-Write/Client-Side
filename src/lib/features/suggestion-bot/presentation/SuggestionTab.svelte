@@ -18,14 +18,11 @@
 	import { textContent, textContentHTML, textTitle } from '$lib/stores/textFromEditorStore';
 	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
 	import { GLFScore } from '$lib/stores/omegaLOL';
-	import { afterNavigate } from '$app/navigation';
 
 	let api = $state<CarouselAPI>();
 	let isSuggestionsTab = $state<boolean>(true);
 	let tabIndex = $state<number>(0);
-	afterNavigate(() => {
-		tabIndex = 0;
-	});
+
 	$effect(() => {
 		if ($progressStore === 0) {
 			if (api) {
