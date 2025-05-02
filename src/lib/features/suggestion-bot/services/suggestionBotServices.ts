@@ -5,52 +5,12 @@ import { progressStore } from '$lib/stores/progressStore';
 import { get } from 'svelte/store';
 import { GLFScore } from '$lib/stores/omegaLOL';
 import { revisedTextStore } from '$lib/stores/revisedTextStore';
-// import axiosInstance from '../../../../service/axios';
 import { toast } from 'svelte-sonner';
 import { preferenceStore } from '$lib/stores/preferenceStore';
 
-// this may be the culprit
-
 const url = import.meta.env.VITE_BACKEND_URL || 'NOTHING';
 
-function isStringOrArrayOfStrings(value: string | string[]) {
-	if (Array.isArray(value)) {
-		// If it's an array, use the first element
-		return value[0];
-	}
-	// Otherwise, it's a string, return it directly
-	return value;
-}
-
-// const checkUrl = () => {
-// 	if (localStorage.getItem('url') !== undefined) {
-// 		return localStorage.getItem('url') as string;
-// 	} else {
-// 		return 'http`://127.0.0.1:8080';
-// 	}
-// };
-
 export async function grammarCheckService(nextSlide: () => void) {
-	console.log(url);
-	// FOR TESTING
-	// aiSuggestions.set([
-	// 	{
-	// 		message: 'Change to plural',
-	// 		originalText: 'firemen',
-	// 		replacement: 'firefighter',
-	// 		correctionType: 'grammar',
-	// 		rationale: 'lorem ipsum somethign something',
-	// 		offSet: 23,
-	// 		endSet: 30,
-	// 		indexReplacement: 5
-	// 	}
-	// ]);
-
-	// progressStore.set(50);
-	// nextSlide();
-
-	// FOR DEPLOYMENT
-
 	try {
 		const post = await fetch(`${url}grammar`, {
 			method: 'POST',
@@ -77,14 +37,17 @@ export async function grammarCheckService(nextSlide: () => void) {
 					originalText: correction.original_text,
 					offSet: correction.character_offset,
 					endSet: correction.character_endset,
-					replacement: isStringOrArrayOfStrings(correction.replacements),
+					replacements: [...correction.replacements],
 					correctionType: 'grammar',
+					chosenReplacement: '',
 					message: correction.message,
 					rational: ''
 				})
 			);
 
 			aiSuggestions.set(await suggestions);
+			console.log('suggestions', suggestions);
+
 			nextSlide();
 			progressStore.set(50);
 		} else {
@@ -98,29 +61,6 @@ export async function grammarCheckService(nextSlide: () => void) {
 }
 
 export async function glfCheckService(nextSlide: () => void) {
-	console.log(url);
-	localStorage.getItem('preferences');
-	// For Testing
-	// setTimeout(() => {
-	// 	aiSuggestions.set([
-	// 		{
-	// 			message: 'Change to firefighter',
-	// 			originalText: 'firemen',
-	// 			replacement: 'firefighter',
-	// 			correctionType: 'gfl',
-	// 			offSet: 23,
-	// 			endSet: 29,
-	// 			indexReplacement: 4,
-	// 			rationale: 'lorem ipsum somethign something'
-	// 		}
-	// 	]);
-
-	// 	GLFScore.set(60);
-	// }, 500);
-	// nextSlide();
-	// progressStore.set(100);
-
-	// JSON.parse(localStorage.getItem('preferences') as string)
 	const preferenceList = () => {
 		// if any preference is empty roll back to this one
 		if (get(preferenceStore).length === 0) {
@@ -183,8 +123,9 @@ export async function glfCheckService(nextSlide: () => void) {
 					originalText: correction.original_text,
 					offSet: correction.character_offset,
 					endSet: correction.character_endset,
-					replacement: isStringOrArrayOfStrings(correction.replacements),
+					replacements: [...correction.replacements],
 					correctionType: 'gfl',
+					chosenReplacement: '',
 					message: 'Gender Fair Language',
 					rational: ''
 				})

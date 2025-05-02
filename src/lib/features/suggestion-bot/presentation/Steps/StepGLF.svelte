@@ -30,7 +30,10 @@
 		$replaceStore = $aiSuggestions
 			.sort((a, b) => b.offSet - a.offSet) // Sort by offSet in ascending order
 			.map((suggestion) => {
-				return suggestion;
+				let sug = { ...suggestion };
+				sug.chosenReplacement = suggestion.replacements[0];
+
+				return sug;
 			});
 
 		// $textContent = $revisedTextStore;
