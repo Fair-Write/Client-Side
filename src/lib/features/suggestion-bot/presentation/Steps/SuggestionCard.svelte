@@ -7,9 +7,7 @@
 	import { aiSuggestions } from '$lib/stores/lintingStore';
 	import { progressStore } from '$lib/stores/progressStore';
 	import { toast } from 'svelte-sonner';
-	import { get } from 'svelte/store';
 	import { textContent } from '$lib/stores/textFromEditorStore';
-	import { foobar } from '../../use-case/test';
 	import { preferenceStore } from '$lib/stores/preferenceStore';
 	import { PUBLIC_BACKEND_URL } from '$env/static/public';
 	import { onMount } from 'svelte';
