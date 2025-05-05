@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Schema, DOMParser } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
 import { DecorationSet } from 'prosemirror-view';
 import createLinterPlugin from '../use-case/LinterPlugin'; // Update this path
-import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 
 // Mock basic ProseMirror schema
 const schema = new Schema({
@@ -52,15 +52,12 @@ describe('Linter Plugin', () => {
 	const countDecorations = (decorationSet: DecorationSet, className: string) => {
 		let count = 0;
 		decorationSet.find().forEach((deco) => {
-			// ProseMirror's Decoration structure is different based on type
-			// For inline decorations, we need to check spec.class
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			if ((deco as any).spec && (deco as any).spec.class === className) {
-				count++;
-			}
+			// @ts-expect-error
+			if (deco.type.attrs.class === className) count++;
 		});
 		return count;
 	};
+
 	beforeEach(() => {
 		// Create a spy on console.log
 		vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -78,22 +75,18 @@ describe('Linter Plugin', () => {
 	});
 
 	it('should create spelling error decorations', () => {
-		const suggestions: TSuggestion[] = [
+		const suggestions = [
 			{
 				offSet: 10, // "This is a tset" - 'tset' is misspelled
 				endSet: 14,
-				correctionType: 'spelling',
-				chosenReplacement: 'BURGER',
-				message: 'BURGER',
-				originalText: 'BURGER',
-				indexReplacement: 5,
-				rationale: 'NONE',
-				replacements: []
+				correctionType: 'spelling'
 			}
 		];
 
 		state = EditorState.create({
 			doc: createDoc('<p>This is a tset paragraph.</p>'),
+			// @ts-expect-error
+
 			plugins: [createLinterPlugin(suggestions)]
 		});
 
@@ -103,22 +96,18 @@ describe('Linter Plugin', () => {
 	});
 
 	it('should create grammar error decorations', () => {
-		const suggestions: TSuggestion[] = [
+		const suggestions = [
 			{
 				offSet: 0, // "Me is" - grammar error
 				endSet: 5,
-				correctionType: 'grammar',
-				chosenReplacement: 'BURGER',
-				message: 'BURGER',
-				originalText: 'BURGER',
-				indexReplacement: 5,
-				rationale: 'NONE',
-				replacements: []
+				correctionType: 'grammar'
 			}
 		];
 
 		state = EditorState.create({
 			doc: createDoc('<p>Me is going to the store.</p>'),
+			// @ts-expect-error
+
 			plugins: [createLinterPlugin(suggestions)]
 		});
 
@@ -128,22 +117,18 @@ describe('Linter Plugin', () => {
 	});
 
 	it('should create gfl error decorations', () => {
-		const suggestions: TSuggestion[] = [
+		const suggestions = [
 			{
 				offSet: 10, // Some gfl error
 				endSet: 25,
-				correctionType: 'gfl',
-				chosenReplacement: 'BURGER',
-				message: 'BURGER',
-				originalText: 'BURGER',
-				indexReplacement: 5,
-				rationale: 'NONE',
-				replacements: []
+				correctionType: 'gfl'
 			}
 		];
 
 		state = EditorState.create({
 			doc: createDoc('<p>This text has some fancy language features.</p>'),
+			// @ts-expect-error
+
 			plugins: [createLinterPlugin(suggestions)]
 		});
 
@@ -153,39 +138,21 @@ describe('Linter Plugin', () => {
 	});
 
 	it('should handle multiple suggestions across different nodes', () => {
-		const suggestions: TSuggestion[] = [
+		const suggestions = [
 			{
 				offSet: 5, // In first paragraph
 				endSet: 10,
-				correctionType: 'spelling',
-				chosenReplacement: 'BURGER',
-				message: 'BURGER',
-				originalText: 'BURGER',
-				indexReplacement: 5,
-				rationale: 'NONE',
-				replacements: []
+				correctionType: 'spelling'
 			},
 			{
 				offSet: 30, // In second paragraph
 				endSet: 40,
-				correctionType: 'grammar',
-				chosenReplacement: 'BURGER',
-				message: 'BURGER',
-				originalText: 'BURGER',
-				indexReplacement: 5,
-				rationale: 'NONE',
-				replacements: []
+				correctionType: 'grammar'
 			},
 			{
 				offSet: 50, // In heading
 				endSet: 55,
-				correctionType: 'gfl',
-				chosenReplacement: 'BURGER',
-				message: 'BURGER',
-				originalText: 'BURGER',
-				indexReplacement: 5,
-				rationale: 'NONE',
-				replacements: []
+				correctionType: 'gfl'
 			}
 		];
 
@@ -194,7 +161,8 @@ describe('Linter Plugin', () => {
 				'<p>First paragraph with error.</p>' +
 					'<p>Second paragraph with another error.</p>' +
 					'<h2>Heading with gfl issue.</h2>'
-			),
+			), // @ts-expect-error
+
 			plugins: [createLinterPlugin(suggestions)]
 		});
 
@@ -206,22 +174,18 @@ describe('Linter Plugin', () => {
 	});
 
 	it('should update decorations when document changes', () => {
-		const suggestions: TSuggestion[] = [
+		const suggestions = [
 			{
 				offSet: 10,
 				endSet: 15,
-				correctionType: 'spelling',
-				chosenReplacement: 'BURGER',
-				message: 'BURGER',
-				originalText: 'BURGER',
-				indexReplacement: 5,
-				rationale: 'NONE',
-				replacements: []
+				correctionType: 'spelling'
 			}
 		];
 
 		state = EditorState.create({
 			doc: createDoc('<p>Text with a misspelled word.</p>'),
+			// @ts-expect-error
+
 			plugins: [createLinterPlugin(suggestions)]
 		});
 
@@ -240,22 +204,18 @@ describe('Linter Plugin', () => {
 	});
 
 	it('should handle suggestions that span partial text nodes', () => {
-		const suggestions: TSuggestion[] = [
+		const suggestions = [
 			{
 				offSet: 8, // "This is [partially highlighted] text"
 				endSet: 28,
-				correctionType: 'spelling',
-				chosenReplacement: 'BURGER',
-				message: 'BURGER',
-				originalText: 'BURGER',
-				indexReplacement: 5,
-				rationale: 'NONE',
-				replacements: []
+				correctionType: 'spelling'
 			}
 		];
 
 		state = EditorState.create({
 			doc: createDoc('<p>This is partially highlighted text.</p>'),
+			// @ts-expect-error
+
 			plugins: [createLinterPlugin(suggestions)]
 		});
 
@@ -265,62 +225,49 @@ describe('Linter Plugin', () => {
 	});
 
 	it('should handle suggestions at the edges of text nodes', () => {
-		const suggestions: TSuggestion[] = [
+		const suggestions = [
 			{
 				offSet: 0, // Start of text
 				endSet: 7,
-				correctionType: 'grammar',
-				chosenReplacement: 'BURGER',
-				message: 'BURGER',
-				originalText: 'BURGER',
-				indexReplacement: 5,
-				rationale: 'NONE',
-				replacements: []
+				correctionType: 'grammar'
 			},
 			{
 				offSet: 24, // End of text
 				endSet: 32,
-				correctionType: 'spelling',
-				chosenReplacement: 'BURGER',
-				message: 'BURGER',
-				originalText: 'BURGER',
-				indexReplacement: 5,
-				rationale: 'NONE',
-				replacements: []
+				correctionType: 'spelling'
 			}
 		];
 
 		state = EditorState.create({
 			doc: createDoc('<p>This is some sample text here.</p>'),
+			// @ts-expect-error
+
 			plugins: [createLinterPlugin(suggestions)]
 		});
 
 		const decorationSet = state.plugins[0].getState(state);
 		expect(decorationSet).toBeDefined();
+		console.log(decorationSet);
+
 		expect(countDecorations(decorationSet!, 'linter-grammar')).toBe(1);
 		expect(countDecorations(decorationSet!, 'linter-error')).toBe(1);
 	});
 
 	it('should handle suggestions that cross node boundaries', () => {
 		// This is a complex case that might not be fully supported by the current implementation
-		const suggestions: TSuggestion[] = [
+		const suggestions = [
 			{
 				offSet: 20, // Spans from one paragraph to another
 				endSet: 45,
-				correctionType: 'gfl',
-				chosenReplacement: 'BURGER',
-				message: 'BURGER',
-				originalText: 'BURGER',
-				indexReplacement: 5,
-				rationale: 'NONE',
-				replacements: []
+				correctionType: 'gfl'
 			}
 		];
 
 		state = EditorState.create({
 			doc: createDoc(
 				'<p>First paragraph ends with some text.</p>' + '<p>Second paragraph starts.</p>'
-			),
+			), // @ts-expect-error
+
 			plugins: [createLinterPlugin(suggestions)]
 		});
 
