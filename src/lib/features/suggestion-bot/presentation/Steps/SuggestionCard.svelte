@@ -7,9 +7,7 @@
 	import { aiSuggestions } from '$lib/stores/lintingStore';
 	import { progressStore } from '$lib/stores/progressStore';
 	import { toast } from 'svelte-sonner';
-	import { get } from 'svelte/store';
 	import { textContent } from '$lib/stores/textFromEditorStore';
-	import { foobar } from '../../use-case/test';
 	import { preferenceStore } from '$lib/stores/preferenceStore';
 	import { PUBLIC_BACKEND_URL } from '$env/static/public';
 	import { onMount } from 'svelte';
@@ -84,7 +82,7 @@
 		} else if (bruh == 'gfl') {
 			const preferenceList = () => {
 				if ($preferenceStore.length === 0) {
-					return `{"Nyala": "gender_fair"}`;
+					return { Nyala: 'gender_fair' };
 				} else {
 					const preferences = JSON.parse(
 						localStorage.getItem('preferences') || `{"Nyala": "gender_fair"}`
@@ -92,6 +90,7 @@
 						name: string;
 						pronoun: string;
 					}[];
+
 					const preferenceMap = preferences.reduce(
 						(acc: { [key: string]: string }, element: { name: string; pronoun: string }) => {
 							acc[element.name] = element.pronoun;
@@ -99,6 +98,11 @@
 						},
 						{}
 					);
+
+					// if any preference is an empty string roll back to this one
+					if (Object.keys(preferenceMap).includes('') || preferenceMap[''] == '')
+						return { Nyala: 'gender_fair' };
+
 					return preferenceMap;
 				}
 			};
