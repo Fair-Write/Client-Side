@@ -82,7 +82,7 @@
 		} else if (bruh == 'gfl') {
 			const preferenceList = () => {
 				if ($preferenceStore.length === 0) {
-					return `{"Nyala": "gender_fair"}`;
+					return { Nyala: 'gender_fair' };
 				} else {
 					const preferences = JSON.parse(
 						localStorage.getItem('preferences') || `{"Nyala": "gender_fair"}`
@@ -90,6 +90,7 @@
 						name: string;
 						pronoun: string;
 					}[];
+
 					const preferenceMap = preferences.reduce(
 						(acc: { [key: string]: string }, element: { name: string; pronoun: string }) => {
 							acc[element.name] = element.pronoun;
@@ -97,6 +98,11 @@
 						},
 						{}
 					);
+
+					// if any preference is an empty string roll back to this one
+					if (Object.keys(preferenceMap).includes('') || preferenceMap[''] == '')
+						return { Nyala: 'gender_fair' };
+
 					return preferenceMap;
 				}
 			};
