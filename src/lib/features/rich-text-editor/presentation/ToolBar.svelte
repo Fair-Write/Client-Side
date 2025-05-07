@@ -309,7 +309,7 @@
 				</Button>
 			</Tooltip.Trigger>
 			<Tooltip.Content>
-				<p>Undo</p>
+				<p>Add Bullets</p>
 			</Tooltip.Content>
 		</Tooltip.Root>
 	</Tooltip.Provider>
