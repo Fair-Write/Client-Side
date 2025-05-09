@@ -130,7 +130,7 @@ export async function glfCheckService(nextSlide: () => void) {
 					rational: ''
 				})
 			);
-			GLFScore.set((await suggestions).length);
+			GLFScore.set(get(GLFScore) + (await suggestions).length);
 			aiSuggestions.set(await suggestions);
 			nextSlide();
 			progressStore.set(100);
