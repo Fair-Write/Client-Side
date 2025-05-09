@@ -11,6 +11,7 @@
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { toast } from 'svelte-sonner';
 	import { signalTextEditor } from '$lib/stores/signalStore';
+	import { GLFScore } from '$lib/stores/omegaLOL';
 	// import { toast } from 'svelte-sonner';
 
 	let {
@@ -31,6 +32,10 @@
 		// refetch every remove omega lol
 	}
 	function applyAllChanges() {
+		if ($aiSuggestions[0].correctionType === 'gfl') {
+			$GLFScore += $aiSuggestions.length;
+		}
+
 		$replaceStore = $aiSuggestions
 			.sort((a, b) => b.offSet - a.offSet) // Sort by offSet in ascending order
 			.map((suggestion) => {

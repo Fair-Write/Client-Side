@@ -148,7 +148,7 @@
 	<!-- Heading -->
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger>
-			<Button variant="secondary" class="rounded-md">H <ChevronDown /></Button>
+			<Button variant="secondary" class="rounded-md p-1">H <ChevronDown /></Button>
 		</DropdownMenu.Trigger>
 		<DropdownMenu.Content>
 			<DropdownMenu.Group>
@@ -164,7 +164,8 @@
 	<!-- Font Size -->
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger>
-			<Button variant="secondary" class="rounded-md">Size: {currentFontSize} <ChevronDown /></Button
+			<Button variant="secondary" class="w-[90px] rounded-md p-1"
+				>Size: {currentFontSize} <ChevronDown /></Button
 			>
 		</DropdownMenu.Trigger>
 		<DropdownMenu.Content>
@@ -189,8 +190,9 @@
 	<!-- Font Family -->
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger>
-			<Button variant="secondary" class="rounded-md"
-				>Font: {currentFontFamily} <ChevronDown /></Button
+			<Button variant="secondary" class="w-[105px] rounded-md p-1"
+				>Font: <span class="hidden truncate 2xl:block">{currentFontFamily} </span><ChevronDown
+				/></Button
 			>
 		</DropdownMenu.Trigger>
 		<DropdownMenu.Content>
