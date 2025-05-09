@@ -86,7 +86,7 @@
 					return { Nyala: 'gender_fair' };
 				} else {
 					const preferences = JSON.parse(
-						localStorage.getItem('preferences') || `{"Nyala": "gender_fair"}`
+						localStorage.getItem('preferences') || `[{"Nyala": "gender_fair"}]`
 					) as {
 						name: string;
 						pronoun: string;
