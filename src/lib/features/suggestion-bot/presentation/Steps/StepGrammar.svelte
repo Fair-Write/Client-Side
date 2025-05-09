@@ -7,7 +7,7 @@
 
 	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
-	import { LoaderCircle } from 'lucide-svelte';
+	import { LoaderCircle, Pencil } from 'lucide-svelte';
 
 	let {
 		nextSlide,
@@ -62,7 +62,7 @@
 </script>
 
 <ScrollArea class="h-[700px] w-full px-3 ">
-	<Card.Root class="h-[250px] w-full">
+	<Card.Root class=" w-full">
 		<Card.Header>
 			<Card.Title class="border-b border-dashed border-stone-500 pb-2 font-bold"
 				>Step 2: Grammar Check</Card.Title
@@ -70,7 +70,7 @@
 			<Card.Description>Here is the list of grammar corrections that I can suggest</Card.Description
 			>
 		</Card.Header>
-		<Card.Content>
+		<Card.Content class="flex flex-col gap-2">
 			<Button
 				class="flex w-full items-center  justify-between border border-blue-500 bg-blue-50  text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
 				disabled={isEmpty || isLoading}
@@ -83,19 +83,22 @@
 				{/if}
 			</Button>
 			<Button
-				class="mt-2 w-full"
+				class="flex w-full items-center  justify-between border border-green-500 bg-green-50  text-base font-bold text-green-500 hover:bg-green-500 hover:text-green-50"
+				variant="outline"
+				onclick={() => {
+					backToTheStart();
+				}}
+				><p>Back To Step 1</p>
+
+				<span class="material-symbols-outlined s26">edit</span>
+			</Button>
+			<Button
+				class=" w-full"
 				variant="outline"
 				disabled={!isEmpty || isLoading}
 				onclick={() => {
 					applyAllChanges();
 				}}>Apply All Changes</Button
-			>
-			<Button
-				class="mt-2 w-full"
-				variant="outline"
-				onclick={() => {
-					backToTheStart();
-				}}>Back To The Writting Step</Button
 			>
 		</Card.Content>
 
