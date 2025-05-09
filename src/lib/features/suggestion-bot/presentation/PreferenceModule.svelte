@@ -14,6 +14,22 @@
 	// this is the shittiest implementation of a preference array in history
 	// I fucking hate this implementation
 	// why can't svelte watch mutations of an array
+	function pronounMap(value: string) {
+		switch (value) {
+			case 'female':
+				return 'She/Her';
+
+			case 'male':
+				return 'He/His';
+
+			case 'gender_fair':
+				return 'They/Them';
+
+			default:
+				return '';
+		}
+	}
+
 	onMount(() => {
 		// gets preferences
 		if (localStorage.getItem('preferences')) {
@@ -98,13 +114,13 @@
 								{#if preference.pronoun === ''}
 									Preference
 								{:else}
-									{preference.pronoun}
+									{pronounMap(preference.pronoun)}
 								{/if}
 							</Select.Trigger>
 							<Select.Content>
-								<Select.Item value="male">Male</Select.Item>
-								<Select.Item value="female">Female</Select.Item>
-								<Select.Item value="gender_fair">Neutral</Select.Item>
+								<Select.Item value="male">He/His</Select.Item>
+								<Select.Item value="female">She/Her</Select.Item>
+								<Select.Item value="gender_fair">They/Them</Select.Item>
 							</Select.Content>
 						</Select.Root>
 					</div>
