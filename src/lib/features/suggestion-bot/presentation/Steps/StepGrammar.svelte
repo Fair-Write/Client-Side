@@ -7,15 +7,12 @@
 
 	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
-	// import { textContent } from '$lib/stores/textFromEditorStore';
 	import { LoaderCircle } from 'lucide-svelte';
-	import { toast } from 'svelte-sonner';
-	import { textContent } from '$lib/stores/textFromEditorStore';
-	import { revisedTextStore } from '$lib/stores/revisedTextStore';
-	import { progressStore } from '$lib/stores/progressStore';
-	import { signalTextEditor } from '$lib/stores/signalStore';
 
-	let { nextSlide }: { nextSlide: () => Promise<void> } = $props();
+	let {
+		nextSlide,
+		backToTheStart
+	}: { nextSlide: () => Promise<void>; backToTheStart: () => void } = $props();
 	let suggestionsReference = $state<TSuggestion[]>($aiSuggestions);
 	let isEmpty = $derived(suggestionsReference.length != 0);
 
@@ -92,6 +89,13 @@
 				onclick={() => {
 					applyAllChanges();
 				}}>Apply All Changes</Button
+			>
+			<Button
+				class="mt-2 w-full"
+				variant="outline"
+				onclick={() => {
+					backToTheStart();
+				}}>Back To The Writting Step</Button
 			>
 		</Card.Content>
 
