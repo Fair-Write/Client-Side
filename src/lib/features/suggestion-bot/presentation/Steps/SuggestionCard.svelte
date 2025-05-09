@@ -11,6 +11,7 @@
 	import { preferenceStore } from '$lib/stores/preferenceStore';
 	import { PUBLIC_BACKEND_URL } from '$env/static/public';
 	import { onMount } from 'svelte';
+	import { GLFScore } from '$lib/stores/omegaLOL';
 
 	let isCompact = $state<boolean>(false);
 	let {
@@ -197,6 +198,9 @@
 								'border-violet-500 bg-gradient-to-t from-purple-700 to-violet-300 p-[1px] transition-all ease-in-out hover:border-violet-700 hover:from-violet-700 hover:to-violet-200'
 						)}
 						onclick={async () => {
+							if (suggestion.correctionType === 'gfl') {
+								$GLFScore += 1;
+							}
 							await removeMe(index, item);
 							await jempoyMoves(suggestion.correctionType);
 						}}
@@ -224,6 +228,9 @@
 				size="sm"
 				class="w-full text-base font-bold text-stone-500 "
 				onclick={() => {
+					if (suggestion.correctionType === 'gfl') {
+						$GLFScore += 1;
+					}
 					ignoreMe(index);
 				}}>Ignore</Button
 			>
@@ -248,7 +255,12 @@
 			<div class="flex items-center justify-center gap-1">
 				<button
 					class="material-symbols-outlined s18 cursor-pointer select-none rounded-full border border-solid border-red-500 bg-transparent p-1 text-red-500 hover:bg-red-500 hover:text-red-50 hover:transition-all hover:ease-in-out"
-					onclick={() => ignoreMe(index)}>delete</button
+					onclick={() => {
+						if (suggestion.correctionType === 'gfl') {
+							$GLFScore += 1;
+						}
+						ignoreMe(index);
+					}}>delete</button
 				>
 				<button
 					class="material-symbols-outlined s18 cursor-pointer select-none rounded-full border border-solid border-stone-500 bg-transparent p-1 text-stone-500 hover:bg-stone-500 hover:text-stone-50 hover:transition-all hover:ease-in-out"

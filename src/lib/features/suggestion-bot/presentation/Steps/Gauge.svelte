@@ -10,7 +10,7 @@
 	const arc = $derived(circumference * (260 / 360));
 	const dashArray = $derived(`${arc} ${circumference}`);
 	const transform = $derived(`rotate(140, ${radius}, ${radius})`);
-
+	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	const percentNormalized = $derived(Math.floor((1 - percent) * 100));
 	const offset = $derived(arc - (percentNormalized / 100) * arc);
 
@@ -168,5 +168,27 @@
 			{$GLFScore} out of {$textContent.split(' ').length} word/s in the document were found as non-gender
 			fair
 		</p>
+
+		<Tooltip.Provider>
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<div
+						class="group rounded-full border border-solid border-orange-500 p-2 hover:bg-orange-500 hover:transition-all hover:ease-in-out"
+					>
+						<p class="text-base font-bold text-orange-500 group-hover:text-white">* DISCLAIMER *</p>
+					</div></Tooltip.Trigger
+				>
+				<Tooltip.Content class="flex h-[250px] w-[300px] items-center justify-center">
+					<p class="text-base">
+						At present, there is no universally accepted or standardized instrument for determining
+						whether a text is truly gender-fair.
+						<br />
+						<br />
+						Assessments of gender fairness in language may vary depending on cultural context, linguistic
+						norms, and individual interpretation.
+					</p>
+				</Tooltip.Content>
+			</Tooltip.Root>
+		</Tooltip.Provider>
 	</Card.Content>
 </Card.Root>

@@ -11,10 +11,14 @@
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { toast } from 'svelte-sonner';
 	import { signalTextEditor } from '$lib/stores/signalStore';
+	import { GLFScore } from '$lib/stores/omegaLOL';
 	// import { toast } from 'svelte-sonner';
 
-	let { nextSlide, goBackToGrammar }: { nextSlide: () => void; goBackToGrammar: () => void } =
-		$props();
+	let {
+		nextSlide,
+		goBackToGrammar,
+		backToTheStart
+	}: { nextSlide: () => void; goBackToGrammar: () => void; backToTheStart: () => void } = $props();
 	let suggestionsReference = $state<TSuggestion[]>($aiSuggestions);
 	let isEmpty = $derived(suggestionsReference.length != 0);
 	let isLoading = $state(false);
@@ -28,6 +32,10 @@
 		// refetch every remove omega lol
 	}
 	function applyAllChanges() {
+		if ($aiSuggestions[0].correctionType === 'gfl') {
+			$GLFScore += $aiSuggestions.length;
+		}
+
 		$replaceStore = $aiSuggestions
 			.sort((a, b) => b.offSet - a.offSet) // Sort by offSet in ascending order
 			.map((suggestion) => {
@@ -67,7 +75,7 @@
 				>Here is the list of Gender Fair appropriate words that I can suggest</Card.Description
 			>
 		</Card.Header>
-		<Card.Content>
+		<Card.Content class="flex flex-col gap-2">
 			<Button
 				class="flex w-full items-center  justify-between border border-blue-500 bg-blue-50  text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
 				disabled={isEmpty || isLoading}
@@ -78,21 +86,34 @@
 				<p>Proceed</p>
 				<span class="material-symbols-outlined s16">arrow_forward_ios</span></Button
 			>
-			<!--	TODO: please add a loading screen for this one kasi magiging multistep -->
+
 			<Button
-				class="mt-2 w-full"
+				class="flex w-full items-center  justify-between border border-fuchsia-500 bg-fuchsia-50  text-base font-bold text-fuchsia-500 hover:bg-fuchsia-500 hover:text-fuchsia-50"
+				variant="outline"
+				onclick={() => {
+					goBackToGrammar();
+				}}
+			>
+				<p>Check Grammar</p>
+				<span class="material-symbols-outlined s26">abc</span>
+			</Button>
+			<Button
+				class="flex w-full items-center  justify-between border border-green-500 bg-green-50  text-base font-bold text-green-500 hover:bg-green-500 hover:text-green-50"
+				variant="outline"
+				onclick={() => {
+					backToTheStart();
+				}}
+				><p>Back To Step 1</p>
+
+				<span class="material-symbols-outlined s26">edit</span>
+			</Button>
+			<Button
+				class="w-full"
 				disabled={!isEmpty || isLoading}
 				variant="outline"
 				onclick={() => {
 					applyAllChanges();
 				}}>Apply All Changes</Button
-			>
-			<Button
-				class="mt-2 w-full"
-				variant="outline"
-				onclick={() => {
-					goBackToGrammar();
-				}}>Check Grammar Again</Button
 			>
 		</Card.Content>
 

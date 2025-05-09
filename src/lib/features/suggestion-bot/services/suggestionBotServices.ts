@@ -3,7 +3,6 @@ import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggesti
 import { aiSuggestions } from '$lib/stores/lintingStore';
 import { progressStore } from '$lib/stores/progressStore';
 import { get } from 'svelte/store';
-import { GLFScore } from '$lib/stores/omegaLOL';
 import { revisedTextStore } from '$lib/stores/revisedTextStore';
 import { toast } from 'svelte-sonner';
 import { preferenceStore } from '$lib/stores/preferenceStore';
@@ -130,7 +129,6 @@ export async function glfCheckService(nextSlide: () => void) {
 					rational: ''
 				})
 			);
-			GLFScore.set((await suggestions).length);
 			aiSuggestions.set(await suggestions);
 			nextSlide();
 			progressStore.set(100);

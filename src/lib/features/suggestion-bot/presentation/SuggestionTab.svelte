@@ -57,8 +57,9 @@
 
 	async function goBackToGrammar() {
 		if (api) {
-			api.scrollTo(1);
-			$progressStore = 0;
+			api.scrollTo(0);
+			tabIndex = api.selectedScrollSnap();
+			// $progressStore = 0;
 		}
 		await grammarCheckService(nextSlide);
 	}
@@ -74,10 +75,19 @@
 			$textContent = '';
 			$textContentHTML = '';
 			$textTitle = 'Untitled_1';
-			$progressStore = 0;
 			$GLFScore = 0;
 			$aiSuggestions = [];
 			$replaceStore = [];
+			tabIndex = api.selectedScrollSnap();
+		}
+	}
+	function backToTheStartModified() {
+		if (api) {
+			api.scrollTo(0);
+			$progressStore = 0;
+			$aiSuggestions = [];
+			$replaceStore = [];
+			tabIndex = api.selectedScrollSnap();
 		}
 	}
 </script>
@@ -118,8 +128,14 @@
 					<Carousel.Item class="px-5"
 						><StepWrite nextSlide={grammarPayload}></StepWrite></Carousel.Item
 					>
-					<Carousel.Item class=""><StepGrammar nextSlide={glfPayload}></StepGrammar></Carousel.Item>
-					<Carousel.Item><StepGLF {goBackToGrammar} {nextSlide}></StepGLF></Carousel.Item>
+					<Carousel.Item class=""
+						><StepGrammar backToTheStart={backToTheStartModified} nextSlide={glfPayload}
+						></StepGrammar></Carousel.Item
+					>
+					<Carousel.Item
+						><StepGLF backToTheStart={backToTheStartModified} {goBackToGrammar} {nextSlide}
+						></StepGLF></Carousel.Item
+					>
 					<Carousel.Item class="px-5"><Analytics {backToTheStart}></Analytics></Carousel.Item>
 				</Carousel.Content>
 			</Carousel.Root>
