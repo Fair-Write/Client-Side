@@ -27,6 +27,7 @@
 	import { toast } from 'svelte-sonner';
 	import { signalTextEditor } from '$lib/stores/signalStore';
 	import { buildInputRules } from '$lib/features/document-scan/use-case/inputRules';
+	import { cleanPastePlugin } from '../use-case/cleanPastePlugin';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -65,7 +66,8 @@
 					keymap(baseKeymap),
 					myKeymap,
 					placeholder('Type your text here'),
-					buildInputRules(mySchema)
+					buildInputRules(mySchema),
+					cleanPastePlugin
 				]
 			});
 
@@ -122,7 +124,8 @@
 				myKeymap,
 				placeholder('Type your text here'),
 				linterPlugin,
-				buildInputRules(mySchema)
+				buildInputRules(mySchema),
+				cleanPastePlugin
 			]
 		});
 
