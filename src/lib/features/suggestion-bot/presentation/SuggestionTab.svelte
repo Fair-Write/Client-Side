@@ -19,6 +19,7 @@
 	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
 	import { GLFScore } from '$lib/stores/omegaLOL';
 	import { afterNavigate } from '$app/navigation';
+	import { ignoreGrammarStore } from '$lib/stores/ignoreStore';
 
 	let api = $state<CarouselAPI>();
 	let isSuggestionsTab = $state<boolean>(true);
@@ -78,6 +79,7 @@
 			$GLFScore = 0;
 			$aiSuggestions = [];
 			$replaceStore = [];
+			$ignoreGrammarStore = [];
 			tabIndex = api.selectedScrollSnap();
 		}
 	}

@@ -8,6 +8,7 @@
 	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 	import { LoaderCircle, Pencil } from 'lucide-svelte';
+	import { ignoreGrammarStore } from '$lib/stores/ignoreStore';
 
 	let {
 		nextSlide,
@@ -40,11 +41,14 @@
 		$aiSuggestions = [];
 	}
 
-	function ignoreMe(index: number) {
+	function ignoreMe(index: number, ignoreString: string) {
 		$aiSuggestions.splice(index, 1);
 		suggestionsReference.splice(index, 1);
+		if (!$ignoreGrammarStore.includes(ignoreString)) {
+			$ignoreGrammarStore.push(ignoreString);
+		}
 		// THIS IS FUCKING STUPID! WHY DO YOU HAVE TO REINSTANTIATE
-		$aiSuggestions = [...$aiSuggestions];
+		$aiSuggestions = [...$aiSuggestions.filter((value) => value.originalText != ignoreString)];
 	}
 
 	$effect(() => {
@@ -105,9 +109,13 @@
 		<!--compact	-->
 	</Card.Root>
 
-	{#key $aiSuggestions}
-		{#each suggestionsReference as payload, index}
-			<SuggestionCard suggestion={payload} {index} {removeMe} {ignoreMe} />
-		{/each}
+	{#key $ignoreGrammarStore}
+		{#key $aiSuggestions}
+			{#each suggestionsReference as payload, index}
+				{#if !$ignoreGrammarStore.includes(payload.originalText)}
+					<SuggestionCard suggestion={payload} {index} {removeMe} {ignoreMe} />
+				{/if}
+			{/each}
+		{/key}
 	{/key}
 </ScrollArea>

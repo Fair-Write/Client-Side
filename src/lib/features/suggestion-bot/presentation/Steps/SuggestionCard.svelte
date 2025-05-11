@@ -12,6 +12,7 @@
 	import { PUBLIC_BACKEND_URL } from '$env/static/public';
 	import { onMount } from 'svelte';
 	import { GLFScore } from '$lib/stores/omegaLOL';
+	import { ignoreGrammarStore } from '$lib/stores/ignoreStore';
 
 	let isCompact = $state<boolean>(false);
 	let {
@@ -23,7 +24,7 @@
 		suggestion: TSuggestion;
 		removeMe: (index: number, correctionString: string) => void;
 		index: number;
-		ignoreMe: (index: number) => void;
+		ignoreMe: (index: number, ignoreString: string) => void;
 	} = $props();
 
 	let isLoading = $state<boolean>(false);
@@ -68,8 +69,10 @@
 							rational: ''
 						})
 					);
-
-					aiSuggestions.set(await suggestions);
+					const filteredSuggestions = await (
+						await suggestions
+					).filter((value) => !$ignoreGrammarStore.includes(value.originalText));
+					aiSuggestions.set(await filteredSuggestions);
 					$progressStore = 50;
 				} else {
 					progressStore.set(50);
@@ -231,7 +234,7 @@
 					if (suggestion.correctionType === 'gfl') {
 						$GLFScore += 1;
 					}
-					ignoreMe(index);
+					ignoreMe(index, suggestion.originalText);
 				}}>Ignore</Button
 			>
 		</Card.Footer>
@@ -259,7 +262,7 @@
 						if (suggestion.correctionType === 'gfl') {
 							$GLFScore += 1;
 						}
-						ignoreMe(index);
+						ignoreMe(index, suggestion.originalText);
 					}}>delete</button
 				>
 				<button
