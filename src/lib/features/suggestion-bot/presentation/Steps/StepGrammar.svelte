@@ -112,7 +112,6 @@
 	{#key $ignoreGrammarStore}
 		{#key $aiSuggestions}
 			{#each suggestionsReference as payload, index}
-				{$ignoreGrammarStore}
 				{#if !$ignoreGrammarStore.includes(payload.originalText)}
 					<SuggestionCard suggestion={payload} {index} {removeMe} {ignoreMe} />
 				{/if}
