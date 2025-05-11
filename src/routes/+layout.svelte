@@ -7,6 +7,7 @@
 	import { progressStore } from '$lib/stores/progressStore';
 	import { GLFScore } from '$lib/stores/omegaLOL';
 	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
+	import { ignoreGrammarStore } from '$lib/stores/ignoreStore';
 
 	beforeNavigate(({ cancel }) => {
 		if ($textContent == '') return;
@@ -21,6 +22,7 @@
 			$GLFScore = 0;
 			$aiSuggestions = [];
 			$replaceStore = [];
+			$ignoreGrammarStore = [];
 			return;
 		}
 	});

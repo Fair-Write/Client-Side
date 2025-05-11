@@ -7,6 +7,7 @@
 	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
 	import { GLFScore } from '$lib/stores/omegaLOL';
 	import { progressStore } from '$lib/stores/progressStore';
+	import { ignoreGrammarStore } from '$lib/stores/ignoreStore';
 
 	let fileNameDisplay: IFileNameDisplay = $state({
 		fileName: undefined,
@@ -16,6 +17,7 @@
 	let signal = $state<boolean>(false);
 
 	function changeState(e: boolean) {
+		$ignoreGrammarStore = [];
 		signal = e;
 	}
 	function setFileNameDisplay(
@@ -58,6 +60,7 @@
 						$GLFScore = 0;
 						$aiSuggestions = [];
 						$replaceStore = [];
+						$ignoreGrammarStore = [];
 						fileDocument = convertInputToFile(e);
 						signal = true;
 					}}

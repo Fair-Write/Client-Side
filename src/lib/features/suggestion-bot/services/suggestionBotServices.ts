@@ -6,6 +6,7 @@ import { get } from 'svelte/store';
 import { revisedTextStore } from '$lib/stores/revisedTextStore';
 import { toast } from 'svelte-sonner';
 import { preferenceStore } from '$lib/stores/preferenceStore';
+import { ignoreGrammarStore } from '$lib/stores/ignoreStore';
 
 const url = import.meta.env.VITE_BACKEND_URL || 'NOTHING';
 
@@ -44,7 +45,10 @@ export async function grammarCheckService(nextSlide: () => void) {
 				})
 			);
 
-			aiSuggestions.set(await suggestions);
+			const filteredSuggestions = await (
+				await suggestions
+			).filter((value) => !get(ignoreGrammarStore).includes(value.originalText));
+			aiSuggestions.set(await filteredSuggestions);
 			console.log('suggestions', suggestions);
 
 			nextSlide();
