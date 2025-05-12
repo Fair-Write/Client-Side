@@ -34,7 +34,7 @@
 	<DropdownMenu.Trigger
 		class={cn(
 			buttonVariants({ variant: 'outline' }),
-			'flex w-full items-center  justify-between border border-green-500 bg-green-50 p-6 text-base font-bold text-green-500 hover:bg-green-500 hover:text-green-50'
+			'my-2 flex w-full items-center justify-between border border-green-500 bg-green-50 p-6 text-base font-bold text-green-500 hover:bg-green-500 hover:text-green-50'
 		)}
 	>
 		<p>Export As</p>

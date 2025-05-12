@@ -37,13 +37,13 @@
 </script>
 
 <ScrollArea
-	class="flex w-full flex-col items-center justify-stretch gap-2 pl-4 lg:h-[550px] 2xl:h-[700px]"
+	class="flex w-full flex-col items-center justify-stretch  pl-4 lg:h-[550px] 2xl:h-[700px]"
 >
 	<Gauge radius={100} percent={difference}></Gauge>
 
-	<Card.Root>
+	<Card.Root class="my-2">
 		<Card.Header>
-			<Card.Title class="border-b border-dashed border-stone-500 pb-2 text-lg font-bold "
+			<Card.Title class=" border-b border-dashed border-stone-500 pb-2 text-lg font-bold"
 				>Useful Articles:</Card.Title
 			>
 		</Card.Header>
@@ -70,7 +70,7 @@
 	<Button
 		variant="outline"
 		onclick={backToTheStart}
-		class="flex w-full items-center  justify-between border border-blue-500 bg-blue-50 p-6 text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
+		class="my-2 flex w-full items-center justify-between border border-blue-500 bg-blue-50 p-6 text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
 		><p>Start All Over Again</p>
 
 		<span class="material-symbols-outlined s26"> restart_alt</span>

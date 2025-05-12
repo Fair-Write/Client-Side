@@ -178,8 +178,8 @@
 						<p class="text-base font-bold text-orange-500 group-hover:text-white">* DISCLAIMER *</p>
 					</div></Tooltip.Trigger
 				>
-				<Tooltip.Content class="flex h-[250px] w-[300px] items-center justify-center">
-					<p class="text-base">
+				<Tooltip.Content class="flex h-[250px] w-[200px] items-center justify-center 2xl:w-[300px]">
+					<p class="text-sm 2xl:text-base">
 						At present, there is no universally accepted or standardized instrument for determining
 						whether a text is truly gender-fair.
 						<br />
