@@ -5,6 +5,7 @@
 	import ExportButton from '$lib/features/suggestion-bot/presentation/Utils/ExportButton.svelte';
 	import { GLFScore } from '$lib/stores/omegaLOL';
 	import { textContent } from '$lib/stores/textFromEditorStore';
+	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 
 	let { backToTheStart }: { backToTheStart: () => void } = $props();
 
@@ -35,7 +36,9 @@
 	// });
 </script>
 
-<div class="flex w-full flex-col items-center justify-stretch gap-2 pl-4">
+<ScrollArea
+	class="flex w-full flex-col items-center justify-stretch gap-2 pl-4 lg:h-[550px] 2xl:h-[700px]"
+>
 	<Gauge radius={100} percent={difference}></Gauge>
 
 	<Card.Root>
@@ -73,7 +76,7 @@
 		<span class="material-symbols-outlined s26"> restart_alt</span>
 	</Button>
 	<ExportButton></ExportButton>
-</div>
+</ScrollArea>
 
 <style>
 </style>

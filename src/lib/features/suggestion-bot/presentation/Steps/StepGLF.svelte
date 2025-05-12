@@ -65,7 +65,7 @@
 	});
 </script>
 
-<ScrollArea class="h-[700px] w-full px-3">
+<ScrollArea class="w-full px-3 lg:h-[550px] 2xl:h-[700px]">
 	<Card.Root class="w-full ">
 		<Card.Header>
 			<Card.Title class="border-b border-dashed border-stone-500 pb-2 font-bold"
