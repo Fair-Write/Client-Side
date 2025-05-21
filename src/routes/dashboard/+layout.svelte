@@ -71,43 +71,78 @@
 			</nav>
 		</div>
 
-		<Dialog.Root>
-			<Dialog.Trigger>
-				<div
-					class="flex items-center justify-center gap-2 border-t border-stone-300 p-2 text-xl lg:justify-start"
-				>
-					<!--stupid icon-->
-					<span
-						class=" flex items-center justify-center rounded-[9px] border border-solid border-stone-500 bg-gradient-to-t from-neutral-700 to-stone-300 p-[1px]"
-					>
+		<div class="flex flex-col gap-1 border border-solid border-t-stone-300">
+			<Dialog.Root>
+				<Dialog.Trigger>
+					<div class="flex items-center justify-center gap-2 p-2 text-xl lg:justify-start">
+						<!--stupid icon-->
 						<span
-							class="material-symbols-outlined s26 rounded-[8px] bg-gradient-to-t from-neutral-700 to-stone-500 p-1 text-stone-50"
+							class=" flex items-center justify-center rounded-[9px] border border-solid border-amber-500 bg-gradient-to-t from-orange-700 to-yellow-300 p-[1px]"
 						>
-							info</span
-						></span
-					>
+							<span
+								class="material-symbols-outlined s26 rounded-[8px] bg-gradient-to-t from-orange-700 to-yellow-500 p-1 text-yellow-50"
+							>
+								volunteer_activism</span
+							></span
+						>
 
-					<span class="hidden lg:inline">Info</span>
-				</div>
-			</Dialog.Trigger>
-			<Dialog.Content>
-				<Dialog.Header>
-					<Dialog.Title>What's Fair Write?</Dialog.Title>
-					<Dialog.Description>
-						&nbsp; Fair Write, a web-based text editing application integrated with gender-fair
-						language capabilities. Fair Write provides suggestions and corrections to help users
-						avoid biased or gender-exclusive terms in their writing. Whether drafting professional
-						documents, academic papers, or casual content,
-						<br />
-						<br />
-						&nbsp; Its integrated features include intelligent grammar checking, inclusive vocabulary
-						alternatives, and style recommendations aligned with current gender-sensitive language standards.
-						Fair Write is an essential tool for individuals and organizations striving for more conscious
-						and inclusive communication.
-					</Dialog.Description>
-				</Dialog.Header>
-			</Dialog.Content>
-		</Dialog.Root>
+						<span class="hidden lg:inline">Help</span>
+					</div>
+				</Dialog.Trigger>
+				<Dialog.Content>
+					<Dialog.Header>
+						<Dialog.Title>What's Fair Write?</Dialog.Title>
+						<Dialog.Description>
+							&nbsp; Fair Write, a web-based text editing application integrated with gender-fair
+							language capabilities. Fair Write provides suggestions and corrections to help users
+							avoid biased or gender-exclusive terms in their writing. Whether drafting professional
+							documents, academic papers, or casual content,
+							<br />
+							<br />
+							&nbsp; Its integrated features include intelligent grammar checking, inclusive vocabulary
+							alternatives, and style recommendations aligned with current gender-sensitive language
+							standards. Fair Write is an essential tool for individuals and organizations striving for
+							more conscious and inclusive communication.
+						</Dialog.Description>
+					</Dialog.Header>
+				</Dialog.Content>
+			</Dialog.Root>
+			<Dialog.Root>
+				<Dialog.Trigger>
+					<div class="flex items-center justify-center gap-2 p-2 text-xl lg:justify-start">
+						<!--stupid icon-->
+						<span
+							class=" flex items-center justify-center rounded-[9px] border border-solid border-stone-500 bg-gradient-to-t from-neutral-700 to-stone-300 p-[1px]"
+						>
+							<span
+								class="material-symbols-outlined s26 rounded-[8px] bg-gradient-to-t from-neutral-700 to-stone-500 p-1 text-stone-50"
+							>
+								info</span
+							></span
+						>
+
+						<span class="hidden lg:inline">Info</span>
+					</div>
+				</Dialog.Trigger>
+				<Dialog.Content>
+					<Dialog.Header>
+						<Dialog.Title>What's Fair Write?</Dialog.Title>
+						<Dialog.Description>
+							&nbsp; Fair Write, a web-based text editing application integrated with gender-fair
+							language capabilities. Fair Write provides suggestions and corrections to help users
+							avoid biased or gender-exclusive terms in their writing. Whether drafting professional
+							documents, academic papers, or casual content,
+							<br />
+							<br />
+							&nbsp; Its integrated features include intelligent grammar checking, inclusive vocabulary
+							alternatives, and style recommendations aligned with current gender-sensitive language
+							standards. Fair Write is an essential tool for individuals and organizations striving for
+							more conscious and inclusive communication.
+						</Dialog.Description>
+					</Dialog.Header>
+				</Dialog.Content>
+			</Dialog.Root>
+		</div>
 
 		<!-- info -->
 	</div>
