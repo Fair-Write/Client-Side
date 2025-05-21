@@ -2,7 +2,20 @@
 	import { cn } from '$lib/utils';
 	import { page } from '$app/stores';
 	import SuggestionTab from '$lib/features/suggestion-bot/presentation/SuggestionTab.svelte';
+	import * as Card from '$lib/components/ui/card/index.js';
+	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import * as Dialog from '$lib/components/ui/dialog';
+
+	const burger = [
+		{ description: 'Write down your text', url: '/write.png', title: 'Write' },
+		{ description: 'Check For Grammar Issues', url: '/grammar.png', title: 'Grammar' },
+		{
+			description: 'Proceed With Gender Fairness Detection',
+			url: '/gfl.png',
+			title: 'Gender Fair Langauge Detection'
+		},
+		{ description: 'See Your Results!', url: '/review.png', title: 'Review' }
+	];
 </script>
 
 <div class="flex flex-1 bg-stone-100">
@@ -89,24 +102,26 @@
 						<span class="hidden lg:inline">Help</span>
 					</div>
 				</Dialog.Trigger>
-				<Dialog.Content>
-					<Dialog.Header>
-						<Dialog.Title>What's Fair Write?</Dialog.Title>
-						<Dialog.Description>
-							&nbsp; Fair Write, a web-based text editing application integrated with gender-fair
-							language capabilities. Fair Write provides suggestions and corrections to help users
-							avoid biased or gender-exclusive terms in their writing. Whether drafting professional
-							documents, academic papers, or casual content,
-							<br />
-							<br />
-							&nbsp; Its integrated features include intelligent grammar checking, inclusive vocabulary
-							alternatives, and style recommendations aligned with current gender-sensitive language
-							standards. Fair Write is an essential tool for individuals and organizations striving for
-							more conscious and inclusive communication.
-						</Dialog.Description>
-					</Dialog.Header>
+				<Dialog.Content
+					class="flex items-center justify-center lg:max-w-[500px] 2xl:max-w-[700px] "
+				>
+					<Carousel.Root class="h-[500px] max-w-[400px] lg:max-w-[500px] 2xl:max-w-[700px]">
+						<Carousel.Content>
+							{#each burger as _, i (i)}
+								<Carousel.Item>
+									<p class="mb-1 text-2xl font-semibold">Step {i + 1}:{_.title}</p>
+									<p class="mb-1 text-base">{_.description}</p>
+									<img alt="" class="mt-1" src={_.url} />
+								</Carousel.Item>
+							{/each}
+							<!--  -->
+						</Carousel.Content>
+						<Carousel.Previous class="h-16 w-16" />
+						<Carousel.Next class="h-16 w-16" />
+					</Carousel.Root>
 				</Dialog.Content>
 			</Dialog.Root>
+
 			<Dialog.Root>
 				<Dialog.Trigger>
 					<div class="flex items-center justify-center gap-2 p-2 text-xl lg:justify-start">
