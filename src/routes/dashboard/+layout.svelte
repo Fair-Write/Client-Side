@@ -5,7 +5,9 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import * as Dialog from '$lib/components/ui/dialog';
-
+	import { onMount } from 'svelte';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
+	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	const burger = [
 		{ description: 'Write down your text', url: '/write.png', title: 'Write' },
 		{ description: 'Check For Grammar Issues', url: '/grammar.png', title: 'Grammar' },
@@ -16,6 +18,16 @@
 		},
 		{ description: 'See Your Results!', url: '/review.png', title: 'Review' }
 	];
+
+	let acceptPolicies = $state(false);
+
+	onMount(() => {
+		if (!localStorage.getItem('Accept')) {
+			localStorage.setItem('Accept', 'false');
+			return;
+		}
+		acceptPolicies = JSON.parse(localStorage.getItem('Accept') as string);
+	});
 </script>
 
 <div class="flex flex-1 bg-stone-100">
@@ -159,7 +171,47 @@
 			</Dialog.Root>
 		</div>
 
-		<!-- info -->
+		{#if !acceptPolicies}
+			<AlertDialog.Root open={true}>
+				<AlertDialog.Content>
+					<AlertDialog.Header>
+						<AlertDialog.Title>Welcome To Fair Write!</AlertDialog.Title>
+						<AlertDialog.Description>
+							<p class="pb-1 text-sm">
+								By Clicking "Continue", you agree to allow Fair Write to temporarily process any
+								documents or text you create or upload in order to analyze them for errors or
+								suggestions.You also acknowledge and support our commitment to promoting gender
+								fairness, and consent to the use of inclusive language checks as part of the
+								analysis.
+							</p>
+							<p class="py-1 text-sm">Key Points:</p>
+							<ul class="list-inside list-disc text-sm *:py-1">
+								<li>We do not store or permanently save your documents or text.</li>
+								<li>
+									All content is processed in memory solely for the purpose of providing feedback
+									and improving your writing experience.
+								</li>
+								<li>
+									You retain full ownership of your content at all times. We do not use your content
+									for any other purpose beyond real-time analysis.
+								</li>
+							</ul>
+							<p class="pt-1 text-sm">
+								If you do not agree with these terms, please do not use the content analysis
+								features of the application.
+							</p>
+						</AlertDialog.Description>
+					</AlertDialog.Header>
+					<AlertDialog.Footer>
+						<AlertDialog.Action
+							onclick={() => {
+								acceptPolicies = !acceptPolicies;
+								localStorage.setItem('Accept', 'true');
+							}}>Continue</AlertDialog.Action
+						>
+					</AlertDialog.Footer>
+				</AlertDialog.Content>
+			</AlertDialog.Root>{/if}
 	</div>
 	<main class=" flex flex-1 shrink-0 basis-0 flex-col bg-stone-200 lg:flex-row">
 		<slot></slot>
