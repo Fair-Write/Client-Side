@@ -12,6 +12,8 @@
 	import { toast } from 'svelte-sonner';
 	import { signalTextEditor } from '$lib/stores/signalStore';
 	import { GLFScore } from '$lib/stores/omegaLOL';
+	import { waitStore } from '$lib/stores/waitStore';
+
 	// import { toast } from 'svelte-sonner';
 
 	let {
@@ -78,7 +80,7 @@
 		<Card.Content class="flex flex-col gap-2">
 			<Button
 				class="flex w-full items-center  justify-between border border-blue-500 bg-blue-50  text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
-				disabled={isEmpty || isLoading}
+				disabled={isEmpty || isLoading || $waitStore}
 				onclick={() => {
 					nextSlide();
 				}}
@@ -90,6 +92,7 @@
 			<Button
 				class="flex w-full items-center  justify-between border border-fuchsia-500 bg-fuchsia-50  text-base font-bold text-fuchsia-500 hover:bg-fuchsia-500 hover:text-fuchsia-50"
 				variant="outline"
+				disabled={$waitStore}
 				onclick={() => {
 					goBackToGrammar();
 				}}
@@ -100,6 +103,7 @@
 			<Button
 				class="flex w-full items-center  justify-between border border-green-500 bg-green-50  text-base font-bold text-green-500 hover:bg-green-500 hover:text-green-50"
 				variant="outline"
+				disabled={$waitStore}
 				onclick={() => {
 					backToTheStart();
 				}}
@@ -109,7 +113,7 @@
 			</Button>
 			<Button
 				class="w-full"
-				disabled={!isEmpty || isLoading}
+				disabled={!isEmpty || isLoading || $waitStore}
 				variant="outline"
 				onclick={() => {
 					applyAllChanges();

@@ -13,6 +13,7 @@
 	import { onMount } from 'svelte';
 	import { GLFScore } from '$lib/stores/omegaLOL';
 	import { ignoreGrammarStore } from '$lib/stores/ignoreStore';
+	import { waitStore } from '$lib/stores/waitStore';
 
 	let isCompact = $state<boolean>(false);
 	let {
@@ -33,6 +34,7 @@
 	});
 	async function jempoyMoves(bruh: string) {
 		isLoading = true;
+		$waitStore = true;
 		if (bruh == 'grammar') {
 			try {
 				const post = await fetch(`${PUBLIC_BACKEND_URL}grammar`, {
@@ -82,6 +84,7 @@
 				console.error('Error:', error);
 			} finally {
 				isLoading = false;
+				$waitStore = false;
 			}
 		} else if (bruh == 'gfl') {
 			const preferenceList = () => {
@@ -156,6 +159,7 @@
 				console.error('Error:', error);
 			} finally {
 				isLoading = false;
+				$waitStore = false;
 			}
 		}
 	}
@@ -190,15 +194,15 @@
 			<div class="flex w-full flex-col gap-1">
 				{#each suggestion.replacements as item}
 					<button
-						disabled={isLoading}
+						disabled={$waitStore}
 						class={cn(
-							'flex w-full items-center justify-center rounded-[9px] border border-solid p-[1px]',
+							'group flex w-full items-center justify-center rounded-[9px] border border-solid p-[1px]',
 							suggestion.correctionType === 'grammar' &&
-								'border-blue-500 bg-gradient-to-t from-indigo-700 to-blue-300 p-[1px] transition-all ease-in-out hover:border-sky-500 hover:from-blue-500 hover:to-sky-200',
+								'border-blue-500 bg-gradient-to-t from-indigo-700 to-blue-300 p-[1px] transition-all ease-in-out hover:border-sky-500 hover:from-blue-500 hover:to-sky-200 disabled:border-sky-500 disabled:from-blue-500 disabled:to-sky-200',
 							suggestion.correctionType === 'spelling' &&
 								'border-red-500 bg-gradient-to-t from-rose-700 to-red-300 p-[1px] transition-all ease-in-out hover:border-red-700 hover:from-red-700 hover:to-red-200',
 							suggestion.correctionType === 'gfl' &&
-								'border-violet-500 bg-gradient-to-t from-purple-700 to-violet-300 p-[1px] transition-all ease-in-out hover:border-violet-700 hover:from-violet-700 hover:to-violet-200'
+								'border-violet-500 bg-gradient-to-t from-purple-700 to-violet-300 p-[1px] transition-all ease-in-out hover:border-violet-700 hover:from-violet-700 hover:to-violet-200 disabled:from-purple-300 disabled:to-violet-100'
 						)}
 						onclick={async () => {
 							if (suggestion.correctionType === 'gfl') {
@@ -212,11 +216,11 @@
 							class={cn(
 								'w-full rounded-[8px] bg-gradient-to-t p-1 text-base font-bold transition-all ease-in-out',
 								suggestion.correctionType === 'grammar' &&
-									'from-indigo-700 to-blue-500  text-blue-50 hover:bg-sky-300 hover:from-blue-500 hover:text-sky-100 ',
+									'from-indigo-700 to-blue-500  text-blue-50 hover:bg-sky-300 hover:from-blue-500 hover:text-sky-100 group-disabled:bg-sky-300 group-disabled:from-blue-500 group-disabled:text-sky-100',
 								suggestion.correctionType === 'spelling' &&
 									'w-full from-rose-700 to-red-500  text-red-50 hover:bg-red-200 hover:from-red-500 hover:to-red-400  hover:text-red-50',
 								suggestion.correctionType === 'gfl' &&
-									'w-full from-purple-700 to-violet-500  text-violet-50 hover:bg-violet-200 hover:from-violet-500 hover:to-violet-400  hover:text-violet-50'
+									'w-full from-purple-700 to-violet-500  text-violet-50 hover:bg-violet-200 hover:from-violet-500 hover:to-violet-400  hover:text-violet-50 group-disabled:bg-violet-200 group-disabled:from-violet-500 group-disabled:to-violet-400  group-disabled:text-violet-50'
 							)}
 						>
 							{item}
@@ -230,6 +234,7 @@
 				variant="outline"
 				size="sm"
 				class="w-full text-base font-bold text-stone-500 "
+				disabled={isLoading}
 				onclick={() => {
 					if (suggestion.correctionType === 'gfl') {
 						$GLFScore += 1;
@@ -239,6 +244,7 @@
 			>
 		</Card.Footer>
 	{:else}
+		<!-- compact vers -->
 		<Card.Content class="flex items-center justify-between px-3 py-2">
 			<div
 				class={cn(
@@ -258,6 +264,7 @@
 			<div class="flex items-center justify-center gap-1">
 				<button
 					class="material-symbols-outlined s18 cursor-pointer select-none rounded-full border border-solid border-red-500 bg-transparent p-1 text-red-500 hover:bg-red-500 hover:text-red-50 hover:transition-all hover:ease-in-out"
+					disabled={isLoading}
 					onclick={() => {
 						if (suggestion.correctionType === 'gfl') {
 							$GLFScore += 1;
