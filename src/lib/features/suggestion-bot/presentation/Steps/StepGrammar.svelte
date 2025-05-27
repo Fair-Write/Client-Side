@@ -9,7 +9,7 @@
 	import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 	import { LoaderCircle, Pencil } from 'lucide-svelte';
 	import { ignoreGrammarStore } from '$lib/stores/ignoreStore';
-
+	import { waitStore } from '$lib/stores/waitStore';
 	let {
 		nextSlide,
 		backToTheStart
@@ -77,7 +77,7 @@
 		<Card.Content class="flex flex-col gap-2">
 			<Button
 				class="flex w-full items-center  justify-between border border-blue-500 bg-blue-50  text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
-				disabled={isEmpty || isLoading}
+				disabled={isEmpty || isLoading || $waitStore}
 				onclick={proceed}
 				><p>Proceed</p>
 				{#if isLoading}
@@ -89,6 +89,7 @@
 			<Button
 				class="flex w-full items-center  justify-between border border-green-500 bg-green-50  text-base font-bold text-green-500 hover:bg-green-500 hover:text-green-50"
 				variant="outline"
+				disabled={$waitStore}
 				onclick={() => {
 					backToTheStart();
 				}}
@@ -99,7 +100,7 @@
 			<Button
 				class=" w-full"
 				variant="outline"
-				disabled={!isEmpty || isLoading}
+				disabled={!isEmpty || isLoading || $waitStore}
 				onclick={() => {
 					applyAllChanges();
 				}}>Apply All Changes</Button
