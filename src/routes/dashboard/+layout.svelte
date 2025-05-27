@@ -7,7 +7,7 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { onMount } from 'svelte';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
-	import { buttonVariants } from '$lib/components/ui/button/index.js';
+	import * as Table from '$lib/components/ui/table/index.js';
 	const burger = [
 		{ description: 'Write down your text', url: '/write.png', title: 'Write' },
 		{ description: 'Check For Grammar Issues', url: '/grammar.png', title: 'Grammar' },
@@ -17,6 +17,37 @@
 			title: 'Gender Fair Langauge Detection'
 		},
 		{ description: 'See Your Results!', url: '/review.png', title: 'Review' }
+	];
+
+	const commands = [
+		{
+			name: 'Undo',
+			keymap: 'Ctrl+z'
+		},
+		{
+			name: 'Redo',
+			keymap: 'Ctrl+y'
+		},
+		{
+			name: 'Redo',
+			keymap: 'Ctrl+Shift+z'
+		},
+		{
+			name: 'Toggle Bold',
+			keymap: 'Ctrl+b'
+		},
+		{
+			name: 'Toggle Italic',
+			keymap: 'Ctrl+i'
+		},
+		{
+			name: 'New List Item',
+			keymap: 'Ctrl+Enter'
+		},
+		{
+			name: 'New Line',
+			keymap: 'Enter'
+		}
 	];
 
 	let acceptPolicies = $state(false);
@@ -97,6 +128,49 @@
 		</div>
 
 		<div class="flex flex-col gap-1 border border-solid border-t-stone-300">
+			<Dialog.Root>
+				<Dialog.Trigger>
+					<div class="flex items-center justify-center gap-2 p-2 text-xl lg:justify-start">
+						<!--stupid icon-->
+						<span
+							class=" flex items-center justify-center rounded-[9px] border border-solid border-fuchsia-500 bg-gradient-to-t from-neutral-700 to-pink-300 p-[1px]"
+						>
+							<span
+								class="material-symbols-outlined s26 rounded-[8px] bg-gradient-to-t from-fuchsia-700 to-pink-500 p-1 text-pink-50"
+							>
+								keyboard_command_key</span
+							></span
+						>
+
+						<span class="hidden lg:inline">Commands</span>
+					</div>
+				</Dialog.Trigger>
+				<Dialog.Content>
+					<Dialog.Header>
+						<Dialog.Title>Command Shortcuts</Dialog.Title>
+						<Dialog.Description>
+							<Table.Root>
+								<Table.Header>
+									<Table.Row>
+										<Table.Head class="w-[100px]">Name</Table.Head>
+										<Table.Head class="text-right">Command</Table.Head>
+									</Table.Row>
+								</Table.Header>
+								<Table.Body>
+									{#each commands as command}
+										<Table.Row>
+											<Table.Cell class="font-medium">{command.name}</Table.Cell>
+
+											<Table.Cell class="text-right">{command.keymap}</Table.Cell>
+										</Table.Row>
+									{/each}
+								</Table.Body>
+							</Table.Root></Dialog.Description
+						>
+					</Dialog.Header>
+				</Dialog.Content>
+			</Dialog.Root>
+
 			<Dialog.Root>
 				<Dialog.Trigger>
 					<div class="flex items-center justify-center gap-2 p-2 text-xl lg:justify-start">
