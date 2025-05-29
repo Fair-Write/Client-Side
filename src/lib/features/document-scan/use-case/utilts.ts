@@ -1,6 +1,6 @@
 // Utils function
-export function getSuffix(fileName: string): 'pdf' | 'docx' | 'jpeg' | 'png' {
-	const lookUpTable = ['pdf', 'docx', 'jpeg', 'png'] as const;
+export function getSuffix(fileName: string): 'pdf' | 'docx' | 'jpeg' | 'png' | 'jpg' {
+	const lookUpTable = ['pdf', 'docx', 'jpeg', 'png', 'jpg'] as const;
 	let suffix: (typeof lookUpTable)[number] | undefined;
 
 	// Checks if the fileName has the correct suffix

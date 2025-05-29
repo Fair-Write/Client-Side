@@ -22,7 +22,7 @@
 	}
 	function setFileNameDisplay(
 		name: string,
-		type: 'jpeg' | 'png' | 'docx' | 'pdf' | undefined
+		type: 'jpg' | 'jpeg' | 'png' | 'docx' | 'pdf' | undefined
 	): void {
 		fileNameDisplay.fileName = name.replace(/\.[^/.]+$/, '');
 		$textTitle = name.replace(/\.[^/.]+$/, '');
@@ -65,7 +65,7 @@
 						signal = true;
 					}}
 					id="File_Drop2"
-					accept=".pdf,.docx,.png,.jpeg"
+					accept=".pdf,.docx,.png,.jpeg,.jpg"
 					type="file"
 					class="hidden"
 				/>
