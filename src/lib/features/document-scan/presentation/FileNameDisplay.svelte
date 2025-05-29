@@ -6,7 +6,7 @@
 {#if fileType !== undefined}
 	<div class="flex items-center justify-center gap-2">
 		<!-- change icon based on file type-->
-		{#if fileType === 'jpeg' || fileType === 'png'}
+		{#if fileType === 'jpeg' || fileType === 'png' || fileType === 'jpg'}
 			<span
 				class=" flex items-center justify-center rounded-[9px] border border-solid border-yellow-500 bg-gradient-to-t from-amber-700 to-yellow-300 p-[1px]"
 			>

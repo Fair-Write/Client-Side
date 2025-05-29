@@ -23,7 +23,10 @@
 		signal = false,
 		changeState
 	}: {
-		setFileNameDisplay: (name: string, type: 'jpeg' | 'png' | 'docx' | 'pdf' | undefined) => void;
+		setFileNameDisplay: (
+			name: string,
+			type: 'jpg' | 'jpeg' | 'png' | 'docx' | 'pdf' | undefined
+		) => void;
 		fileDocument: File | null;
 		signal: boolean;
 		changeState: (e: boolean) => void;
@@ -41,7 +44,7 @@
 		}
 	});
 
-	let fileSuffix: 'jpeg' | 'png' | 'docx' | 'pdf' | undefined = $derived.by(() => {
+	let fileSuffix: 'jpg' | 'jpeg' | 'png' | 'docx' | 'pdf' | undefined = $derived.by(() => {
 		if (fileDocument) {
 			let doc = fileDocument as File;
 			return getSuffix(doc.name);
@@ -96,7 +99,8 @@
 				break;
 			}
 			case 'png':
-			case 'jpeg': {
+			case 'jpeg':
+			case 'jpg': {
 				try {
 					console.log('Getting PNG');
 					const result = await ocrToText(file as File);
@@ -171,7 +175,7 @@
 					await convertToText(fileDocument, fileSuffix);
 				}}
 				id="File_Drop"
-				accept=".pdf,.docx,.png,.jpeg"
+				accept=".pdf,.docx,.png,.jpeg,.jpg"
 				type="file"
 				class="hidden"
 			/>
