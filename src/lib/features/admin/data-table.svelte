@@ -133,7 +133,7 @@
 				<Button
 					size="sm"
 					variant="destructive"
-					disabled={table.getSelectedRowModel().rows.length == 0}>Delete Selected</Button
+					disabled={table.getSelectedRowModel().rows.length == 0}>Delete Selected Row(s)</Button
 				>
 				<div class="flex-1 text-sm text-muted-foreground">
 					{table.getFilteredSelectedRowModel().rows.length} of{' '}
