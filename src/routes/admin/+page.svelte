@@ -24,7 +24,7 @@
 	];
 </script>
 
-<main class="h-[100svh] min-h-0 w-full flex-col items-center bg-stone-200">
+<main class="h-[100svh] min-h-0 w-full flex-col items-center bg-stone-100">
 	<AdminNavbar></AdminNavbar>
 
 	<DataTable data={burger} {columns}></DataTable>
