@@ -14,6 +14,8 @@
 	import { GLFScore } from '$lib/stores/omegaLOL';
 	import { ignoreGrammarStore } from '$lib/stores/ignoreStore';
 	import { waitStore } from '$lib/stores/waitStore';
+	import { getCount } from '../../services/countService';
+	import { countStore } from '$lib/stores/countStore';
 
 	let isCompact = $state<boolean>(false);
 	let {
@@ -161,6 +163,9 @@
 				isLoading = false;
 				$waitStore = false;
 			}
+			const count = await getCount();
+
+			$countStore = await count.count;
 		}
 	}
 </script>

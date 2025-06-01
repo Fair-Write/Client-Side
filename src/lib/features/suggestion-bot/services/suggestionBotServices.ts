@@ -7,6 +7,7 @@ import { revisedTextStore } from '$lib/stores/revisedTextStore';
 import { toast } from 'svelte-sonner';
 import { preferenceStore } from '$lib/stores/preferenceStore';
 import { ignoreGrammarStore } from '$lib/stores/ignoreStore';
+import { getCount } from './countService';
 
 const url = import.meta.env.VITE_BACKEND_URL || 'NOTHING';
 
@@ -147,4 +148,6 @@ export async function glfCheckService(nextSlide: () => void) {
 		toast.error('Network Error');
 		console.error('Error:', error);
 	}
+
+	await getCount();
 }
