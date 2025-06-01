@@ -10,8 +10,4 @@
 		<h1 class="hidden font-Leckerli-One text-2xl lg:inline">Fair Write</h1>
 		<p class="text-2xl font-light text-neutral-500">Admin</p>
 	</div>
-
-	<Button size="icon" class="h-8 w-8">
-		<span class="material-symbols-outlined s18"> logout</span>
-	</Button>
 </div>
