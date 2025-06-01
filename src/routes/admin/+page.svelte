@@ -8,9 +8,9 @@
 	import { onMount } from 'svelte';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
-	import AdminNavbar from '$lib/features/admin/AdminNavbar.svelte';
-	import DataTable from '$lib/features/admin/data-table.svelte';
-	import { columns, type TGenderTermProcessed } from '$lib/features/admin/column';
+	import AdminNavbar from './AdminNavbar.svelte';
+	import DataTable from './data-table.svelte';
+	import { columns, type TGenderTermProcessed } from './column';
 	const burger: TGenderTermProcessed[] = [
 		{ term: 'waiter', alternatives: ['server'] },
 		{ term: 'waitress', alternatives: ['server'] },

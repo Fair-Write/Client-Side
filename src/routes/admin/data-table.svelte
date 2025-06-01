@@ -12,24 +12,27 @@
 	} from '@tanstack/table-core';
 	import { createSvelteTable, FlexRender } from '$lib/components/ui/data-table/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
-	import Button from '$lib/components/ui/button/button.svelte';
+	import { Button } from '$lib/components/ui/button/index.js';
+
 	import { Input } from '$lib/components/ui/input/index.js';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+	import AddTermForm from './AddTermForm.svelte';
+
 	type DataTableProps<TData, TValue> = {
 		columns: ColumnDef<TData, TValue>[];
 		data: TData[];
 	};
 	let sorting = $state<SortingState>([]);
-
-	let { data, columns }: DataTableProps<TData, TValue> = $props();
+	import type { PageData } from './$types.js';
+	let { dataTableProps, net }: { dataTableProps: DataTableProps<TData, TValue>; net: PageData } =
+		$props();
 	let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 5 });
 	let columnFilters = $state<ColumnFiltersState>([]);
 	let rowSelection = $state<RowSelectionState>({});
 	const table = createSvelteTable({
 		get data() {
-			return data;
+			return dataTableProps.data;
 		},
-		columns,
+		columns: dataTableProps.columns,
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel(),
@@ -92,7 +95,7 @@
 			}}
 			class="max-w-xs"
 		/>
-		<Button size="default" variant="secondary">Add New Term</Button>
+		<AddTermForm data={net}></AddTermForm>
 	</div>
 	<div class="">
 		<Table.Root>
@@ -123,7 +126,9 @@
 					</Table.Row>
 				{:else}
 					<Table.Row>
-						<Table.Cell colspan={columns.length} class="h-24 text-center">No results.</Table.Cell>
+						<Table.Cell colspan={dataTableProps.columns.length} class="h-24 text-center"
+							>No results.</Table.Cell
+						>
 					</Table.Row>
 				{/each}
 			</Table.Body>
