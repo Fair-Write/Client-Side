@@ -6,7 +6,7 @@
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { Label } from '$lib/components/ui/label';
-	import { putList } from './service';
+	import { deleteListItem, putList } from './service';
 
 	let { term, index }: { term: TGenderTermProcessed; index: number } = $props();
 
@@ -126,8 +126,19 @@
 			</Dialog.Description>
 		</Dialog.Header>
 		<Dialog.Footer>
-			<Button variant="destructive">Delete</Button>
-			<Button variant="outline" onclick={() => (deleteDialogOpen = false)}>Cancel</Button>
+			<Button
+				variant="destructive"
+				onclick={() => {
+					deleteDialogOpen = false;
+					deleteListItem(term.term);
+				}}>Delete</Button
+			>
+			<Button
+				variant="outline"
+				onclick={() => {
+					deleteDialogOpen = false;
+				}}>Cancel</Button
+			>
 		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>

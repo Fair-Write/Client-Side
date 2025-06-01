@@ -54,7 +54,7 @@
 	const { form: formData, enhance, reset } = form;
 </script>
 
-<Dialog.Root bind:open={dialogOpen} onOpenChange={handleDialogClose}>
+<Dialog.Root open={dialogOpen} onOpenChange={handleDialogClose}>
 	<Button
 		variant="outline"
 		onclick={() => {
@@ -99,6 +99,7 @@
 		</form>
 
 		<!-- Display submitted entries -->
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		{#if submittedEntries.length > 0}
 			<div class="mt-4">
 				<h4 class="mb-2 font-medium">Added Terms:</h4>
@@ -120,11 +121,23 @@
 					{/each}
 				</div>
 			</div>
-			<Button
+			<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+			<div
+				class="cursor-pointer rounded bg-blue-500 px-4 py-2 text-white"
 				onclick={() => {
-					console.log(postBulkList(submittedEntries));
-				}}>Submit</Button
+					postBulkList(submittedEntries);
+					dialogOpen = false;
+				}}
+				onkeydown={(e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						postBulkList(submittedEntries);
+						dialogOpen = false;
+					}
+				}}
 			>
+				Submit
+			</div>
 		{/if}
 	</Dialog.Content>
 </Dialog.Root>

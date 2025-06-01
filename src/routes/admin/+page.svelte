@@ -54,12 +54,11 @@
 		console.log($listStore);
 	}
 
-	// onMount(() => {
-	// 	loadEverything();
-	// });
+	onMount(() => {
+		loadEverything();
+	});
 
 	$effect(() => {
-		loadEverything();
 		if ($refreshStore > 0) {
 			loadEverything();
 		}
@@ -133,7 +132,7 @@
 <Toaster richColors position="top-center"></Toaster>
 
 <main class="h-[100svh] min-h-0 w-full flex-col items-center bg-stone-100">
-	{#key burger}
+	{#key $listStore}
 		<AdminNavbar></AdminNavbar>
 
 		<div class="p-2">
