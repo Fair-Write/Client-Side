@@ -9,6 +9,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { formSchema, type FormSchema } from './schema';
 	import type { infer } from 'zod';
+	import { postBulkList } from './service';
 
 	interface Props {
 		data: {
@@ -72,7 +73,7 @@
 				<Form.Control>
 					{#snippet children({ props })}
 						<Form.Label>Term</Form.Label>
-						<Input {...props} bind:value={$formData.term} />
+						<Input style="text-transform: lowercase;" {...props} bind:value={$formData.term} />
 					{/snippet}
 				</Form.Control>
 				<Form.Description>Enter the gender-neutral term.</Form.Description>
@@ -82,7 +83,11 @@
 				<Form.Control>
 					{#snippet children({ props })}
 						<Form.Label>Alternatives</Form.Label>
-						<Input {...props} bind:value={$formData.alternatives} />
+						<Input
+							style="text-transform: lowercase;"
+							{...props}
+							bind:value={$formData.alternatives}
+						/>
 					{/snippet}
 				</Form.Control>
 				<Form.Description>Enter alternative terms (comma-separated).</Form.Description>
@@ -115,7 +120,11 @@
 					{/each}
 				</div>
 			</div>
-			<Button>Submit</Button>
+			<Button
+				onclick={() => {
+					console.log(postBulkList(submittedEntries));
+				}}>Submit</Button
+			>
 		{/if}
 	</Dialog.Content>
 </Dialog.Root>

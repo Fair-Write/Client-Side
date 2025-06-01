@@ -6,14 +6,16 @@
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { Label } from '$lib/components/ui/label';
+	import { putList } from './service';
 
-	let { term }: { term: TGenderTermProcessed } = $props();
+	let { term, index }: { term: TGenderTermProcessed; index: number } = $props();
 
 	// State to control dropdown visibility
 	let dropdownOpen = $state(false);
 	let editDialogOpen = $state(false);
 	let deleteDialogOpen = $state(false);
 
+	let optionsResponse = $state('');
 	// Function to handle dialog open while keeping dropdown open
 	function openEditDialog() {
 		editDialogOpen = true;
@@ -36,6 +38,11 @@
 	function handleDeleteDialogClose() {
 		deleteDialogOpen = false;
 		dropdownOpen = false;
+	}
+
+	function handleChange(event: Event) {
+		const target = event.currentTarget as HTMLInputElement;
+		optionsResponse = target.value;
 	}
 </script>
 
@@ -86,18 +93,24 @@
 		</Dialog.Header>
 		<div class="grid gap-4 py-4">
 			<div class="grid grid-cols-4 items-center gap-4">
-				<Label for="name" class="text-right">Term</Label>
-				<Input id="name" value={term.term} class="col-span-3" />
-			</div>
-			<div class="grid grid-cols-4 items-center gap-4">
 				<Label for="username" class="text-right">Alternative</Label>
-				<Input id="username" value={term.alternatives} class="col-span-3" />
+				<Input
+					style="text-transform: lowercase;"
+					id="username"
+					value={term.alternatives}
+					onchange={(e: Event) => handleChange(e)}
+					class="col-span-3"
+				/>
 			</div>
 			<p class="text-sm text-muted-foreground">Enter alternative terms (comma-separated).</p>
 		</div>
 		<Dialog.Footer>
-			<Button type="submit" disabled={term.alternatives == '' || term.term == ''}
-				>Save changes</Button
+			<Button
+				type="submit"
+				disabled={false}
+				onclick={async () => {
+					await putList(term.term, optionsResponse);
+				}}>Save changes</Button
 			>
 		</Dialog.Footer>
 	</Dialog.Content>

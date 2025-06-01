@@ -28,21 +28,43 @@
 	import AdminNavbar from './AdminNavbar.svelte';
 
 	import { columns, type TGenderTermProcessed } from './column';
-	const burger: TGenderTermProcessed[] = [
-		{ term: 'waiter', alternatives: 'server' },
-		{ term: 'waitress', alternatives: 'server' },
-		{ term: 'policeman', alternatives: 'police officer' },
-		{ term: 'policewoman', alternatives: 'police officer' },
-		{ term: 'policemen', alternatives: 'police officers' },
-		{ term: 'policewomen', alternatives: 'police officers' },
-		{ term: 'fireman', alternatives: 'firefighter' },
-		{ term: 'firewoman', alternatives: 'firefighter' },
-		{ term: 'firewomen', alternatives: 'firefighters' }
-	];
+	import { getList } from './service.js';
+	import { listStore, refreshStore } from '$lib/stores/refreshStore.js';
+	import { Toaster } from 'svelte-sonner';
+	let burger = $state<TGenderTermProcessed[]>([]);
+	let burger2 = $state<TGenderTermProcessed[]>([]);
 	let sorting = $state<SortingState>([]);
-	let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 5 });
+	let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
 	let columnFilters = $state<ColumnFiltersState>([]);
 	let rowSelection = $state<RowSelectionState>({});
+
+	async function loadEverything() {
+		burger = [];
+		burger2 = [];
+		$listStore = [];
+		const list = await getList();
+		if (!list) return;
+
+		for (const [key, value] of Object.entries(list)) {
+			burger2.push({ term: key, alternatives: value.toLocaleString() });
+		}
+
+		burger = [...burger2];
+		$listStore = [...burger2];
+		console.log($listStore);
+	}
+
+	// onMount(() => {
+	// 	loadEverything();
+	// });
+
+	$effect(() => {
+		loadEverything();
+		if ($refreshStore > 0) {
+			loadEverything();
+		}
+	});
+
 	const table = createSvelteTable({
 		get data() {
 			return burger;
@@ -108,105 +130,115 @@
 	}
 </script>
 
-<main class="h-[100svh] min-h-0 w-full flex-col items-center bg-stone-100">
-	<AdminNavbar></AdminNavbar>
+<Toaster richColors position="top-center"></Toaster>
 
-	<div class="p-2">
-		<div class="flex items-center gap-2 py-4">
-			<Input
-				placeholder="Filter by Term..."
-				value={(table.getColumn('term')?.getFilterValue() as string) ?? ''}
-				onchange={(e) => {
-					table.getColumn('term')?.setFilterValue(e.currentTarget.value);
-				}}
-				oninput={(e) => {
-					table.getColumn('term')?.setFilterValue(e.currentTarget.value);
-				}}
-				class="max-w-xs"
-			/>
-			<AddTermForm {data}></AddTermForm>
-		</div>
-		<div class="">
-			<Table.Root>
-				<Table.Header>
-					{#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
-						<Table.Row>
-							{#each headerGroup.headers as header (header.id)}
-								<Table.Head>
-									{#if !header.isPlaceholder}
-										<FlexRender
-											content={header.column.columnDef.header}
-											context={header.getContext()}
-										/>
-									{/if}
-								</Table.Head>
-							{/each}
-						</Table.Row>
-					{/each}
-				</Table.Header>
-				<Table.Body>
-					{#each table.getRowModel().rows as row (row.id)}
-						<Table.Row data-state={row.getIsSelected() && 'selected'}>
-							{#each row.getVisibleCells() as cell (cell.id)}
-								<Table.Cell class="border-t border-t-stone-300">
-									<FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
-								</Table.Cell>
-							{/each}
-						</Table.Row>
-					{:else}
-						<Table.Row>
-							<Table.Cell colspan={columns.length} class="h-24 text-center">No results.</Table.Cell>
-						</Table.Row>
-					{/each}
-				</Table.Body>
-			</Table.Root>
-			<div class="flex items-center justify-end space-x-2 border-t border-t-stone-300 py-4">
-				<div class="flex flex-1 items-center justify-between gap-2">
-					<Button
-						size="sm"
-						variant="destructive"
-						onclick={openDeleteDialog}
-						disabled={table.getSelectedRowModel().rows.length == 0}>Delete Selected Row(s)</Button
-					>
-					<div class="flex-1 text-sm text-muted-foreground">
-						{table.getFilteredSelectedRowModel().rows.length} of{' '}
-						{table.getFilteredRowModel().rows.length} row(s) selected.
+<main class="h-[100svh] min-h-0 w-full flex-col items-center bg-stone-100">
+	{#key burger}
+		<AdminNavbar></AdminNavbar>
+
+		<div class="p-2">
+			<div class="flex items-center gap-2 py-4">
+				<Input
+					placeholder="Filter by Term..."
+					value={(table.getColumn('term')?.getFilterValue() as string) ?? ''}
+					onchange={(e) => {
+						table.getColumn('term')?.setFilterValue(e.currentTarget.value);
+					}}
+					oninput={(e) => {
+						table.getColumn('term')?.setFilterValue(e.currentTarget.value);
+					}}
+					class="max-w-xs"
+				/>
+				<AddTermForm {data}></AddTermForm>
+			</div>
+			<div class="">
+				<Table.Root>
+					<Table.Header>
+						{#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
+							<Table.Row>
+								{#each headerGroup.headers as header (header.id)}
+									<Table.Head>
+										{#if !header.isPlaceholder}
+											<FlexRender
+												content={header.column.columnDef.header}
+												context={header.getContext()}
+											/>
+										{/if}
+									</Table.Head>
+								{/each}
+							</Table.Row>
+						{/each}
+					</Table.Header>
+					<Table.Body>
+						{#each table.getRowModel().rows as row (row.id)}
+							<Table.Row data-state={row.getIsSelected() && 'selected'}>
+								{#each row.getVisibleCells() as cell (cell.id)}
+									<Table.Cell class="border-t border-t-stone-300">
+										<FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
+									</Table.Cell>
+								{/each}
+							</Table.Row>
+						{:else}
+							<Table.Row>
+								<Table.Cell colspan={columns.length} class="h-24 text-center"
+									>No results.</Table.Cell
+								>
+							</Table.Row>
+						{/each}
+					</Table.Body>
+				</Table.Root>
+				<div class="flex items-center justify-end space-x-2 border-t border-t-stone-300 py-4">
+					<div class="flex flex-1 items-center justify-between gap-2">
+						<Button
+							size="sm"
+							variant="destructive"
+							onclick={openDeleteDialog}
+							disabled={table.getSelectedRowModel().rows.length == 0}>Delete Selected Row(s)</Button
+						>
+						<div class="flex-1 text-sm text-muted-foreground">
+							{table.getFilteredSelectedRowModel().rows.length} of{' '}
+							{table.getFilteredRowModel().rows.length} row(s) selected.
+						</div>
+					</div>
+					<div class="flex items-center justify-center gap-2">
+						<p class="text-sm text-muted-foreground">
+							page {table.getState().pagination.pageIndex + 1} out of {table.getPageCount()}
+						</p>
+						<Button
+							variant="outline"
+							size="sm"
+							onclick={() => table.previousPage()}
+							disabled={!table.getCanPreviousPage()}
+						>
+							Previous
+						</Button>
+						<Button
+							variant="outline"
+							size="sm"
+							onclick={() => table.nextPage()}
+							disabled={!table.getCanNextPage()}
+						>
+							Next
+						</Button>
 					</div>
 				</div>
-
-				<Button
-					variant="outline"
-					size="sm"
-					onclick={() => table.previousPage()}
-					disabled={!table.getCanPreviousPage()}
-				>
-					Previous
-				</Button>
-				<Button
-					variant="outline"
-					size="sm"
-					onclick={() => table.nextPage()}
-					disabled={!table.getCanNextPage()}
-				>
-					Next
-				</Button>
 			</div>
 		</div>
-	</div>
 
-	<Dialog.Root bind:open={deleteDialogOpen} onOpenChange={handleDeleteDialogClose}>
-		<Dialog.Content>
-			<Dialog.Header>
-				<Dialog.Title>Are you absolutely sure?</Dialog.Title>
-				<Dialog.Description>
-					This action cannot be undone. This will permanently delete {table.getFilteredSelectedRowModel()
-						.rows.length} term/s and their alternative/s.
-				</Dialog.Description>
-			</Dialog.Header>
-			<Dialog.Footer>
-				<Button variant="destructive">Delete</Button>
-				<Button variant="outline" onclick={() => (deleteDialogOpen = false)}>Cancel</Button>
-			</Dialog.Footer>
-		</Dialog.Content>
-	</Dialog.Root>
+		<Dialog.Root bind:open={deleteDialogOpen} onOpenChange={handleDeleteDialogClose}>
+			<Dialog.Content>
+				<Dialog.Header>
+					<Dialog.Title>Are you absolutely sure?</Dialog.Title>
+					<Dialog.Description>
+						This action cannot be undone. This will permanently delete {table.getFilteredSelectedRowModel()
+							.rows.length} term/s and their alternative/s.
+					</Dialog.Description>
+				</Dialog.Header>
+				<Dialog.Footer>
+					<Button variant="destructive">Delete</Button>
+					<Button variant="outline" onclick={() => (deleteDialogOpen = false)}>Cancel</Button>
+				</Dialog.Footer>
+			</Dialog.Content>
+		</Dialog.Root>
+	{/key}
 </main>

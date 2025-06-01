@@ -45,7 +45,7 @@ export const columns: ColumnDef<TGenderTermProcessed>[] = [
 		id: 'actions',
 		cell: ({ row }) => {
 			// You can pass whatever you need from `row.original` to the component
-			return renderComponent(DataTableActions, { term: row.original });
+			return renderComponent(DataTableActions, { term: row.original, index: row.index });
 		}
 	}
 ];
