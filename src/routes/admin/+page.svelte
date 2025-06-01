@@ -31,6 +31,7 @@
 	import { bulkDeleteListItem, getList } from './service.js';
 	import { listStore, refreshStore } from '$lib/stores/refreshStore.js';
 	import { Toaster } from 'svelte-sonner';
+
 	let burger = $state<TGenderTermProcessed[]>([]);
 	let burger2 = $state<TGenderTermProcessed[]>([]);
 	let sorting = $state<SortingState>([]);
@@ -39,20 +40,30 @@
 	let rowSelection = $state<RowSelectionState>({});
 	const deletedRowSelection = $state<string[]>([]);
 
+	// Add loading state
+	let isLoading = $state(true);
+
 	async function loadEverything() {
-		burger = [];
-		burger2 = [];
-		$listStore = [];
-		const list = await getList();
-		if (!list) return;
+		try {
+			isLoading = true;
+			burger = [];
+			burger2 = [];
+			$listStore = [];
+			const list = await getList();
+			if (!list) return;
 
-		for (const [key, value] of Object.entries(list)) {
-			burger2.push({ term: key, alternatives: value.toLocaleString() });
+			for (const [key, value] of Object.entries(list)) {
+				burger2.push({ term: key, alternatives: value.toLocaleString() });
+			}
+
+			burger = [...burger2];
+			$listStore = [...burger2];
+			console.log($listStore);
+		} catch (error) {
+			console.error('Error loading data:', error);
+		} finally {
+			isLoading = false;
 		}
-
-		burger = [...burger2];
-		$listStore = [...burger2];
-		console.log($listStore);
 	}
 
 	onMount(() => {
@@ -148,6 +159,7 @@
 						table.getColumn('term')?.setFilterValue(e.currentTarget.value);
 					}}
 					class="max-w-xs"
+					disabled={isLoading}
 				/>
 				<AddTermForm {data}></AddTermForm>
 			</div>
@@ -170,21 +182,37 @@
 						{/each}
 					</Table.Header>
 					<Table.Body>
-						{#each table.getRowModel().rows as row (row.id)}
-							<Table.Row data-state={row.getIsSelected() && 'selected'}>
-								{#each row.getVisibleCells() as cell (cell.id)}
-									<Table.Cell class="border-t border-t-stone-300">
-										<FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
-									</Table.Cell>
-								{/each}
-							</Table.Row>
+						{#if isLoading}
+							<!-- Loading skeleton rows -->
+							{#each Array(5) as _, i}
+								<Table.Row>
+									{#each columns as column}
+										<Table.Cell class="border-t border-t-stone-300">
+											<div class="h-4 animate-pulse rounded bg-gray-200"></div>
+										</Table.Cell>
+									{/each}
+								</Table.Row>
+							{/each}
 						{:else}
-							<Table.Row>
-								<Table.Cell colspan={columns.length} class="h-24 text-center"
-									>No results.</Table.Cell
-								>
-							</Table.Row>
-						{/each}
+							{#each table.getRowModel().rows as row (row.id)}
+								<Table.Row data-state={row.getIsSelected() && 'selected'}>
+									{#each row.getVisibleCells() as cell (cell.id)}
+										<Table.Cell class="border-t border-t-stone-300">
+											<FlexRender
+												content={cell.column.columnDef.cell}
+												context={cell.getContext()}
+											/>
+										</Table.Cell>
+									{/each}
+								</Table.Row>
+							{:else}
+								<Table.Row>
+									<Table.Cell colspan={columns.length} class="h-24 text-center"
+										>No results.</Table.Cell
+									>
+								</Table.Row>
+							{/each}
+						{/if}
 					</Table.Body>
 				</Table.Root>
 				<div class="flex items-center justify-end space-x-2 border-t border-t-stone-300 py-4">
@@ -193,22 +221,31 @@
 							size="sm"
 							variant="destructive"
 							onclick={openDeleteDialog}
-							disabled={table.getSelectedRowModel().rows.length == 0}>Delete Selected Row(s)</Button
+							disabled={isLoading || table.getSelectedRowModel().rows.length == 0}
+							>Delete Selected Row(s)</Button
 						>
 						<div class="flex-1 text-sm text-muted-foreground">
-							{table.getFilteredSelectedRowModel().rows.length} of{' '}
-							{table.getFilteredRowModel().rows.length} row(s) selected.
+							{#if isLoading}
+								Loading...
+							{:else}
+								{table.getFilteredSelectedRowModel().rows.length} of{' '}
+								{table.getFilteredRowModel().rows.length} row(s) selected.
+							{/if}
 						</div>
 					</div>
 					<div class="flex items-center justify-center gap-2">
 						<p class="text-sm text-muted-foreground">
-							page {table.getState().pagination.pageIndex + 1} out of {table.getPageCount()}
+							{#if isLoading}
+								Loading...
+							{:else}
+								page {table.getState().pagination.pageIndex + 1} out of {table.getPageCount()}
+							{/if}
 						</p>
 						<Button
 							variant="outline"
 							size="sm"
 							onclick={() => table.previousPage()}
-							disabled={!table.getCanPreviousPage()}
+							disabled={isLoading || !table.getCanPreviousPage()}
 						>
 							Previous
 						</Button>
@@ -216,7 +253,7 @@
 							variant="outline"
 							size="sm"
 							onclick={() => table.nextPage()}
-							disabled={!table.getCanNextPage()}
+							disabled={isLoading || !table.getCanNextPage()}
 						>
 							Next
 						</Button>

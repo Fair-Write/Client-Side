@@ -59,10 +59,10 @@ export async function postBulkList(request: TGenderTermProcessed[]) {
 		const results = await Promise.all(request.map(postList));
 		console.log('✅ Bulk submission results:', results);
 
-		toast.success('✅ Submission Added');
+		toast.success('Submission Added');
 		refreshStore.set(get(refreshStore) + 1);
 	} catch (error) {
-		console.error('❌ Error in bulk submission:', error);
+		console.error('Error in bulk submission:', error);
 		toast.error('Error occurred during bulk submission. Please check logs.');
 	}
 }
@@ -129,7 +129,7 @@ export async function bulkDeleteListItem(terms: string[]) {
 		toast.success('✅ Submission Added');
 		refreshStore.set(get(refreshStore) + 1);
 	} catch (error) {
-		console.error('❌ Error in bulk submission:', error);
+		console.error('Error in bulk submission:', error);
 		toast.error('Error occurred during bulk submission. Please check logs.');
 	}
 }
