@@ -103,3 +103,33 @@ export async function deleteListItem(term: string) {
 		refreshStore.set(get(refreshStore) + 1);
 	}
 }
+
+// ignore me
+async function bulkDelete(term: string) {
+	const response = await fetch(url + 'terms/' + term, {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+	if (!response.ok) {
+		toast.error('Error Occured Please Check Logs');
+		throw new Error(`HTTP error! status: ${response.status}`);
+	} else {
+		toast.success('Success');
+		refreshStore.set(get(refreshStore) + 1);
+	}
+}
+
+export async function bulkDeleteListItem(terms: string[]) {
+	try {
+		const results = await Promise.all(terms.map(bulkDelete));
+		console.log('✅ Bulk submission results:', results);
+
+		toast.success('✅ Submission Added');
+		refreshStore.set(get(refreshStore) + 1);
+	} catch (error) {
+		console.error('❌ Error in bulk submission:', error);
+		toast.error('Error occurred during bulk submission. Please check logs.');
+	}
+}

@@ -28,7 +28,7 @@
 	import AdminNavbar from './AdminNavbar.svelte';
 
 	import { columns, type TGenderTermProcessed } from './column';
-	import { getList } from './service.js';
+	import { bulkDeleteListItem, getList } from './service.js';
 	import { listStore, refreshStore } from '$lib/stores/refreshStore.js';
 	import { Toaster } from 'svelte-sonner';
 	let burger = $state<TGenderTermProcessed[]>([]);
@@ -37,6 +37,7 @@
 	let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
 	let columnFilters = $state<ColumnFiltersState>([]);
 	let rowSelection = $state<RowSelectionState>({});
+	const deletedRowSelection = $state<string[]>([]);
 
 	async function loadEverything() {
 		burger = [];
@@ -234,7 +235,18 @@
 					</Dialog.Description>
 				</Dialog.Header>
 				<Dialog.Footer>
-					<Button variant="destructive">Delete</Button>
+					<Button
+						variant="destructive"
+						onclick={() => {
+							const selectedRowsData = table.getSelectedRowModel().rows.map((row) => row.original);
+							selectedRowsData.forEach((data) => {
+								deletedRowSelection.push(data.term);
+							});
+							bulkDeleteListItem(deletedRowSelection);
+							table.resetRowSelection(true);
+							deleteDialogOpen = false;
+						}}>Delete</Button
+					>
 					<Button variant="outline" onclick={() => (deleteDialogOpen = false)}>Cancel</Button>
 				</Dialog.Footer>
 			</Dialog.Content>
