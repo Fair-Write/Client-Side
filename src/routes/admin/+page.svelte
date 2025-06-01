@@ -26,18 +26,18 @@
 	import AddTermForm from './AddTermForm.svelte';
 
 	import AdminNavbar from './AdminNavbar.svelte';
-	import DataTable from './data-table.svelte';
+
 	import { columns, type TGenderTermProcessed } from './column';
 	const burger: TGenderTermProcessed[] = [
-		{ term: 'waiter', alternatives: ['server'] },
-		{ term: 'waitress', alternatives: ['server'] },
-		{ term: 'policeman', alternatives: ['police officer'] },
-		{ term: 'policewoman', alternatives: ['police officer'] },
-		{ term: 'policemen', alternatives: ['police officers'] },
-		{ term: 'policewomen', alternatives: ['police officers'] },
-		{ term: 'fireman', alternatives: ['firefighter'] },
-		{ term: 'firewoman', alternatives: ['firefighter'] },
-		{ term: 'firewomen', alternatives: ['firefighters'] }
+		{ term: 'waiter', alternatives: 'server' },
+		{ term: 'waitress', alternatives: 'server' },
+		{ term: 'policeman', alternatives: 'police officer' },
+		{ term: 'policewoman', alternatives: 'police officer' },
+		{ term: 'policemen', alternatives: 'police officers' },
+		{ term: 'policewomen', alternatives: 'police officers' },
+		{ term: 'fireman', alternatives: 'firefighter' },
+		{ term: 'firewoman', alternatives: 'firefighter' },
+		{ term: 'firewomen', alternatives: 'firefighters' }
 	];
 	let sorting = $state<SortingState>([]);
 	let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 5 });
@@ -97,6 +97,15 @@
 	});
 
 	let { data }: { data: PageData } = $props();
+	let deleteDialogOpen = $state(false);
+	function openDeleteDialog() {
+		deleteDialogOpen = true;
+		// Keep dropdown open when dialog opens
+	}
+
+	function handleDeleteDialogClose() {
+		deleteDialogOpen = false;
+	}
 </script>
 
 <main class="h-[100svh] min-h-0 w-full flex-col items-center bg-stone-100">
@@ -156,6 +165,7 @@
 					<Button
 						size="sm"
 						variant="destructive"
+						onclick={openDeleteDialog}
 						disabled={table.getSelectedRowModel().rows.length == 0}>Delete Selected Row(s)</Button
 					>
 					<div class="flex-1 text-sm text-muted-foreground">
@@ -183,4 +193,20 @@
 			</div>
 		</div>
 	</div>
+
+	<Dialog.Root bind:open={deleteDialogOpen} onOpenChange={handleDeleteDialogClose}>
+		<Dialog.Content>
+			<Dialog.Header>
+				<Dialog.Title>Are you absolutely sure?</Dialog.Title>
+				<Dialog.Description>
+					This action cannot be undone. This will permanently delete {table.getFilteredSelectedRowModel()
+						.rows.length} term/s and their alternative/s.
+				</Dialog.Description>
+			</Dialog.Header>
+			<Dialog.Footer>
+				<Button variant="destructive">Delete</Button>
+				<Button variant="outline" onclick={() => (deleteDialogOpen = false)}>Cancel</Button>
+			</Dialog.Footer>
+		</Dialog.Content>
+	</Dialog.Root>
 </main>

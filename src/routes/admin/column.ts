@@ -8,7 +8,7 @@ import { Checkbox } from '$lib/components/ui/checkbox/index.js';
 
 export type TGenderTermProcessed = {
 	term: string;
-	alternatives: string[];
+	alternatives: string;
 };
 export const columns: ColumnDef<TGenderTermProcessed>[] = [
 	{
