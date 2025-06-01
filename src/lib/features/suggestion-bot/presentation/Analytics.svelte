@@ -6,6 +6,7 @@
 	import { GLFScore } from '$lib/stores/omegaLOL';
 	import { textContent } from '$lib/stores/textFromEditorStore';
 	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
+	import { countStore } from '$lib/stores/countStore';
 
 	let { backToTheStart }: { backToTheStart: () => void } = $props();
 
@@ -40,6 +41,19 @@
 	class="flex w-full flex-col items-center justify-stretch  pl-4 lg:h-[550px] 2xl:h-[700px]"
 >
 	<Gauge radius={100} percent={difference}></Gauge>
+
+	<Card.Root class="my-2">
+		<Card.Header>
+			<Card.Title class=" border-b border-dashed border-stone-500 pb-2 text-lg font-bold"
+				>Fair Write's Total Scanned Files:</Card.Title
+			>
+		</Card.Header>
+		<Card.Content class="text-base text-blue-500">
+			<p class="text-center text-base font-bold text-green-500">
+				{$countStore} Scanned Documents
+			</p>
+		</Card.Content>
+	</Card.Root>
 
 	<Card.Root class="my-2">
 		<Card.Header>

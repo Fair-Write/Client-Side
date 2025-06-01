@@ -8,22 +8,24 @@
 	import { GLFScore } from '$lib/stores/omegaLOL';
 	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
 	import { ignoreGrammarStore } from '$lib/stores/ignoreStore';
-
+	import { page } from '$app/state';
 	beforeNavigate(({ cancel }) => {
-		if ($textContent == '') return;
-		const confirmed = confirm('Are you sure you want to leave this page?');
-		if (!confirmed) {
-			cancel(); // cancels the navigation, including back button
-		} else {
-			$textContent = '';
-			$textContentHTML = '';
-			$textTitle = 'Untitled_1';
-			$progressStore = 0;
-			$GLFScore = 0;
-			$aiSuggestions = [];
-			$replaceStore = [];
-			$ignoreGrammarStore = [];
-			return;
+		if (page.url.pathname == '/dashboard/editor' || page.url.pathname == '/dashboard/scan') {
+			if ($textContent == '') return;
+			const confirmed = confirm('Are you sure you want to leave this page?');
+			if (!confirmed) {
+				cancel(); // cancels the navigation, including back button
+			} else {
+				$textContent = '';
+				$textContentHTML = '';
+				$textTitle = 'Untitled_1';
+				$progressStore = 0;
+				$GLFScore = 0;
+				$aiSuggestions = [];
+				$replaceStore = [];
+				$ignoreGrammarStore = [];
+				return;
+			}
 		}
 	});
 </script>
