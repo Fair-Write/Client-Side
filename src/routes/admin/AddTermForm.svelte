@@ -8,17 +8,58 @@
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { formSchema, type FormSchema } from './schema';
-	let { data }: { data: { form: SuperValidated<Infer<FormSchema>> } } = $props();
+	import type { infer } from 'zod';
+
+	interface Props {
+		data: {
+			form: SuperValidated<Infer<FormSchema>>;
+		};
+	}
+
+	let { data }: Props = $props();
+
+	// Control dialog open/close state
+	let dialogOpen = $state(false);
+
+	let submittedEntries: Array<{ term: string; alternatives: string }> = $state([]);
 
 	const form = superForm(data.form, {
-		validators: zodClient(formSchema)
+		validators: zodClient(formSchema),
+		// Handle client-side only, don't submit to server
+		SPA: true,
+		onUpdated: ({ form }) => {
+			if (form.valid) {
+				console.log('Form submitted successfully!');
+				// Add the submitted data to our array
+				submittedEntries.push({
+					term: form.data.term,
+					alternatives: form.data.alternatives
+				});
+				// Reset the form after successful submission
+				form.data.term = '';
+				form.data.alternatives = '';
+				// Close the dialog after successful submission
+				// dialogOpen = false;
+			}
+		}
 	});
+	const handleDialogClose = () => {
+		dialogOpen = false;
+		submittedEntries = [];
+		// Reset form data to initial state
+		reset();
+	};
 
-	const { form: formData, enhance } = form;
+	const { form: formData, enhance, reset } = form;
 </script>
 
-<Dialog.Root>
-	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>Edit Profile</Dialog.Trigger>
+<Dialog.Root bind:open={dialogOpen} onOpenChange={handleDialogClose}>
+	<Button
+		variant="outline"
+		onclick={() => {
+			dialogOpen = true;
+		}}>Add A New Term</Button
+	>
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
 			<Dialog.Title>Add a New Term</Dialog.Title>
@@ -26,45 +67,55 @@
 				Make changes to the gender neutral terms here. Click add when you're done.
 			</Dialog.Description>
 		</Dialog.Header>
-
 		<form method="POST" use:enhance>
 			<Form.Field {form} name="term">
 				<Form.Control>
 					{#snippet children({ props })}
-						<Form.Label>Username</Form.Label>
+						<Form.Label>Term</Form.Label>
 						<Input {...props} bind:value={$formData.term} />
 					{/snippet}
 				</Form.Control>
-				<Form.Description>This is your public display name.</Form.Description>
+				<Form.Description>Enter the gender-neutral term.</Form.Description>
 				<Form.FieldErrors />
 			</Form.Field>
 			<Form.Field {form} name="alternatives">
 				<Form.Control>
 					{#snippet children({ props })}
-						<Form.Label>Username</Form.Label>
+						<Form.Label>Alternatives</Form.Label>
 						<Input {...props} bind:value={$formData.alternatives} />
 					{/snippet}
 				</Form.Control>
-				<Form.Description>This is your public display name.</Form.Description>
+				<Form.Description>Enter alternative terms (comma-separated).</Form.Description>
 				<Form.FieldErrors />
 			</Form.Field>
-			<Form.Button>Add to list</Form.Button>
+			<Dialog.Footer>
+				<Form.Button>Add to list</Form.Button>
+			</Dialog.Footer>
 		</form>
 
-		<div class="grid gap-4 py-4">
-			<div class="flex w-full max-w-sm flex-col gap-1.5">
-				<Label for="term">Term</Label>
-				<Input aria-invalid type="text" id="term" placeholder="insert input" />
+		<!-- Display submitted entries -->
+		{#if submittedEntries.length > 0}
+			<div class="mt-4">
+				<h4 class="mb-2 font-medium">Added Terms:</h4>
+				<div class="max-h-32 space-y-2 overflow-y-auto">
+					{#each submittedEntries as entry, index}
+						<div class="flex items-center justify-between">
+							<div class="rounded bg-muted p-2 text-sm">
+								<div><strong>Term:</strong> {entry.term}</div>
+								<div><strong>Alternatives:</strong> {entry.alternatives}</div>
+							</div>
+							<Button
+								variant="destructive"
+								size="sm"
+								onclick={() => {
+									submittedEntries.splice(index, 1);
+								}}>delete</Button
+							>
+						</div>
+					{/each}
+				</div>
 			</div>
-
-			<div class="flex w-full max-w-sm flex-col gap-1.5">
-				<Label for="alternatives">Alternatives</Label>
-				<Input type="text" id="alternatives" placeholder="insert alternatives" />
-				<p class="text-sm text-muted-foreground">Enter your email address.</p>
-			</div>
-		</div>
-		<Dialog.Footer>
-			<Button type="submit">Submit</Button>
-		</Dialog.Footer>
+			<Button>Submit</Button>
+		{/if}
 	</Dialog.Content>
 </Dialog.Root>
