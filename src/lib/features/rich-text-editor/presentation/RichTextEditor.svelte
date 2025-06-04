@@ -165,7 +165,7 @@
 		{/if}
 
 		<div>
-			<p class="text-sm text-muted-foreground">
+			<p class="text-xs text-muted-foreground lg:text-sm">
 				Count: {$textContent == '' ? 0 : $textContent.trim().split(/\s+/).length}
 			</p>
 		</div>

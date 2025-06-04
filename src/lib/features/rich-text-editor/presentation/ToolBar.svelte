@@ -173,7 +173,7 @@
 	<!-- Font Size -->
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger>
-			<Button variant="secondary" class="w-[90px] rounded-md p-1"
+			<Button variant="secondary" class="w-[90px] rounded-md p-1 text-xs 2xl:text-base"
 				>Size: {currentFontSize} <ChevronDown /></Button
 			>
 		</DropdownMenu.Trigger>
@@ -199,9 +199,11 @@
 	<!-- Font Family -->
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger>
-			<Button variant="secondary" class="w-[105px] rounded-md p-1"
-				>Font: <span class="hidden truncate 2xl:block">{currentFontFamily} </span><ChevronDown
-				/></Button
+			<Button variant="secondary" class="rounded-md p-1  lg:w-[100px] 2xl:w-[200px]"
+				><p class="text-xs 2xl:text-base">Font:</p>
+				<span class="hidden truncate text-xs 2xl:block 2xl:text-base"
+					>{currentFontFamily}
+				</span><ChevronDown /></Button
 			>
 		</DropdownMenu.Trigger>
 		<DropdownMenu.Content>
@@ -355,7 +357,7 @@
 		</Tooltip.Root>
 	</Tooltip.Provider>
 	<!-- history -->
-	<div>
+	<div class="flex items-center justify-center">
 		<!-- Undo -->
 		<Tooltip.Provider>
 			<Tooltip.Root>
