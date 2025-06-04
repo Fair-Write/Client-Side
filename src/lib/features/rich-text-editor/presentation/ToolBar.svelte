@@ -10,6 +10,7 @@
 
 	import {
 		AlignCenter,
+		AlignJustify,
 		AlignLeft,
 		AlignRight,
 		Bold,
@@ -291,6 +292,24 @@
 				</Tooltip.Trigger>
 				<Tooltip.Content>
 					<p>Align Right</p>
+				</Tooltip.Content>
+			</Tooltip.Root>
+		</Tooltip.Provider>
+		<!-- JUSTIFY -->
+		<Tooltip.Provider>
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<Button
+						size="icon"
+						class="h-6 w-6"
+						variant="ghost"
+						onclick={() => setTextAlign('justify')}
+					>
+						<AlignJustify></AlignJustify>
+					</Button>
+				</Tooltip.Trigger>
+				<Tooltip.Content>
+					<p>Align Justify</p>
 				</Tooltip.Content>
 			</Tooltip.Root>
 		</Tooltip.Provider>
