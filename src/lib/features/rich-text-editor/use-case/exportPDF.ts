@@ -15,7 +15,7 @@ export function exportStateAsPDF(state: string) {
 		callback: function (doc) {
 			doc.save(title);
 		},
-		margin: [10, 10, 10, 10],
+		margin: [25.4, 25.4, 25.4, 25.4], // 1 inch margins
 		autoPaging: 'text',
 		x: 0,
 		y: 0,
