@@ -19,6 +19,7 @@
 		List,
 		Pilcrow,
 		Redo2,
+		Underline,
 		Undo2
 	} from 'lucide-svelte';
 
@@ -103,6 +104,13 @@
 		const { state, dispatch } = view;
 		const { schema } = state;
 		toggleMark(schema.marks.italic)(state, dispatch);
+	}
+
+	function toggleUnderline() {
+		if (!view) return;
+		const { state, dispatch } = view;
+		const { schema } = state;
+		toggleMark(schema.marks.underline)(state, dispatch);
 	}
 
 	function setTextAlign(align: string) {
@@ -221,7 +229,19 @@
 				</Tooltip.Content>
 			</Tooltip.Root>
 		</Tooltip.Provider>
-
+		<!-- Under line -->
+		<Tooltip.Provider>
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<Button size="icon" class="h-6 w-6" variant="ghost" onclick={toggleUnderline}>
+						<Underline></Underline>
+					</Button>
+				</Tooltip.Trigger>
+				<Tooltip.Content>
+					<p>Underline</p>
+				</Tooltip.Content>
+			</Tooltip.Root>
+		</Tooltip.Provider>
 		<Tooltip.Provider>
 			<Tooltip.Root>
 				<Tooltip.Trigger>
