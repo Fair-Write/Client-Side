@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { HistoryManager } from './historyManager';
-
+	import { HistoryManager, type History } from './historyManager';
+	import { formatDistanceStrict } from 'date-fns';
 	let historyManager: HistoryManager;
+	let history = $state<History[]>([]);
 	onMount(async () => {
 		historyManager = await new HistoryManager();
+		history = await historyManager.getAllStore();
 	});
 </script>
 
@@ -15,6 +17,13 @@
 		<h2 class="text-xl font-semibold">History</h2>
 	</div>
 	<div class="flex w-full flex-1 items-start justify-center lg:items-center">
+		{#key history}
+			{#each history as item}
+				<p>{item.text}</p>
+				<p>{formatDistanceStrict(item.timestamp, new Date())}</p>
+			{/each}
+		{/key}
+
 		<button
 			onclick={async () => {
 				await historyManager.addStore({ text: 'Test', timestamp: new Date() });
