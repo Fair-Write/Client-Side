@@ -1,5 +1,5 @@
 export type History = {
-	id?: number;
+	id: number;
 	text: string;
 	timestamp: Date;
 };

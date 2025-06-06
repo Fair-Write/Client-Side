@@ -4,24 +4,30 @@
 	import { formatDistanceStrict } from 'date-fns';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Trash } from 'lucide-svelte';
-	const { text, timestamp, id }: History = $props();
+	const { history, deleteFunc }: { history: History; deleteFunc: (id: number) => void } = $props();
 </script>
 
 <button
 	class="border-4 border-dashed border-transparent p-1 transition-all duration-100 ease-out hover:border-blue-500 hover:transition-all"
 >
-	<Card.Root class="aspect-3/2 w-[200px]  2xl:w-[400px] ">
+	<Card.Root class="aspect-3/2 w-[250px]  2xl:w-[400px] ">
 		<Card.Header class="flex w-full flex-row items-center justify-between gap-2">
 			<Card.Title class="text-base text-muted-foreground">
-				{formatDistanceStrict(timestamp, new Date())} ago
+				{formatDistanceStrict(history.timestamp, new Date())} ago
 			</Card.Title>
-			<Button size="icon" variant="destructive">
+			<Button
+				onclick={() => {
+					deleteFunc(history.id);
+				}}
+				size="icon"
+				variant="destructive"
+			>
 				<Trash></Trash>
 			</Button>
 		</Card.Header>
 		<Card.Content class="pt-4">
 			<p class="line-clamp-5 text-justify text-base">
-				{text}
+				{history.text}
 			</p>
 		</Card.Content>
 		<Card.Footer></Card.Footer>
