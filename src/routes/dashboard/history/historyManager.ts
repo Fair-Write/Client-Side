@@ -11,11 +11,9 @@ export class HistoryManager {
 		return new Promise((resolve, reject) => {
 			const request = window.indexedDB.open('HistoryDB', 1);
 
-			// This is crucial - handle database creation/upgrade
 			request.onupgradeneeded = (event) => {
 				const db = (event.target as IDBOpenDBRequest).result;
 
-				// Create the object store if it doesn't exist
 				if (!db.objectStoreNames.contains('History')) {
 					const store = db.createObjectStore('History', {
 						keyPath: 'id',
@@ -44,7 +42,6 @@ export class HistoryManager {
 		this.dbRequest = HistoryManager.initDB();
 	}
 
-	// read
 	async getAllStore(): Promise<History[]> {
 		const db = await this.dbRequest;
 		return new Promise((resolve, reject) => {
@@ -57,7 +54,6 @@ export class HistoryManager {
 		});
 	}
 
-	// write
 	async addStore(payload: Omit<History, 'id'>): Promise<number> {
 		const db = await this.dbRequest;
 		return new Promise((resolve, reject) => {
@@ -67,13 +63,12 @@ export class HistoryManager {
 
 			request.onsuccess = () => {
 				console.log('Added successful');
-				resolve(request.result as number); // Return the generated ID
+				resolve(request.result as number);
 			};
 			request.onerror = () => reject(request.error);
 		});
 	}
 
-	// delete
 	async deleteStore(id: number): Promise<void> {
 		const db = await this.dbRequest;
 		return new Promise((resolve, reject) => {
@@ -89,7 +84,6 @@ export class HistoryManager {
 		});
 	}
 
-	// Additional utility method to clear all data
 	async clearAll(): Promise<void> {
 		const db = await this.dbRequest;
 		return new Promise((resolve, reject) => {
