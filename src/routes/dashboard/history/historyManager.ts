@@ -1,6 +1,8 @@
 export type History = {
 	id: number;
 	text: string;
+	htmlAsText: string;
+	title: string;
 	timestamp: Date;
 };
 

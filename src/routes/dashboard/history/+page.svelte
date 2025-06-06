@@ -1,9 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { HistoryManager, type History } from './historyManager';
-	import { formatDistanceStrict } from 'date-fns';
+	import { type History } from './historyManager';
 	import HistoryCard from './HistoryCard.svelte';
-	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 
 	let history = $state<History[]>([]);
@@ -36,7 +34,12 @@
 	<div class="flex w-full items-center justify-end gap-5 p-5">
 		<button
 			onclick={async () => {
-				await manager.manager!.addStore({ text: poop, timestamp: new Date() });
+				await manager.manager!.addStore({
+					text: poop,
+					timestamp: new Date(),
+					title: 'poop',
+					htmlAsText: poop
+				});
 				history = await manager.manager!.getAllStore();
 			}}
 		>
