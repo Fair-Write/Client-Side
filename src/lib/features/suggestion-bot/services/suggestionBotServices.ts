@@ -1,4 +1,4 @@
-import { textContent } from '$lib/stores/textFromEditorStore';
+import { textContent, textContentHTML, textTitle } from '$lib/stores/textFromEditorStore';
 import type { TSuggestion } from '$lib/features/suggestion-bot/entities/suggestions';
 import { aiSuggestions } from '$lib/stores/lintingStore';
 import { progressStore } from '$lib/stores/progressStore';
@@ -8,11 +8,22 @@ import { toast } from 'svelte-sonner';
 import { preferenceStore } from '$lib/stores/preferenceStore';
 import { ignoreGrammarStore } from '$lib/stores/ignoreStore';
 import { getCount } from './countService';
+import { HistoryManager } from '../../../../routes/dashboard/history/historyManager';
 
 const url = import.meta.env.VITE_BACKEND_URL || 'NOTHING';
 
 export async function grammarCheckService(nextSlide: () => void) {
 	try {
+		// store
+		const history = await new HistoryManager();
+
+		await history.addStore({
+			text: get(textContent),
+			timestamp: new Date(),
+			htmlAsText: get(textContentHTML),
+			title: get(textTitle)
+		});
+
 		const post = await fetch(`${url}grammar`, {
 			method: 'POST',
 			headers: {

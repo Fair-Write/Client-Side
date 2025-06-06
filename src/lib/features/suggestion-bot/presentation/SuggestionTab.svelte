@@ -20,6 +20,7 @@
 	import { GLFScore } from '$lib/stores/omegaLOL';
 	import { afterNavigate } from '$app/navigation';
 	import { ignoreGrammarStore } from '$lib/stores/ignoreStore';
+	import { HistoryManager } from '../../../../routes/dashboard/history/historyManager';
 
 	let api = $state<CarouselAPI>();
 	let isSuggestionsTab = $state<boolean>(true);
@@ -42,10 +43,23 @@
 		}
 	});
 
-	function nextSlide() {
+	async function nextSlide() {
 		if (api) {
 			api.scrollNext();
 			tabIndex = api.selectedScrollSnap();
+			console.log(tabIndex);
+			if (tabIndex == 3) {
+				console.log('INIT GENDER VER ');
+
+				const history = await new HistoryManager();
+
+				await history.addStore({
+					text: $textContent,
+					timestamp: new Date(),
+					htmlAsText: $textContentHTML,
+					title: $textTitle
+				});
+			}
 		}
 	}
 	function toPreferenceModule() {

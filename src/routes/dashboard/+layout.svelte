@@ -124,6 +124,29 @@
 					>
 					<span class=" hidden lg:inline">Scan</span>
 				</a>
+
+				<a
+					href="/dashboard/history"
+					class={cn(
+						'flex items-center justify-start gap-2  rounded-lg border border-transparent p-2 text-xl transition-all ease-in-out',
+						' hover:bg-stone-200 ',
+						$page.url.pathname === '/dashboard/history' &&
+							'border-solid border-stone-300 bg-stone-50 shadow-md hover:bg-stone-50'
+					)}
+				>
+					<!--stupid icon-->
+					<span
+						class=" flex items-center justify-center rounded-[9px] border border-solid border-violet-500 bg-gradient-to-t from-purple-700 to-violet-300 p-[1px]"
+					>
+						<span
+							class="material-symbols-outlined s26 rounded-[8px] bg-gradient-to-t from-purple-700 to-violet-500 p-1 text-violet-50"
+						>
+							schedule</span
+						></span
+					>
+
+					<span class="hidden lg:inline">History</span>
+				</a>
 			</nav>
 		</div>
 

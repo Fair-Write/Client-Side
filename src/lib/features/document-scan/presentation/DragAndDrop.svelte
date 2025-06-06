@@ -36,7 +36,6 @@
 
 	$effect(() => {
 		if (signal == true) {
-			console.log('Foo');
 			setFileNameDisplay(fileName, fileSuffix);
 			convertToText(fileDocument as File, fileSuffix);
 			signal = false;
