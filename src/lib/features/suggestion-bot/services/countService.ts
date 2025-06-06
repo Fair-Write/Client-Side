@@ -2,7 +2,7 @@ import { countStore } from '$lib/stores/countStore';
 
 const url = import.meta.env.VITE_BACKEND_URL || 'NOTHING';
 
-export async function getCount(): Promise<{ count: number }> {
+export async function getCount() {
 	try {
 		const response = await fetch(url + 'count', {
 			method: 'GET',
@@ -27,7 +27,6 @@ export async function getCount(): Promise<{ count: number }> {
 		const data = await response.json();
 
 		countStore.set(await data.count);
-		return (await response.json()) as { count: number };
 	} catch (error) {
 		if (error instanceof SyntaxError) {
 			console.error('Invalid JSON response');

@@ -12,11 +12,11 @@
 	onMount(async () => {
 		const { HistoryManager } = await import('./historyManager');
 		manager.manager = new HistoryManager();
-		history = await manager.manager.getAllStore();
+		history = (await manager.manager.getAllStore()).reverse();
 	});
 	async function deleteFunc(id: number) {
 		await manager.manager!.deleteStore(id);
-		history = await manager.manager!.getAllStore();
+		history = (await manager.manager!.getAllStore()).reverse();
 	}
 
 	const poop =
@@ -32,25 +32,11 @@
 		<h2 class="text-xl font-semibold">History</h2>
 	</div>
 	<div class="flex w-full items-center justify-end gap-5 p-5">
-		<button
-			onclick={async () => {
-				await manager.manager!.addStore({
-					text: poop,
-					timestamp: new Date(),
-					title: 'poop',
-					htmlAsText: poop
-				});
-				history = await manager.manager!.getAllStore();
-			}}
-		>
-			ADD</button
-		>
-
 		<Button
 			variant="destructive"
 			onclick={async () => {
 				await manager.manager!.clearAll();
-				history = await manager.manager!.getAllStore();
+				history = (await manager.manager!.getAllStore()).reverse();
 			}}>Clear All</Button
 		>
 	</div>
