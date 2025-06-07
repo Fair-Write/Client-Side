@@ -28,6 +28,7 @@
 	import { signalTextEditor } from '$lib/stores/signalStore';
 	import { buildInputRules } from '$lib/features/document-scan/use-case/inputRules';
 	import { cleanPastePlugin } from '../use-case/cleanPastePlugin';
+	import { driver } from 'driver.js';
 
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
@@ -111,6 +112,68 @@
 		}
 	});
 
+	const driverObj = driver({
+		showProgress: true,
+		allowClose: false,
+		steps: [
+			{
+				element: '.step-1',
+				popover: { title: 'Navigation', description: 'This is where you navigate between pages' }
+			},
+			{
+				element: '.step-2',
+				popover: { title: 'Editor', description: 'This is were you write your document!' }
+			},
+			{
+				element: '.step-3',
+				popover: {
+					title: 'Toolbar',
+					description: 'This is the toolbar where you can edit your text with styles!'
+				}
+			},
+			{
+				element: '.step-4',
+				popover: {
+					title: 'Suggestion Tab',
+					description: 'This tab contains the AI Suggestions and Preference settings'
+				}
+			},
+			{
+				element: '.step-5',
+				popover: {
+					title: 'Prefered Pronouns',
+					description:
+						'If you have any people in the document that have prefered pronouns you can add their names here'
+				}
+			},
+			{
+				element: '.step-6',
+				popover: {
+					title: 'Submit',
+					description:
+						'After writing your document, you can begin scanning for inappropriate use of gender fair langauge'
+				}
+			},
+			{
+				element: '.step-7',
+				popover: {
+					title: 'Added Info',
+					description: 'For more information please visit these links!'
+				}
+			}
+		]
+	});
+
+	onMount(() => {
+		if (localStorage.getItem('tourScan1')) {
+			driverObj.destroy();
+			return;
+		} else if (!localStorage.getItem('tourScan1')) {
+			localStorage.setItem('tourScan1', 'Poop');
+			driverObj.drive();
+		}
+	});
+
 	onMount(() => {
 		const state = EditorState.create({
 			schema: mySchema,
@@ -152,7 +215,7 @@
 <section class="flex min-h-[100svh] flex-1 flex-col items-center bg-stone-50 xl:h-full">
 	<!-- Custom toolbar with Chadcn Svelte buttons -->
 	<div
-		class=" flex h-14 max-h-14 w-full items-center justify-between border-b border-stone-300 bg-stone-50 p-2"
+		class="step-3 flex h-14 max-h-14 w-full items-center justify-between border-b border-stone-300 bg-stone-50 p-2"
 	>
 		<input
 			type="text"
@@ -165,7 +228,7 @@
 		{/if}
 
 		<div>
-			<p class="text-sm text-muted-foreground">
+			<p class="text-xs text-muted-foreground lg:text-sm">
 				Count: {$textContent == '' ? 0 : $textContent.trim().split(/\s+/).length}
 			</p>
 		</div>
@@ -174,7 +237,7 @@
 	<!-- ProseMirror editor container -->
 
 	<ScrollArea
-		class="max-h-[400px] w-full flex-1 shadow-inner lg:max-h-[600px] xl:max-h-[800px]"
+		class="step-2 max-h-[400px] w-full flex-1 shadow-inner lg:max-h-[600px] xl:max-h-[800px]"
 		onclick={() => {
 			if ($progressStore > 0) {
 				toast.info('You can only edit text during the Write Step');

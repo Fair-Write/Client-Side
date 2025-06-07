@@ -24,7 +24,7 @@
 	</Card.Header>
 	<Card.Content>
 		<Button
-			class="flex  w-full items-center  justify-between border border-blue-500 bg-blue-50 p-3  text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
+			class="step-6 flex  w-full items-center  justify-between border border-blue-500 bg-blue-50 p-3  text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-blue-50"
 			disabled={$textContent.trim().split(/\s+/).length <= 25 || isLoading}
 			variant="outline"
 			color="secondary"

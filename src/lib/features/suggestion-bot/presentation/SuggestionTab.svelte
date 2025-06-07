@@ -20,6 +20,7 @@
 	import { GLFScore } from '$lib/stores/omegaLOL';
 	import { afterNavigate } from '$app/navigation';
 	import { ignoreGrammarStore } from '$lib/stores/ignoreStore';
+	import { HistoryManager } from '../../../../routes/dashboard/history/historyManager';
 
 	let api = $state<CarouselAPI>();
 	let isSuggestionsTab = $state<boolean>(true);
@@ -42,10 +43,23 @@
 		}
 	});
 
-	function nextSlide() {
+	async function nextSlide() {
 		if (api) {
 			api.scrollNext();
 			tabIndex = api.selectedScrollSnap();
+			console.log(tabIndex);
+			if (tabIndex == 3) {
+				console.log('INIT GENDER VER ');
+
+				const history = await new HistoryManager();
+
+				await history.addStore({
+					text: $textContent,
+					timestamp: new Date(),
+					htmlAsText: $textContentHTML,
+					title: $textTitle
+				});
+			}
 		}
 	}
 	function toPreferenceModule() {
@@ -94,11 +108,11 @@
 	}
 </script>
 
-<section class=" h-full border-l border-stone-300 bg-stone-100 sm:w-full md:w-64 2xl:w-80">
+<section class="step-4 h-full border-l border-stone-300 bg-stone-100 sm:w-full md:w-64 2xl:w-80">
 	{#if isSuggestionsTab}
 		<!-- Grammar & GLF Suggestion Module -->
 		<div
-			class="flex h-14 w-full items-center justify-between border-b border-solid border-stone-300 bg-stone-50 p-5"
+			class="step-5 flex h-14 w-full items-center justify-between border-b border-solid border-stone-300 bg-stone-50 p-5"
 		>
 			<h2 class="text-xl font-semibold">AI Companion</h2>
 

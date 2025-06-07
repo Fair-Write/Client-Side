@@ -16,6 +16,9 @@
 	import { aiSuggestions, replaceStore } from '$lib/stores/lintingStore';
 	import { GLFScore } from '$lib/stores/omegaLOL';
 	import { progressStore } from '$lib/stores/progressStore';
+	import { driver } from 'driver.js';
+	import { onMount } from 'svelte';
+	import 'driver.js/dist/driver.css';
 
 	let {
 		setFileNameDisplay,
@@ -36,7 +39,6 @@
 
 	$effect(() => {
 		if (signal == true) {
-			console.log('Foo');
 			setFileNameDisplay(fileName, fileSuffix);
 			convertToText(fileDocument as File, fileSuffix);
 			signal = false;
@@ -119,6 +121,27 @@
 		}
 		isLoading = false;
 	}
+
+	const driverObj = driver({
+		popoverClass: 'driverjs-theme',
+		stagePadding: 4
+	});
+
+	onMount(() => {
+		if (localStorage.getItem('tourScan')) {
+			driverObj.destroy();
+			return;
+		} else if (!localStorage.getItem('tourScan')) {
+			localStorage.setItem('tourScan', 'Poop');
+			driverObj.highlight({
+				element: '#File_Label',
+				popover: {
+					side: 'bottom',
+					title: 'Click "Select File" to scan your document'
+				}
+			});
+		}
+	});
 </script>
 
 <div class="flex w-full flex-1 items-start justify-center lg:items-center">
@@ -153,6 +176,7 @@
 			py-2 text-blue-50 shadow-lg duration-100 hover:cursor-pointer hover:hue-rotate-[-90deg] hover:transition-all
 			hover:duration-100 hover:ease-in-out active:scale-95 active:transform"
 				for="File_Drop"
+				id="File_Label"
 			>
 				<CloudUpload class="h-8 w-8"></CloudUpload>
 				<span
