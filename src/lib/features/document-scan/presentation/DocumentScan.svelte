@@ -8,7 +8,8 @@
 	import { GLFScore } from '$lib/stores/omegaLOL';
 	import { progressStore } from '$lib/stores/progressStore';
 	import { ignoreGrammarStore } from '$lib/stores/ignoreStore';
-
+	import { onMount, tick } from 'svelte';
+	import { driver } from 'driver.js';
 	let fileNameDisplay: IFileNameDisplay = $state({
 		fileName: undefined,
 		fileType: undefined
@@ -40,10 +41,11 @@
 			<FileNameDisplay {...fileNameDisplay} />
 			<div>
 				<label
-					class="flex items-center justify-center gap-2 rounded-full border border-solid
-			border-sky-700 bg-blue-500 bg-gradient-to-b from-sky-300 to-sky-600 px-3 py-1
-			text-blue-50 shadow-lg hover:cursor-pointer"
+					class=" flex items-center justify-center gap-2 rounded-full border
+			border-solid border-sky-700 bg-blue-500 bg-gradient-to-b from-sky-300 to-sky-600 px-3
+			py-1 text-blue-50 shadow-lg hover:cursor-pointer"
 					for="File_Drop2"
+					id="FileLabel"
 				>
 					<span
 						class="bg-gradient-to-b from-sky-50 to-sky-200 bg-clip-text text-center text-sm font-semibold text-transparent lg:text-base"
@@ -72,6 +74,5 @@
 			</div>
 		{/if}
 	</div>
-
 	<DragAndDrop {setFileNameDisplay} {fileDocument} {changeState} {signal}></DragAndDrop>
 </div>
