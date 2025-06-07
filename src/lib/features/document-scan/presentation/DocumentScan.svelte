@@ -8,8 +8,6 @@
 	import { GLFScore } from '$lib/stores/omegaLOL';
 	import { progressStore } from '$lib/stores/progressStore';
 	import { ignoreGrammarStore } from '$lib/stores/ignoreStore';
-	import { onMount, tick } from 'svelte';
-	import { driver } from 'driver.js';
 	let fileNameDisplay: IFileNameDisplay = $state({
 		fileName: undefined,
 		fileType: undefined

@@ -1,6 +1,7 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+@import 'driver.js/dist/driver.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
