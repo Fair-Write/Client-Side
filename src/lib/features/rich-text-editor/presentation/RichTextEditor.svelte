@@ -114,6 +114,7 @@
 
 	const driverObj = driver({
 		showProgress: true,
+		allowClose: false,
 		steps: [
 			{
 				element: '.step-1',
@@ -168,7 +169,7 @@
 			driverObj.destroy();
 			return;
 		} else if (!localStorage.getItem('tourScan1')) {
-			localStorage.setItem('tourScan', 'Poop');
+			localStorage.setItem('tourScan1', 'Poop');
 			driverObj.drive();
 		}
 	});
