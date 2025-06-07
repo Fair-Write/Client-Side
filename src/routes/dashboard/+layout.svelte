@@ -63,11 +63,11 @@
 
 <div class="flex flex-1 bg-stone-100">
 	<div
-		class="flex flex-col justify-between gap-2 border-r border-solid border-stone-300 sm:w-auto md:w-48 2xl:w-64"
+		class="step-1 flex flex-col justify-between gap-2 border-r border-solid border-stone-300 sm:w-auto md:w-48 2xl:w-64"
 	>
 		<!-- wrapper -->
 
-		<div class="flex flex-col gap-1 *:px-2">
+		<div class=" flex flex-col gap-1 *:px-2">
 			<div
 				class="flex h-14 items-center justify-center gap-2 border-b border-solid border-stone-300 bg-stone-50 lg:justify-start"
 			>
@@ -150,7 +150,7 @@
 			</nav>
 		</div>
 
-		<div class="flex flex-col gap-1 border border-solid border-t-stone-300">
+		<div class="step-7 flex flex-col gap-1 border border-solid border-t-stone-300">
 			<Dialog.Root>
 				<Dialog.Trigger>
 					<div class="flex items-center justify-center gap-2 p-2 text-xl lg:justify-start">

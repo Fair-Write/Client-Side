@@ -108,11 +108,11 @@
 	}
 </script>
 
-<section class=" h-full border-l border-stone-300 bg-stone-100 sm:w-full md:w-64 2xl:w-80">
+<section class="step-4 h-full border-l border-stone-300 bg-stone-100 sm:w-full md:w-64 2xl:w-80">
 	{#if isSuggestionsTab}
 		<!-- Grammar & GLF Suggestion Module -->
 		<div
-			class="flex h-14 w-full items-center justify-between border-b border-solid border-stone-300 bg-stone-50 p-5"
+			class="step-5 flex h-14 w-full items-center justify-between border-b border-solid border-stone-300 bg-stone-50 p-5"
 		>
 			<h2 class="text-xl font-semibold">AI Companion</h2>
 
