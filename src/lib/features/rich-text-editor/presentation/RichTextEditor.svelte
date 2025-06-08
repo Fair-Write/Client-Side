@@ -30,6 +30,8 @@
 	import { cleanPastePlugin } from '../use-case/cleanPastePlugin';
 	import { driver } from 'driver.js';
 
+	import { tourStore } from '$lib/stores/tourStore';
+
 	let editorContainer: HTMLDivElement | null = $state(null);
 	let view: EditorView | null = $state(null);
 	let linterPlugin = createLinterPlugin([]);
@@ -164,13 +166,17 @@
 		]
 	});
 
-	onMount(() => {
+	$effect(() => {
+		// if localstorage exists then just destroy it
 		if (localStorage.getItem('tourScan1')) {
 			driverObj.destroy();
 			return;
-		} else if (!localStorage.getItem('tourScan1')) {
+		}
+		if ($tourStore) {
 			localStorage.setItem('tourScan1', 'Poop');
 			driverObj.drive();
+		} else {
+			driverObj.destroy();
 		}
 	});
 

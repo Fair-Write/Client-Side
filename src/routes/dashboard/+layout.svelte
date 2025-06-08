@@ -8,6 +8,7 @@
 	import { onMount } from 'svelte';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
+	import { tourStore } from '$lib/stores/tourStore';
 	const burger = [
 		{ description: 'Write down your text', url: '/write.png', title: 'Write' },
 		{ description: 'Check For Grammar Issues', url: '/grammar.png', title: 'Grammar' },
@@ -304,6 +305,7 @@
 							onclick={() => {
 								acceptPolicies = !acceptPolicies;
 								localStorage.setItem('Accept', 'true');
+								$tourStore = true;
 							}}>Continue</AlertDialog.Action
 						>
 					</AlertDialog.Footer>
