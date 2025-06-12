@@ -57,7 +57,20 @@
 					text: $textContent,
 					timestamp: new Date(),
 					htmlAsText: $textContentHTML,
-					title: $textTitle
+					title: $textTitle,
+					type: 'GFL'
+				});
+			} else if (tabIndex == 2) {
+				console.log('INIT GRAMMAR VER ');
+
+				const history = await new HistoryManager();
+
+				await history.addStore({
+					text: $textContent,
+					timestamp: new Date(),
+					htmlAsText: $textContentHTML,
+					title: $textTitle,
+					type: 'Grammar'
 				});
 			}
 		}

@@ -41,11 +41,19 @@
 		>
 	</div>
 
-	<div class="flex w-full flex-wrap items-start justify-start gap-2 px-5">
-		{#key history}
-			{#each history as item}
-				<HistoryCard history={item} {deleteFunc}></HistoryCard>
-			{/each}
-		{/key}
-	</div>
+	{#key history}
+		{#if history.length == 0}
+			<div class="flex h-full w-full flex-wrap items-center justify-center gap-2 px-5">
+				<h3 class="mb-10 scroll-m-20 text-2xl font-semibold tracking-tight text-muted-foreground">
+					EMPTY
+				</h3>
+			</div>
+		{:else}
+			<div class="flex w-full flex-wrap items-start justify-start gap-2 px-5">
+				{#each history as item}
+					<HistoryCard history={item} {deleteFunc}></HistoryCard>
+				{/each}
+			</div>
+		{/if}
+	{/key}
 </div>

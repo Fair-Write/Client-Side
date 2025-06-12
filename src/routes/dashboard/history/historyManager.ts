@@ -4,6 +4,7 @@ export type History = {
 	htmlAsText: string;
 	title: string;
 	timestamp: Date;
+	type: 'GFL' | 'Grammar';
 };
 
 export class HistoryManager {

@@ -6,6 +6,7 @@
 	import { Trash } from 'lucide-svelte';
 	import { textContent, textTitle } from '$lib/stores/textFromEditorStore';
 	import { goto } from '$app/navigation';
+	import { cn } from '$lib/utils';
 
 	const { history, deleteFunc }: { history: History; deleteFunc: (id: number) => void } = $props();
 </script>
@@ -22,9 +23,20 @@
 		}}
 	>
 		<Card.Header class="flex w-full flex-row items-center justify-between gap-2">
-			<Card.Title class="">
-				{history.title}
-			</Card.Title>
+			<div>
+				<Card.Title class="mb-1">
+					{history.title}
+				</Card.Title>
+				<p
+					class={cn(
+						history.type == 'Grammar' && 'text-blue-300',
+						history.type == 'GFL' && 'text-violet-300',
+						'font-bold'
+					)}
+				>
+					{history.type}
+				</p>
+			</div>
 			<Button
 				onclick={(e) => {
 					e.stopPropagation();
