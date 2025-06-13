@@ -38,7 +38,7 @@
 </script>
 
 <ScrollArea
-	class="flex w-full flex-col items-center justify-stretch  pl-4 lg:h-[550px] 2xl:h-[800px]"
+	class="flex w-full flex-col items-center justify-stretch  pl-4 lg:h-[550px] 2xl:h-[850px]"
 >
 	<Gauge radius={100} percent={difference}></Gauge>
 
