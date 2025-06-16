@@ -210,11 +210,31 @@
 			<DropdownMenu.Group>
 				<DropdownMenu.Label>Font Families</DropdownMenu.Label>
 				<DropdownMenu.Separator />
+
 				<DropdownMenu.Item onclick={() => setFontFamily('Arial')}>Arial</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontFamily('Helvetica')}>Helvetica</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontFamily('Verdana')}>Verdana</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontFamily('Tahoma')}>Tahoma</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontFamily('Trebuchet MS')}
+					>Trebuchet MS</DropdownMenu.Item
+				>
+
+				<DropdownMenu.Separator />
+
 				<DropdownMenu.Item onclick={() => setFontFamily('Times New Roman')}
 					>Times New Roman</DropdownMenu.Item
 				>
-				<DropdownMenu.Item onclick={() => setFontFamily('courier')}>Courier</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontFamily('Times')}>Times</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontFamily('Georgia')}>Georgia</DropdownMenu.Item>
+
+				<DropdownMenu.Separator />
+
+				<DropdownMenu.Item onclick={() => setFontFamily('Courier New')}
+					>Courier New</DropdownMenu.Item
+				>
+				<DropdownMenu.Item onclick={() => setFontFamily('Courier')}>Courier</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontFamily('Consolas')}>Consolas</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => setFontFamily('Monaco')}>Monaco</DropdownMenu.Item>
 			</DropdownMenu.Group>
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>
