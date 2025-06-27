@@ -143,9 +143,9 @@
 			{
 				element: '.step-5',
 				popover: {
-					title: 'Prefered Pronouns',
+					title: 'Preferred Pronouns',
 					description:
-						'If you have any people in the document that have prefered pronouns you can add their names here'
+						'If you have any people in the document that have preferred pronouns you can add their names here'
 				}
 			},
 			{
