@@ -1,5 +1,6 @@
 import { Schema } from 'prosemirror-model';
 import { addListNodes } from 'prosemirror-schema-list';
+
 const leSchema = new Schema({
 	nodes: {
 		doc: {
@@ -135,6 +136,22 @@ const leSchema = new Schema({
 			parseDOM: [{ style: 'color=yellow' }],
 			toDOM() {
 				return ['span', { style: 'color: yellow' }, 0];
+			}
+		},
+		color: {
+			attrs: {
+				color: { default: '#000000' }
+			},
+			parseDOM: [
+				{
+					style: 'color',
+					getAttrs: (value) => {
+						return typeof value === 'string' ? { color: value } : false;
+					}
+				}
+			],
+			toDOM(mark) {
+				return ['span', { style: `color: ${mark.attrs.color}` }, 0];
 			}
 		}
 	}

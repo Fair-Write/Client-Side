@@ -3,6 +3,7 @@
 	import { type History } from './historyManager';
 	import HistoryCard from './HistoryCard.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 
 	let history = $state<History[]>([]);
 
@@ -18,9 +19,6 @@
 		await manager.manager!.deleteStore(id);
 		history = (await manager.manager!.getAllStore()).reverse();
 	}
-
-	const poop =
-		'Consequatur officiis repudiandae quia sit reiciendis molestiae voluptate. Perspiciatis dolorem aut architecto sit aliquam et voluptatem. Qui ducimus dolorum tenetur rerum dolorum. Repudiandae magnam nihil architecto odio aut ipsam qui. Aut suscipit excepturi voluptas. Reiciendis enim doloremque vel sit dolor vero eaque nesciunt.';
 </script>
 
 <div
@@ -49,11 +47,13 @@
 				</h3>
 			</div>
 		{:else}
-			<div class="flex w-full flex-wrap items-start justify-start gap-2 px-5">
-				{#each history as item}
-					<HistoryCard history={item} {deleteFunc}></HistoryCard>
-				{/each}
-			</div>
+			<ScrollArea class="h-[580px] w-full">
+				<div class="flex w-full flex-col flex-wrap items-center justify-start">
+					{#each history as item}
+						<HistoryCard history={item} {deleteFunc}></HistoryCard>
+					{/each}
+				</div>
+			</ScrollArea>
 		{/if}
 	{/key}
 </div>

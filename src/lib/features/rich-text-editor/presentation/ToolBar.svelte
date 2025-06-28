@@ -7,6 +7,7 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import { wrapInList } from 'prosemirror-schema-list';
+	import { MarkType } from 'prosemirror-model';
 
 	import {
 		AlignCenter,
@@ -26,6 +27,7 @@
 	let { view, mySchema }: { view: EditorView; mySchema: Schema } = $props();
 	let currentFontSize = $state('16px'); // Default font size
 	let currentFontFamily = $state('Arial'); // Default font family
+	let currentColor = $state('black');
 	function setFontSize(size: string) {
 		if (!view) return;
 		console.log('setFontSize', size);
@@ -39,8 +41,6 @@
 				setBlockType(node.type, attrs)(state, dispatch);
 			}
 		});
-
-		currentFontSize = size; // Update the current font size
 	}
 
 	function setFontFamily(fontFamily: string) {
@@ -58,6 +58,40 @@
 		});
 
 		currentFontFamily = fontFamily; // Update the current font family
+	}
+
+	function applyTextColor(view: EditorView, markType: MarkType, color: string) {
+		const { state, dispatch } = view;
+		const { from, to, empty } = state.selection;
+
+		const tr = state.tr;
+
+		if (empty) {
+			// Remove old color marks
+			state.storedMarks?.forEach((mark) => {
+				if (mark.type === markType) {
+					tr.removeStoredMark(markType);
+				}
+			});
+			// Add new color mark
+			tr.addStoredMark(markType.create({ color }));
+			dispatch(tr);
+			return true;
+		}
+
+		// Remove all color marks in selection
+		tr.removeMark(from, to, markType);
+		// Apply the new one
+		tr.addMark(from, to, markType.create({ color }));
+
+		dispatch(tr);
+		return true;
+	}
+
+	function setColor(color: string) {
+		if (!view) return;
+		const colorMark = mySchema.marks.color;
+		applyTextColor(view, colorMark, color);
 	}
 
 	// Function to update the current font size based on the selection
@@ -196,10 +230,59 @@
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>
 
+	<!-- color -->
+	<DropdownMenu.Root>
+		<DropdownMenu.Trigger>
+			<Button
+				style={`color:${currentColor};`}
+				variant="secondary"
+				class="w-[90px] rounded-md p-1 text-xs 2xl:text-base">Color: <ChevronDown /></Button
+			>
+		</DropdownMenu.Trigger>
+		<DropdownMenu.Content>
+			<DropdownMenu.Group>
+				<DropdownMenu.Label>Color</DropdownMenu.Label>
+				<DropdownMenu.Separator />
+				<DropdownMenu.Item
+					onclick={() => {
+						setColor('oklch(57.7% 0.245 27.325)');
+					}}>Red</DropdownMenu.Item
+				>
+				<DropdownMenu.Item
+					onclick={() => {
+						setColor('oklch(64.6% 0.222 41.116)');
+					}}>Orange</DropdownMenu.Item
+				>
+				<DropdownMenu.Item
+					onclick={() => {
+						setColor('oklch(79.5% 0.184 86.047)');
+					}}>Yellow</DropdownMenu.Item
+				>
+				<DropdownMenu.Item
+					onclick={() => {
+						setColor('oklch(52.7% 0.154 150.069)');
+					}}>Green</DropdownMenu.Item
+				>
+				<DropdownMenu.Item
+					onclick={() => {
+						setColor('oklch(54.6% 0.245 262.881)');
+					}}>Blue</DropdownMenu.Item
+				>
+				<DropdownMenu.Item
+					onclick={() => {
+						setColor('oklch(54.1% 0.281 293.009)');
+					}}>Violet</DropdownMenu.Item
+				>
+			</DropdownMenu.Group>
+		</DropdownMenu.Content>
+	</DropdownMenu.Root>
+
 	<!-- Font Family -->
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger>
-			<Button variant="secondary" class="rounded-md p-1  lg:w-[100px] 2xl:w-[200px]"
+			<Button
+				variant="secondary"
+				class="flex items-center  justify-start rounded-md p-1 lg:w-[100px] 2xl:w-[150px]"
 				><p class="text-xs 2xl:text-base">Font:</p>
 				<span class="hidden truncate text-xs 2xl:block 2xl:text-base"
 					>{currentFontFamily}
