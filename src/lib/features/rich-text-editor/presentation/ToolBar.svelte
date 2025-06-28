@@ -7,6 +7,7 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import { wrapInList } from 'prosemirror-schema-list';
+	import { MarkType } from 'prosemirror-model';
 
 	import {
 		AlignCenter,
@@ -59,30 +60,40 @@
 		currentFontFamily = fontFamily; // Update the current font family
 	}
 
-	function setColor(color: string) {
-		if (!view) return;
-
+	function applyTextColor(view: EditorView, markType: MarkType, color: string) {
 		const { state, dispatch } = view;
-		const { from, to } = state.selection;
+		const { from, to, empty } = state.selection;
 
 		const tr = state.tr;
 
-		state.doc.nodesBetween(from, to, (node, pos) => {
-			if (node.type === mySchema.nodes.paragraph || node.type === mySchema.nodes.heading) {
-				// preserve other attrs like alignment, etc.
-				const newAttrs = {
-					...node.attrs,
-					color // override only color
-				};
+		if (empty) {
+			// Remove old color marks
+			state.storedMarks?.forEach((mark) => {
+				if (mark.type === markType) {
+					tr.removeStoredMark(markType);
+				}
+			});
+			// Add new color mark
+			tr.addStoredMark(markType.create({ color }));
+			dispatch(tr);
+			return true;
+		}
 
-				// Replace the block node with the same type but new attrs
-				tr.setNodeMarkup(pos, node.type, newAttrs, node.marks);
-			}
-		});
+		// Remove all color marks in selection
+		tr.removeMark(from, to, markType);
+		// Apply the new one
+		tr.addMark(from, to, markType.create({ color }));
 
 		dispatch(tr);
-		currentColor = color;
+		return true;
 	}
+
+	function setColor(color: string) {
+		if (!view) return;
+		const colorMark = mySchema.marks.color;
+		applyTextColor(view, colorMark, color);
+	}
+
 	// Function to update the current font size based on the selection
 	function updateCurrentFontSize() {
 		if (!view) return;
