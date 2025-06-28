@@ -26,6 +26,7 @@
 	let { view, mySchema }: { view: EditorView; mySchema: Schema } = $props();
 	let currentFontSize = $state('16px'); // Default font size
 	let currentFontFamily = $state('Arial'); // Default font family
+	let currentColor = $state('black');
 	function setFontSize(size: string) {
 		if (!view) return;
 		console.log('setFontSize', size);
@@ -39,8 +40,6 @@
 				setBlockType(node.type, attrs)(state, dispatch);
 			}
 		});
-
-		currentFontSize = size; // Update the current font size
 	}
 
 	function setFontFamily(fontFamily: string) {
@@ -60,6 +59,30 @@
 		currentFontFamily = fontFamily; // Update the current font family
 	}
 
+	function setColor(color: string) {
+		if (!view) return;
+
+		const { state, dispatch } = view;
+		const { from, to } = state.selection;
+
+		const tr = state.tr;
+
+		state.doc.nodesBetween(from, to, (node, pos) => {
+			if (node.type === mySchema.nodes.paragraph || node.type === mySchema.nodes.heading) {
+				// preserve other attrs like alignment, etc.
+				const newAttrs = {
+					...node.attrs,
+					color // override only color
+				};
+
+				// Replace the block node with the same type but new attrs
+				tr.setNodeMarkup(pos, node.type, newAttrs, node.marks);
+			}
+		});
+
+		dispatch(tr);
+		currentColor = color;
+	}
 	// Function to update the current font size based on the selection
 	function updateCurrentFontSize() {
 		if (!view) return;
@@ -196,10 +219,59 @@
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>
 
+	<!-- color -->
+	<DropdownMenu.Root>
+		<DropdownMenu.Trigger>
+			<Button
+				style={`color:${currentColor};`}
+				variant="secondary"
+				class="w-[90px] rounded-md p-1 text-xs 2xl:text-base">Color: <ChevronDown /></Button
+			>
+		</DropdownMenu.Trigger>
+		<DropdownMenu.Content>
+			<DropdownMenu.Group>
+				<DropdownMenu.Label>Color</DropdownMenu.Label>
+				<DropdownMenu.Separator />
+				<DropdownMenu.Item
+					onclick={() => {
+						setColor('oklch(57.7% 0.245 27.325)');
+					}}>Red</DropdownMenu.Item
+				>
+				<DropdownMenu.Item
+					onclick={() => {
+						setColor('oklch(64.6% 0.222 41.116)');
+					}}>Orange</DropdownMenu.Item
+				>
+				<DropdownMenu.Item
+					onclick={() => {
+						setColor('oklch(79.5% 0.184 86.047)');
+					}}>Yellow</DropdownMenu.Item
+				>
+				<DropdownMenu.Item
+					onclick={() => {
+						setColor('oklch(52.7% 0.154 150.069)');
+					}}>Green</DropdownMenu.Item
+				>
+				<DropdownMenu.Item
+					onclick={() => {
+						setColor('oklch(54.6% 0.245 262.881)');
+					}}>Blue</DropdownMenu.Item
+				>
+				<DropdownMenu.Item
+					onclick={() => {
+						setColor('oklch(54.1% 0.281 293.009)');
+					}}>Violet</DropdownMenu.Item
+				>
+			</DropdownMenu.Group>
+		</DropdownMenu.Content>
+	</DropdownMenu.Root>
+
 	<!-- Font Family -->
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger>
-			<Button variant="secondary" class="rounded-md p-1  lg:w-[100px] 2xl:w-[200px]"
+			<Button
+				variant="secondary"
+				class="flex items-center  justify-start rounded-md p-1 lg:w-[100px] 2xl:w-[150px]"
 				><p class="text-xs 2xl:text-base">Font:</p>
 				<span class="hidden truncate text-xs 2xl:block 2xl:text-base"
 					>{currentFontFamily}

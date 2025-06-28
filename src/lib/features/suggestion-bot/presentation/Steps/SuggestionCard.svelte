@@ -32,7 +32,7 @@
 
 	let isLoading = $state<boolean>(false);
 	onMount(() => {
-		console.log('card', suggestion);
+		$inspect('card', suggestion);
 	});
 	async function jempoyMoves(bruh: string) {
 		isLoading = true;
@@ -163,9 +163,7 @@
 				isLoading = false;
 				$waitStore = false;
 			}
-			const count = await getCount();
-
-			$countStore = await count.count;
+			await getCount();
 		}
 	}
 </script>
