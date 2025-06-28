@@ -12,17 +12,17 @@
 </script>
 
 <div
-	class="border-4 border-dashed border-transparent p-1 transition-all duration-100 ease-out hover:border-blue-500 hover:transition-all"
+	class="w-full border-4 border-dashed border-transparent p-1 transition-all duration-100 ease-out hover:border-blue-500 hover:transition-all"
 >
 	<Card.Root
-		class="aspect-3/2 w-[250px]  cursor-pointer 2xl:w-[400px] "
+		class="flex w-full cursor-pointer flex-row items-center justify-center p-2 "
 		onclick={() => {
 			$textContent = history.htmlAsText;
 			$textTitle = history.title;
 			goto('/dashboard/editor');
 		}}
 	>
-		<Card.Header class="flex w-full flex-row items-center justify-between gap-2">
+		<Card.Header class="flex w-full flex-row items-center justify-between gap-2 p-0">
 			<div>
 				<Card.Title class="mb-1">
 					{history.title}
@@ -37,6 +37,16 @@
 					{history.type}
 				</p>
 			</div>
+		</Card.Header>
+		<Card.Content class="max-w-[500px] p-0">
+			<p class="line-clamp-1 text-justify text-base">
+				{history.text}
+			</p>
+		</Card.Content>
+		<Card.Footer class="flex w-full items-center justify-end gap-5 p-0">
+			<p class="text-base text-muted-foreground">
+				{formatDistanceStrict(history.timestamp, new Date())} ago
+			</p>
 			<Button
 				onclick={(e) => {
 					e.stopPropagation();
@@ -47,16 +57,6 @@
 			>
 				<Trash></Trash>
 			</Button>
-		</Card.Header>
-		<Card.Content class="pt-4">
-			<p class="line-clamp-5 text-justify text-base">
-				{history.text}
-			</p>
-		</Card.Content>
-		<Card.Footer class="flex items-center justify-end">
-			<p class="text-base text-muted-foreground">
-				{formatDistanceStrict(history.timestamp, new Date())} ago
-			</p>
 		</Card.Footer>
 	</Card.Root>
 </div>
