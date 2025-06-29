@@ -1,38 +1,77 @@
-# create-svelte
+# FairWrite (Client-Side)
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+FairWrite a modern web-based text editor that supports grammar correction and gender-fair language rewriting. The client side built with **SvelteKit** and a carefully curated frontend tech stack, FairWrite offers a clean, responsive, and intuitive editing experience.
 
-## Creating a project
+---
 
-If you're seeing this, you've probably already done this step. Congrats!
+## ✨ Features
+
+- **Grammar Suggestions** – Instantly see grammar feedback from the backend as you type.
+- **Gender-Fair Language Corrections** – View and apply inclusive alternatives for biased terms.
+- **PDF Parsing and Annotation** – Upload PDFs and extract editable content using OCR and PDF.js.
+- **ProseMirror-Based Editor** – A rich text editor with structured formatting and plugin support.
+- **Custom preferred pronouns** -system can apply respectful and inclusive language tailored to you.
+- **Admin Dashboard** – UI for managing gender term rules.
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology       | Purpose                                        |
+| ---------------- | ---------------------------------------------- |
+| **SvelteKit**    | Application framework and routing              |
+| **Tailwind CSS** | Utility-first styling for responsive UI        |
+| **TypeScript**   | Type safety and DX improvements                |
+| **Zod**          | Schema validation for forms and frontend logic |
+| **ProseMirror**  | WYSIWYG editor with custom plugin extensions   |
+| **Chad Svelte**  | Prebuilt Svelte UI components                  |
+| **PDF.js**       | PDF rendering and manipulation                 |
+| **Tesseract.js** | OCR for scanned documents or image-based PDFs  |
+| **Quasar JS**    | Additional UI component usage                  |
+| **Elephant.js**  | Feedback animations and micro-interactions     |
+
+---
+
+## 📦 Installation
+
+### 1. Clone the Repository
 
 ```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+git clone https://github.com/yourusername/fairwrite-client.git
+cd fairwrite-client
 ```
 
-## Developing
+### 2. Install Dependencies
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+```bash
+npm install
+# or
+pnpm install
+```
+
+### 3. Run the Development Server
 
 ```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+---
 
-To create a production version of your app:
+## 🌐 API Integration
 
-```bash
-npm run build
+This client connects to the FairWrite Backend via REST API for grammar and gender-fair language processing.
+
+You can configure the backend base URL using a `.env` file.
+
+**Example `.env` file:**
+
+```env
+VITE_API_BASE_URL=http://localhost:80
+ADMIN_PASSWORD=ILOVEGFL
 ```
 
-You can preview the production build with `npm run preview`.
+---
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## Backend Repository
+
+- [FairWrite/Server-Side](https://github.com/Fair-Write/Server-Side.git): The official backend for FairWrite, providing data via REST API for grammar and gender-fair language processing.
