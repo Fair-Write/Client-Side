@@ -34,6 +34,10 @@ FairWrite a modern web-based text editor that supports grammar correction and ge
 
 ## 📦 Installation
 
+### 0. Prerequisite: Install Node.js
+
+Make sure you have [Node.js](https://nodejs.org/) (version 18 or higher recommended) installed on your system.
+
 ### 1. Clone the Repository
 
 ```bash
@@ -66,7 +70,7 @@ You can configure the backend base URL using a `.env` file.
 **Example `.env` file:**
 
 ```env
-VITE_API_BASE_URL=http://localhost:80
+PUBLIC_BACKEND_URL=http://localhost:80
 ADMIN_PASSWORD=ILOVEGFL
 ```
 
