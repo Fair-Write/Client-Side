@@ -37,7 +37,7 @@ FairWrite a modern web-based text editor that supports grammar correction and ge
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/fairwrite-client.git
+git clone https://github.com/yourusername/fairwrite-client.git](https://github.com/Fair-Write/Client-Side.git
 cd fairwrite-client
 ```
 
