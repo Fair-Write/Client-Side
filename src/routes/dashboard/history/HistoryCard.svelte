@@ -4,7 +4,7 @@
 	import { formatDistanceStrict } from 'date-fns';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Trash } from 'lucide-svelte';
-	import { textContent, textTitle } from '$lib/stores/textFromEditorStore';
+	import { textContent, textContentHTML, textTitle } from '$lib/stores/textFromEditorStore';
 	import { goto } from '$app/navigation';
 	import { cn } from '$lib/utils';
 
@@ -17,7 +17,8 @@
 	<Card.Root
 		class="flex w-full cursor-pointer flex-row items-center justify-center p-2 "
 		onclick={() => {
-			$textContent = history.htmlAsText;
+			$textContent = history.text;
+			$textContentHTML = history.htmlAsText;
 			$textTitle = history.title;
 			goto('/dashboard/editor');
 		}}

@@ -41,7 +41,7 @@ Make sure you have [Node.js](https://nodejs.org/) (version 18 or higher recommen
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/fairwrite-client.git
+git clone https://github.com/yourusername/fairwrite-client.git](https://github.com/Fair-Write/Client-Side.git
 cd fairwrite-client
 ```
 

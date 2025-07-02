@@ -184,7 +184,7 @@
 		const state = EditorState.create({
 			schema: mySchema,
 			doc: DOMParser.fromSchema(mySchema).parse(
-				document.createRange().createContextualFragment($textContent)
+				document.createRange().createContextualFragment($textContentHTML)
 			),
 			plugins: [
 				history(),
